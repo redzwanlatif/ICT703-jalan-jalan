@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -61,17 +63,34 @@ export default function Home() {
         <section className="container mx-auto px-4 py-16">
           <h3 className="text-2xl font-bold text-center mb-8">Platform Features</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature) => (
-              <Card key={feature.title}>
-                <CardHeader>
-                  <CardTitle>{feature.title}</CardTitle>
-                  <CardDescription className="text-xs">{feature.group}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+            {features.map((feature) => {
+              const cardContent = (
+                <Card key={feature.title}>
+                  <CardHeader>
+                    <CardTitle>{feature.title}</CardTitle>
+                    <CardDescription className="text-xs">{feature.group}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              );
+
+              // Only Group 2 navigates
+              if (feature.group === "Group 2") {
+                return (
+                  <Link
+                    key={feature.title}
+                    href="/group2-dashboard"
+                    className="block"
+                  >
+                    {cardContent}
+                  </Link>
+                );
+              }
+
+              return cardContent;
+            })}
           </div>
         </section>
       </main>
