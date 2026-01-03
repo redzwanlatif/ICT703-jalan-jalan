@@ -76,12 +76,12 @@ export default function Home() {
                 </Card>
               );
 
-              // Only Group 2 navigates
+              // Group 2
               if (feature.group === "Group 2") {
                 return (
                   <Link
                     key={feature.title}
-                    href="/group2-dashboard"
+                    href="/group2-landing"
                     className="block"
                   >
                     {cardContent}

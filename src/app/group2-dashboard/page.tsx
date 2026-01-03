@@ -1,10 +1,14 @@
+"use client"
+
 import Header from "@/components/group2/header"
 import { SearchBar } from "@/components/group2/search-bar"
 import { GPSFinder } from "@/components/group2/gps-finder"
 import { Button } from "@/components/ui/group2/button"
 import { DashboardCard } from "@/components/group2/dashboard-card"
+import { useRouter } from "next/navigation"
 
 export default function LiveItineraryPage() {
+    const router = useRouter()
     return (
         <div className="min-h-screen bg-slate-100">
 
@@ -14,7 +18,10 @@ export default function LiveItineraryPage() {
             <section className="flex gap-4 p-6">
                 <SearchBar />
                 <GPSFinder />
-                <Button>Go to Another Page</Button>
+                <Button
+                    className="px-6"
+                    onClick={() => router.push("/group2-booking-details")}
+                >Schedule & Updates</Button>
             </section>
 
             {/* Dashboard Grid */}
