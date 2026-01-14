@@ -114,163 +114,127 @@ export default function CommunityPage() {
       <GroupLabel group={4} />
       <AnimatedBackground variant="subtle" />
 
-      {/* Search Section */}
-      <section className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 xl:px-24 py-10">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-800 dark:text-neutral-100 mb-6 tracking-tight">
-          Get live data from your destination.
-        </h1>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 md:gap-6">
-          <div className="relative flex-1 max-w-xl">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-neutral-400" />
-            <Input
-              placeholder="Where are you travelling to?"
-              className={cn(
-                "pl-12 h-14 text-base",
-                "bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm",
-                "border-neutral-200 dark:border-neutral-700",
-                "focus:border-orange-500 focus:ring-orange-500/20",
-                "shadow-lg shadow-black/5"
-              )}
+      <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-8">
+        {/* My Trip Section */}
+        <section className="relative z-10 py-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
+              My Trip
+            </h2>
+            <Link
+              href="/predictions"
+              className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+            >
+              Create New Trip
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <TripCard
+              title="Malacca River Walk"
+              dates="25th February - 26th February 2026"
+              status="Active"
+            />
+            <TripCard
+              title="Baba Nyonya Heritage Museum"
+              dates="25th March - 26th March 2026"
+              status="Upcoming"
+            />
+            <TripCard
+              title="Menara Taming Sari"
+              dates="25th April - 26th April 2026"
+              status="Upcoming"
             />
           </div>
-          <Button
-            className={cn(
-              "h-14 px-8 text-base font-semibold",
-              "bg-gradient-to-r from-orange-500 to-amber-500",
-              "hover:from-orange-600 hover:to-amber-600",
-              "text-white border-0",
-              "shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40",
-              "transition-all duration-300"
-            )}
-          >
-            Search
-          </Button>
-        </div>
-        {/* Flow Guide */}
-        <div className="mt-8">
-          <FlowGuide variant="inline" title="Ready to plan?" />
-        </div>
-      </section>
+        </section>
 
-      {/* My Trip Section */}
-      <section className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 xl:px-24 py-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
-            My Trip
-          </h2>
-          <Link
-            href="/predictions"
-            className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
-          >
-            Create New Trip
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          <TripCard
-            title="Tokyo, Japan"
-            dates="25th December - 31 December 2025"
-            status="Active"
-          />
-          <TripCard
-            title="Tokyo, Japan"
-            dates="25th December - 31 December 2025"
-            status="Upcoming"
-          />
-          <TripCard
-            title="Tokyo, Japan"
-            dates="25th December - 31 December 2025"
-            status="Upcoming"
-          />
-        </div>
-      </section>
+        {/* Upcoming Events Section */}
+        <section className="relative z-10 py-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
+              Upcoming Events
+            </h2>
+            <Link
+              href="/community/events"
+              className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+            >
+              View More
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <EventCard
+              title="Jom Cuti Sekolah 2026"
+              subtitle="School holiday travel deals and family activities"
+              date="12 - 15 January 2026"
+              location="Ayer Keroh, Melaka"
+              type="Promotion Event"
+              badges={["Family-friendly", "School Holiday"]}
+              imageGradient="bg-gradient-to-br from-yellow-200 to-orange-300"
+            />
+            <EventCard
+              title="Cuti Cuti Muslim-Friendly Fair"
+              subtitle="Muslim-friendly travel packages and experiences"
+              date="18- 20 January 2026"
+              location="Ayer Molek, Melaka"
+              type="Travel Fair"
+              badges={["Muslim-friendly", "Travel Deals"]}
+              imageGradient="bg-gradient-to-br from-green-200 to-teal-300"
+            />
+            <EventCard
+              title="Play Your Way to Joy Festival"
+              subtitle="Interactive activities and attractions for all ages"
+              date="5- 7 February 2026"
+              location="Pantai Klebang, Melaka"
+              type="Festival"
+              badges={["Family-friendly", "Popular Event"]}
+              imageGradient="bg-gradient-to-br from-purple-200 to-pink-300"
+            />
+          </div>
+        </section>
 
-      {/* Upcoming Events Section */}
-      <section className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 xl:px-24 py-8">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
-            Upcoming Events
-          </h2>
-          <Link
-            href="/community/events"
-            className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
-          >
-            View More
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          <EventCard
-            title="Jom Cuti Sekolah 2025"
-            subtitle="School holiday travel deals and family activities"
-            date="12 - 15 January 2025"
-            location="Kuala Lumpur"
-            type="Promotion Event"
-            badges={["Family-friendly", "School Holiday"]}
-            imageGradient="bg-gradient-to-br from-yellow-200 to-orange-300"
-          />
-          <EventCard
-            title="Cuti Cuti Muslim-Friendly Fair"
-            subtitle="Muslim-friendly travel packages and experiences"
-            date="18- 20 January 2025"
-            location="Kuala Lumpur"
-            type="Travel Fair"
-            badges={["Muslim-friendly", "Travel Deals"]}
-            imageGradient="bg-gradient-to-br from-green-200 to-teal-300"
-          />
-          <EventCard
-            title="Play Your Way to Joy Festival"
-            subtitle="Interactive activities and attractions for all ages"
-            date="5- 7 February"
-            location="Sunway Lagoon, Selangor"
-            type="Festival"
-            badges={["Family-friendly", "Popular Event"]}
-            imageGradient="bg-gradient-to-br from-purple-200 to-pink-300"
-          />
-        </div>
-      </section>
-
-      {/* Community Story Section */}
-      <section className="relative z-10 px-4 sm:px-6 md:px-12 lg:px-16 xl:px-24 py-8 pb-16">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
-            Community Story
-          </h2>
-          <Link
-            href="/community/stories"
-            className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
-          >
-            View More
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          <StoryCard
-            id={1}
-            location="Kuala Lumpur, Malaysia"
-            place="Kuala Lumpur City Centre"
-            author="Imran Rosli"
-            authorBadge="Verified Local"
-            tags={["#LocalTourist", "#KLCC"]}
-            bgGradient="bg-gradient-to-br from-blue-400 to-purple-500"
-          />
-          <StoryCard
-            id={2}
-            location="Langkawi Island, Malaysia"
-            place="Langkawi Island Bridge"
-            author="Farah Shazwanie"
-            authorBadge="Frequent Traveller"
-            tags={["#Langkawi"]}
-            bgGradient="bg-gradient-to-br from-cyan-400 to-blue-500"
-          />
-          <StoryCard
-            id={3}
-            location="Macau, Hong Kong"
-            place="Lisboeta, Macau"
-            author="Saranya Mohabatten"
-            authorBadge="Verified Local"
-            tags={["#Macau", "#Local", "#Tourist"]}
-            bgGradient="bg-gradient-to-br from-orange-400 to-red-500"
-          />
-        </div>
-      </section>
+        {/* Community Story Section */}
+        <section className="relative z-10 py-8 pb-16">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
+              Community Story
+            </h2>
+            <Link
+              href="/community/stories"
+              className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+            >
+              View More
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <StoryCard
+              id={1}
+              location="Kuala Lumpur, Malaysia"
+              place="Kuala Lumpur City Centre"
+              author="Imran Rosli"
+              authorBadge="Verified Local"
+              tags={["#LocalTourist", "#KLCC"]}
+              bgGradient="bg-gradient-to-br from-blue-400 to-purple-500"
+            />
+            <StoryCard
+              id={2}
+              location="Langkawi Island, Malaysia"
+              place="Langkawi Island Bridge"
+              author="Farah Shazwanie"
+              authorBadge="Frequent Traveller"
+              tags={["#Langkawi"]}
+              bgGradient="bg-gradient-to-br from-cyan-400 to-blue-500"
+            />
+            <StoryCard
+              id={3}
+              location="Macau, Hong Kong"
+              place="Lisboeta, Macau"
+              author="Saranya Mohabatten"
+              authorBadge="Verified Local"
+              tags={["#Macau", "#Local", "#Tourist"]}
+              bgGradient="bg-gradient-to-br from-orange-400 to-red-500"
+            />
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
