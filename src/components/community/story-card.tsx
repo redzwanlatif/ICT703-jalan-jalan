@@ -54,7 +54,7 @@ export function StoryCard({
                         )}
                     </div>
                 </div>
-                <div className={cn("h-100 md:h-108 relative overflow-hidden", !imagePath && bgGradient)}>
+                <div className={cn("h-[400px] md:h-[432px] relative overflow-hidden", !imagePath && bgGradient)}>
                     {imagePath && (
                         <Image
                             src={imagePath}

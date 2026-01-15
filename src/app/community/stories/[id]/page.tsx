@@ -184,7 +184,9 @@ export default function StoryDetailPage({
                   <Twitter className="h-4 w-4 hover:text-blue-400 cursor-pointer transition-colors" />
                   <LinkIcon className="h-4 w-4 hover:text-neutral-600 cursor-pointer transition-colors" />
                   <ReportModal>
-                    <AlertCircle className="h-4 w-4 hover:text-red-500 cursor-pointer transition-colors" />
+                    <button type="button" aria-label="Report this story" className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded">
+                      <AlertCircle className="h-4 w-4 hover:text-red-500 cursor-pointer transition-colors" />
+                    </button>
                   </ReportModal>
                 </div>
               </div>

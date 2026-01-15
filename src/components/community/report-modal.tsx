@@ -119,10 +119,10 @@ export function ReportModal({ children }: ReportModalProps) {
                         {/* Success Text */}
                         <div className="text-center space-y-2">
                             <h3 className="text-lg font-bold text-slate-700 uppercase tracking-wide">
-                                YOUR REPORT IS SUCCESSFULLY
+                                YOUR REPORT HAS BEEN
                             </h3>
                             <h3 className="text-lg font-bold text-slate-700 uppercase tracking-wide">
-                                SUBMITTED
+                                SUCCESSFULLY SUBMITTED
                             </h3>
                         </div>
 

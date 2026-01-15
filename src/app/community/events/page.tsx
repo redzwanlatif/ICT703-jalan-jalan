@@ -19,7 +19,7 @@ export default function UpcomingEventsPage() {
     {
       title: "Cuti Cuti Muslim-Friendly Fair",
       subtitle: "Muslim-friendly travel packages and experiences",
-      date: "18- 20 January 2025",
+      date: "18 - 20 January 2025",
       location: "Ayer Molek, Melaka",
       type: "Travel Fair",
       badges: ["Muslim-friendly", "Travel Deals"],
@@ -29,7 +29,7 @@ export default function UpcomingEventsPage() {
     {
       title: "Play Your Way to Joy Festival",
       subtitle: "Interactive activities and attractions for all ages",
-      date: "5- 7 February",
+      date: "5 - 7 February",
       location: "Ayer Keroh, Melaka",
       type: "Festival",
       badges: ["Family-friendly", "Popular Event"],
@@ -49,7 +49,7 @@ export default function UpcomingEventsPage() {
     {
       title: "Cuti Cuti Muslim-Friendly Fair",
       subtitle: "Muslim-friendly travel packages and experiences",
-      date: "18- 20 January 2025",
+      date: "18 - 20 January 2025",
       location: "Ayer Molek, Melaka",
       type: "Travel Fair",
       badges: ["Muslim-friendly", "Travel Deals"],
@@ -59,7 +59,7 @@ export default function UpcomingEventsPage() {
     {
       title: "Play Your Way to Joy Festival",
       subtitle: "Interactive activities and attractions for all ages",
-      date: "5- 7 February",
+      date: "5 - 7 February",
       location: "Ayer Keroh, Melaka",
       type: "Festival",
       badges: ["Family-friendly", "Popular Event"],
@@ -79,7 +79,7 @@ export default function UpcomingEventsPage() {
     {
       title: "Cuti Cuti Muslim-Friendly Fair",
       subtitle: "Muslim-friendly travel packages and experiences",
-      date: "18- 20 January 2025",
+      date: "18 - 20 January 2025",
       location: "Ayer Molek, Melaka",
       type: "Travel Fair",
       badges: ["Muslim-friendly", "Travel Deals"],
@@ -89,7 +89,7 @@ export default function UpcomingEventsPage() {
     {
       title: "Play Your Way to Joy Festival",
       subtitle: "Interactive activities and attractions for all ages",
-      date: "5- 7 February",
+      date: "5 - 7 February",
       location: "Ayer Keroh, Melaka",
       type: "Festival",
       badges: ["Family-friendly", "Popular Event"],
@@ -109,7 +109,7 @@ export default function UpcomingEventsPage() {
     {
       title: "Cuti Cuti Muslim-Friendly Fair",
       subtitle: "Muslim-friendly travel packages and experiences",
-      date: "18- 20 January 2025",
+      date: "18 - 20 January 2025",
       location: "Ayer Molek, Melaka",
       type: "Travel Fair",
       badges: ["Muslim-friendly", "Travel Deals"],
@@ -119,7 +119,7 @@ export default function UpcomingEventsPage() {
     {
       title: "Play Your Way to Joy Festival",
       subtitle: "Interactive activities and attractions for all ages",
-      date: "5- 7 February",
+      date: "5 - 7 February",
       location: "Ayer Keroh, Melaka",
       type: "Festival",
       badges: ["Family-friendly", "Popular Event"],
@@ -142,7 +142,7 @@ export default function UpcomingEventsPage() {
         </section>
 
         {/* Events Grid */}
-        <section className="relative z-10 pb-18">
+        <section className="relative z-10 pb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
             {events.map((event, i) => (
               <EventCard key={i} {...event} />

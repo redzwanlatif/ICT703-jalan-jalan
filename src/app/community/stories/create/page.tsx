@@ -142,7 +142,7 @@ export default function CreateStoryPage() {
                 className="mt-1 w-4 h-4 border border-neutral-400 rounded accent-[#1E3A8A] cursor-pointer"
               />
               <label htmlFor="confirm" className="text-sm text-neutral-500 cursor-pointer select-none">
-                I confirm that all photos and videos I have uploaded are my own, and I agree to be bound by JalanJalan's
+                I confirm that all photos and videos I have uploaded are my own, and I agree to be bound by Jalan-Jalan's Terms of Service and Community Guidelines.
               </label>
             </div>
 
