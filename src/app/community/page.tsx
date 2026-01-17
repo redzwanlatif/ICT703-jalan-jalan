@@ -1,187 +1,358 @@
 "use client";
 
-import { Search, Calendar, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  PageLayoutFull,
-  PageSection,
-  UnifiedCard,
-  AnimatedBackground,
-} from "@/components/shared/page-layout";
-import { Navigation } from "@/components/shared/navigation";
-import { GroupLabel } from "@/components/shared/group-label";
-import { FlowGuide } from "@/components/shared/flow-guide";
-import { EventCard } from "@/components/community/event-card";
-import { StoryCard } from "@/components/community/story-card";
+import { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  MapPin,
+  Calendar,
+  Users,
+  ChevronRight,
+  Sparkles,
+  Star,
+  Plus,
+  Ticket,
+  BookOpen,
+  TrendingUp,
+  Clock,
+} from "lucide-react";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { cn } from "@/lib/utils";
 
-// Trip Card component
-function TripCard({ title, dates, status }: { title: string; dates: string; status: "Active" | "Upcoming" }) {
-  return (
-    <UnifiedCard className="group p-0">
-      <div className="p-6 space-y-1">
-        <h3 className="font-semibold text-neutral-800 dark:text-neutral-100">{title}</h3>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">{dates}</p>
-      </div>
-      <div className="px-6 pb-6 flex items-center justify-between">
-        <Badge
-          variant="outline"
-          className={cn(
-            "rounded-lg",
-            status === "Active"
-              ? "border-emerald-500/50 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"
-              : "border-orange-500/50 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400"
-          )}
-        >
-          {status}
-        </Badge>
-        <span className="font-semibold text-neutral-600 dark:text-neutral-300 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-          View More
-        </span>
-      </div>
-    </UnifiedCard>
-  );
-}
+// Trip data
+const trips = [
+  {
+    id: 1,
+    title: "Malacca River Walk",
+    dates: "25th - 26th Feb 2026",
+    status: "active" as const,
+    emoji: "🚣",
+  },
+  {
+    id: 2,
+    title: "Baba Nyonya Museum",
+    dates: "25th - 26th Mar 2026",
+    status: "upcoming" as const,
+    emoji: "🏛️",
+  },
+  {
+    id: 3,
+    title: "Menara Taming Sari",
+    dates: "25th - 26th Apr 2026",
+    status: "upcoming" as const,
+    emoji: "🗼",
+  },
+];
 
+// Events data
+const events = [
+  {
+    id: 1,
+    title: "Jom Cuti Sekolah 2026",
+    subtitle: "School holiday travel deals",
+    date: "12 - 15 Jan",
+    location: "Ayer Keroh, Melaka",
+    type: "Promotion",
+    color: "var(--duo-yellow)",
+    emoji: "🎉",
+  },
+  {
+    id: 2,
+    title: "Cuti Muslim-Friendly Fair",
+    subtitle: "Muslim-friendly packages",
+    date: "18 - 20 Jan",
+    location: "Ayer Molek, Melaka",
+    type: "Travel Fair",
+    color: "var(--duo-green)",
+    emoji: "🌙",
+  },
+  {
+    id: 3,
+    title: "Play Your Way Festival",
+    subtitle: "Interactive activities for all",
+    date: "5 - 7 Feb",
+    location: "Pantai Klebang",
+    type: "Festival",
+    color: "var(--duo-purple)",
+    emoji: "🎪",
+  },
+];
 
+// Stories data
+const stories = [
+  {
+    id: 1,
+    place: "Malacca Sultanate Museum",
+    author: "Imran Rosli",
+    badge: "Verified Local",
+    tags: ["#LocalTourist", "#Melaka"],
+    color: "var(--duo-blue)",
+  },
+  {
+    id: 2,
+    place: "Muzium Samudera",
+    author: "Farah Shazwanie",
+    badge: "Frequent Traveller",
+    tags: ["#Melaka"],
+    color: "var(--duo-purple)",
+  },
+  {
+    id: 3,
+    place: "Kampung Morten",
+    author: "Hafiz Suhaimi",
+    badge: "Verified Local",
+    tags: ["#Local", "#Tourist"],
+    color: "var(--duo-orange)",
+  },
+];
 
 export default function CommunityPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950 relative">
-      <Navigation />
-      <GroupLabel group={4} />
-      <AnimatedBackground variant="subtle" />
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <DuoMascot mood="happy" size="sm" />
+          <div className="flex-1">
+            <h1 className="text-2xl font-extrabold">Community</h1>
+            <p className="text-muted-foreground">Trips, events & stories</p>
+          </div>
+        </motion.div>
 
-      <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-8">
-        {/* My Trip Section */}
-        <section className="relative z-10 py-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
-              My Trip
+        {/* My Trips Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="font-extrabold flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-[var(--duo-green)]" />
+              My Trips
             </h2>
             <Link
               href="/predictions"
-              className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+              className="text-sm font-bold text-[var(--duo-blue)] hover:underline flex items-center gap-1"
             >
-              Create New Trip
+              <Plus className="w-4 h-4" />
+              New Trip
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            <TripCard
-              title="Malacca River Walk"
-              dates="25th February - 26th February 2026"
-              status="Active"
-            />
-            <TripCard
-              title="Baba Nyonya Heritage Museum"
-              dates="25th March - 26th March 2026"
-              status="Upcoming"
-            />
-            <TripCard
-              title="Menara Taming Sari"
-              dates="25th April - 26th April 2026"
-              status="Upcoming"
-            />
+
+          <div className="space-y-2">
+            {trips.map((trip, index) => (
+              <motion.div
+                key={trip.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 + index * 0.05 }}
+              >
+                <Link href={`/trip/${trip.id}/plan`}>
+                  <div className="duo-card duo-card-interactive p-4 flex items-center gap-4">
+                    <span className="text-3xl">{trip.emoji}</span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold truncate">{trip.title}</h3>
+                      <p className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {trip.dates}
+                      </p>
+                    </div>
+                    <span
+                      className={cn(
+                        "px-3 py-1 rounded-full text-xs font-bold",
+                        trip.status === "active"
+                          ? "bg-[var(--duo-green)]/20 text-[var(--duo-green)]"
+                          : "bg-[var(--duo-orange)]/20 text-[var(--duo-orange)]"
+                      )}
+                    >
+                      {trip.status === "active" ? "Active" : "Upcoming"}
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Upcoming Events Section */}
-        <section className="relative z-10 py-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="font-extrabold flex items-center gap-2">
+              <Ticket className="w-5 h-5 text-[var(--duo-purple)]" />
               Upcoming Events
             </h2>
             <Link
               href="/community/events"
-              className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+              className="text-sm font-bold text-[var(--duo-blue)] hover:underline flex items-center gap-1"
             >
-              View More
+              View All
+              <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            <EventCard
-              title="Jom Cuti Sekolah 2026"
-              subtitle="School holiday travel deals and family activities"
-              date="12 - 15 January 2026"
-              location="Ayer Keroh, Melaka"
-              type="Promotion Event"
-              badges={["Family-friendly", "School Holiday"]}
-              image="event-01.png"
-              imageGradient="bg-gradient-to-br from-yellow-200 to-orange-300"
-            />
-            <EventCard
-              title="Cuti Cuti Muslim-Friendly Fair"
-              subtitle="Muslim-friendly travel packages and experiences"
-              date="18 - 20 January 2026"
-              location="Ayer Molek, Melaka"
-              type="Travel Fair"
-              badges={["Muslim-friendly", "Travel Deals"]}
-              image="event-02.png"
-              imageGradient="bg-gradient-to-br from-green-200 to-teal-300"
-            />
-            <EventCard
-              title="Play Your Way to Joy Festival"
-              subtitle="Interactive activities and attractions for all ages"
-              date="5 - 7 February 2026"
-              location="Pantai Klebang, Melaka"
-              type="Festival"
-              badges={["Family-friendly", "Popular Event"]}
-              image="event-03.png"
-              imageGradient="bg-gradient-to-br from-purple-200 to-pink-300"
-            />
-          </div>
-        </section>
 
-        {/* Community Story Section */}
-        <section className="relative z-10 py-8 pb-16">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
-              Community Story
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+            {events.map((event, index) => (
+              <motion.div
+                key={event.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 + index * 0.05 }}
+                className="flex-shrink-0 w-[200px]"
+              >
+                <div
+                  className="duo-card p-4 h-full"
+                  style={{ borderColor: event.color }}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-2xl">{event.emoji}</span>
+                    <span
+                      className="text-[10px] px-2 py-0.5 rounded-full font-bold"
+                      style={{
+                        background: `color-mix(in srgb, ${event.color} 20%, transparent)`,
+                        color: event.color,
+                      }}
+                    >
+                      {event.type}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-sm mb-1 line-clamp-1">{event.title}</h3>
+                  <p className="text-xs text-muted-foreground mb-2 line-clamp-1">
+                    {event.subtitle}
+                  </p>
+                  <div className="space-y-1 text-xs text-muted-foreground">
+                    <p className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      {event.date}
+                    </p>
+                    <p className="flex items-center gap-1">
+                      <MapPin className="w-3 h-3" />
+                      {event.location}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Community Stories Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="font-extrabold flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-[var(--duo-orange)]" />
+              Community Stories
             </h2>
             <Link
               href="/community/stories"
-              className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+              className="text-sm font-bold text-[var(--duo-blue)] hover:underline flex items-center gap-1"
             >
-              View More
+              View All
+              <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            <StoryCard
-              id={1}
-              location="Melaka"
-              place="Malacca Sultanate Museum"
-              author="Imran Rosli"
-              authorBadge="Verified Local"
-              tags={["#LocalTourist", "#Melaka"]}
-              bgGradient="bg-gradient-to-br from-blue-400 to-purple-500"
-              image="story-01.webp"
-            />
-            <StoryCard
-              id={2}
-              location="Melaka"
-              place="Muzium Samudera"
-              author="Farah Shazwanie"
-              authorBadge="Frequent Traveller"
-              tags={["#Melaka"]}
-              bgGradient="bg-gradient-to-br from-cyan-400 to-blue-500"
-              image="story-02.webp"
-            />
-            <StoryCard
-              id={3}
-              location="Melaka"
-              place="Kampung Morten"
-              author="Hafiz Suhaimi"
-              authorBadge="Verified Local"
-              tags={["#Melaka", "#Local", "#Tourist"]}
-              bgGradient="bg-gradient-to-br from-orange-400 to-red-500"
-              image="story-03.webp"
-            />
+
+          <div className="space-y-2">
+            {stories.map((story, index) => (
+              <motion.div
+                key={story.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + index * 0.05 }}
+              >
+                <Link href={`/community/stories/${story.id}`}>
+                  <div
+                    className="duo-card duo-card-interactive p-4"
+                    style={{ borderColor: story.color }}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                        style={{
+                          background: `color-mix(in srgb, ${story.color} 20%, transparent)`,
+                        }}
+                      >
+                        <MapPin
+                          className="w-6 h-6"
+                          style={{ color: story.color }}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold truncate">{story.place}</h3>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-xs text-muted-foreground">
+                            by {story.author}
+                          </span>
+                          <span
+                            className="text-[10px] px-2 py-0.5 rounded-full font-bold"
+                            style={{
+                              background: `color-mix(in srgb, ${story.color} 20%, transparent)`,
+                              color: story.color,
+                            }}
+                          >
+                            {story.badge}
+                          </span>
+                        </div>
+                        <div className="flex gap-1 mt-2">
+                          {story.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-semibold"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0" />
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </div>
-        </section>
-      </main>
-    </div>
+        </motion.section>
+
+        {/* Create Story CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="space-y-4 pt-4"
+        >
+          <Link href="/community/stories/create">
+            <DuoButton fullWidth>
+              <Plus className="w-5 h-5 mr-2" />
+              Share Your Story
+            </DuoButton>
+          </Link>
+
+          {/* XP Hint */}
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mt-2">
+            <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+            <span>
+              Earn <strong className="text-[var(--duo-green)]">+25 XP</strong> for
+              sharing stories!
+            </span>
+          </div>
+        </motion.div>
+      </div>
+    </DuoAppShell>
   );
 }

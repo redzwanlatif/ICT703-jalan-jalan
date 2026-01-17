@@ -3,11 +3,77 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================================
+   JALAN-JALAN DESIGN SYSTEM
+   Playful travel planning experience inspired by the bus mascot
+   Official brand colors extracted from logo.png and mascot.png
+   ============================================================================ */
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-nunito);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-nunito);
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     JALAN-JALAN OFFICIAL BRAND PALETTE
+     Extracted from logo.png and mascot.png
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* Primary: Terracotta/Rust - warmth, adventure (bus roof & border) */
+  --color-jj-terracotta: #C75A3B;
+  --color-jj-terracotta-dark: #A84832;
+  --color-jj-terracotta-light: #E07050;
+
+  /* Secondary: Sky Blue - freedom, journey (logo background) */
+  --color-jj-sky: #7CB9E8;
+  --color-jj-sky-dark: #5A9FD4;
+  --color-jj-sky-light: #A8D4F5;
+
+  /* Accent: Light Cyan - freshness (bus windows) */
+  --color-jj-cyan: #7DD4E4;
+  --color-jj-cyan-dark: #5AC0D3;
+  --color-jj-cyan-light: #A5E5F0;
+
+  /* Nature: Grass Green - exploration, outdoors */
+  --color-jj-green: #389B59;
+  --color-jj-green-dark: #2D7D46;
+  --color-jj-green-light: #4CB76D;
+
+  /* Neutral: Cream - comfort, warmth (bus body) */
+  --color-jj-cream: #F5EDE0;
+  --color-jj-cream-dark: #E8DCC8;
+  --color-jj-cream-light: #FDF8F2;
+
+  /* Dark: Brown - grounding, outlines */
+  --color-jj-brown: #3D1F1A;
+  --color-jj-brown-light: #5C3830;
+
+  /* Accent: Navy Blue - trust, depth (mascot eyes) */
+  --color-jj-navy: #1E3A8A;
+  --color-jj-navy-light: #2B4B9B;
+
+  /* Highlight: Orange/Coral - energy, excitement (accent dot) */
+  --color-jj-coral: #E85D3B;
+  --color-jj-coral-dark: #C94A2B;
+
+  /* Legacy aliases for compatibility */
+  --color-duo-green: var(--color-jj-green);
+  --color-duo-green-dark: var(--color-jj-green-dark);
+  --color-duo-green-light: var(--color-jj-green-light);
+  --color-duo-blue: var(--color-jj-sky);
+  --color-duo-blue-dark: var(--color-jj-sky-dark);
+  --color-duo-orange: var(--color-jj-terracotta);
+  --color-duo-orange-dark: var(--color-jj-terracotta-dark);
+  --color-duo-red: var(--color-jj-coral);
+  --color-duo-red-dark: var(--color-jj-coral-dark);
+  --color-duo-purple: var(--color-jj-navy-light);
+  --color-duo-purple-dark: var(--color-jj-navy);
+  --color-duo-yellow: #FBBF24;
+  --color-duo-pink: #F472B6;
+
+  /* Semantic Colors */
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -47,72 +113,209 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 1rem;
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     JALAN-JALAN LIGHT THEME
+     Clean cream/white backgrounds with warm, travel-inspired accents
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* Main Background: Warm cream inspired by bus body */
+  --background: #FFFDF9;
+  --foreground: #3D1F1A;
+
+  /* Cards: Slightly elevated cream */
+  --card: #FFFFFF;
+  --card-foreground: #3D1F1A;
+  --popover: #FFFFFF;
+  --popover-foreground: #3D1F1A;
+
+  /* Primary Action: Jalan-Jalan Terracotta (bus roof color) */
+  --primary: #C75A3B;
+  --primary-foreground: #FFFFFF;
+
+  /* Secondary: Cream tones */
+  --secondary: #F5EDE0;
+  --secondary-foreground: #3D1F1A;
+
+  /* Muted: Soft cream for subtitles */
+  --muted: #F5EDE0;
+  --muted-foreground: #8B7355;
+
+  /* Accent: Sky Blue (logo background) */
+  --accent: #7CB9E8;
+  --accent-foreground: #FFFFFF;
+  --destructive: #E85D3B;
+
+  /* Borders & Inputs */
+  --border: #E8DCC8;
+  --input: #FFFFFF;
+  --ring: #C75A3B;
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+     JALAN-JALAN OFFICIAL BRAND COLORS
+     Based on logo.png and mascot.png
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* Terracotta - Primary CTA, Headers, Key Actions (bus roof) */
+  --jj-terracotta: #C75A3B;
+  --jj-terracotta-dark: #A84832;
+  --jj-terracotta-light: #E07050;
+
+  /* Sky Blue - Secondary Actions, Links (logo background) */
+  --jj-sky: #7CB9E8;
+  --jj-sky-dark: #5A9FD4;
+  --jj-sky-light: #A8D4F5;
+
+  /* Cyan - Info, Highlights (bus windows) */
+  --jj-cyan: #7DD4E4;
+  --jj-cyan-dark: #5AC0D3;
+  --jj-cyan-light: #A5E5F0;
+
+  /* Green - Success, Nature, Progress (grass) */
+  --jj-green: #389B59;
+  --jj-green-dark: #2D7D46;
+  --jj-green-light: #4CB76D;
+
+  /* Cream - Backgrounds, Cards (bus body) */
+  --jj-cream: #F5EDE0;
+  --jj-cream-dark: #E8DCC8;
+  --jj-cream-light: #FDF8F2;
+
+  /* Brown - Text, Outlines (mascot outlines) */
+  --jj-brown: #3D1F1A;
+  --jj-brown-light: #5C3830;
+
+  /* Navy - Trust, Depth (mascot eyes) */
+  --jj-navy: #1E3A8A;
+  --jj-navy-light: #2B4B9B;
+
+  /* Coral - Alerts, Energy (accent dot) */
+  --jj-coral: #E85D3B;
+  --jj-coral-dark: #C94A2B;
+
+  /* Legacy duo-* aliases for backward compatibility */
+  --duo-green: #389B59;
+  --duo-green-dark: #2D7D46;
+  --duo-green-light: #4CB76D;
+  --duo-blue: #7CB9E8;
+  --duo-blue-dark: #5A9FD4;
+  --duo-orange: #C75A3B;
+  --duo-orange-dark: #A84832;
+  --duo-red: #E85D3B;
+  --duo-red-dark: #C94A2B;
+  --duo-purple: #2B4B9B;
+  --duo-purple-dark: #1E3A8A;
+  --duo-yellow: #FBBF24;
+  --duo-pink: #F472B6;
+
+  /* Neutrals - Text & UI elements */
+  --duo-gray: #8B7355;
+  --duo-gray-light: #E8DCC8;
+  --duo-gray-dark: #5C3830;
+  --duo-text-dark: #3D1F1A;
+  --duo-text-darker: #2A1512;
+
+  /* Chart colors - Jalan-Jalan palette */
+  --chart-1: #389B59;
+  --chart-2: #7CB9E8;
+  --chart-3: #C75A3B;
+  --chart-4: #1E3A8A;
+  --chart-5: #E85D3B;
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #3D1F1A;
+  --sidebar-primary: #C75A3B;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F5EDE0;
+  --sidebar-accent-foreground: #3D1F1A;
+  --sidebar-border: #E8DCC8;
+  --sidebar-ring: #C75A3B;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* ═══════════════════════════════════════════════════════════════════════════
+     JALAN-JALAN DARK THEME
+     Deep brown/navy night mode inspired by mascot colors
+     ═══════════════════════════════════════════════════════════════════════════ */
+
+  /* Deep brown background inspired by mascot outlines */
+  --background: #1A1210;
+  --foreground: #F5EDE0;
+  --card: #2A1F1A;
+  --card-foreground: #F5EDE0;
+  --popover: #2A1F1A;
+  --popover-foreground: #F5EDE0;
+
+  /* Primary: Lighter terracotta for dark mode */
+  --primary: #E07050;
+  --primary-foreground: #1A1210;
+
+  /* Secondary: Dark cream tones */
+  --secondary: #3D2A24;
+  --secondary-foreground: #F5EDE0;
+  --muted: #3D2A24;
+  --muted-foreground: #C4A589;
+
+  /* Accent: Lighter sky blue */
+  --accent: #A8D4F5;
+  --accent-foreground: #1A1210;
+  --destructive: #F87171;
+
+  /* Borders */
+  --border: #3D2A24;
+  --input: #3D2A24;
+  --ring: #E07050;
+
+  /* Dark mode Jalan-Jalan brand colors (lightened) */
+  --jj-terracotta: #E07050;
+  --jj-terracotta-dark: #C75A3B;
+  --jj-terracotta-light: #F08B6D;
+  --jj-sky: #A8D4F5;
+  --jj-sky-dark: #7CB9E8;
+  --jj-sky-light: #C5E4FA;
+  --jj-cyan: #A5E5F0;
+  --jj-cyan-dark: #7DD4E4;
+  --jj-cyan-light: #C2EFF7;
+  --jj-green: #4CB76D;
+  --jj-green-dark: #389B59;
+  --jj-green-light: #6FCF89;
+  --jj-cream: #F5EDE0;
+  --jj-cream-dark: #E8DCC8;
+  --jj-navy: #3B5CC4;
+  --jj-navy-light: #5078D9;
+  --jj-coral: #F87B5B;
+  --jj-coral-dark: #E85D3B;
+
+  /* Dark mode legacy duo-* aliases */
+  --duo-green: #4CB76D;
+  --duo-green-dark: #389B59;
+  --duo-green-light: #6FCF89;
+  --duo-blue: #A8D4F5;
+  --duo-blue-dark: #7CB9E8;
+  --duo-orange: #E07050;
+  --duo-orange-dark: #C75A3B;
+  --duo-red: #F87B5B;
+  --duo-red-dark: #E85D3B;
+  --duo-yellow: #FCD34D;
+
+  /* Chart colors - Jalan-Jalan dark palette */
+  --chart-1: #4CB76D;
+  --chart-2: #A8D4F5;
+  --chart-3: #E07050;
+  --chart-4: #5078D9;
+  --chart-5: #F87B5B;
+
+  /* Sidebar dark mode */
+  --sidebar: #2A1F1A;
+  --sidebar-foreground: #F5EDE0;
+  --sidebar-primary: #E07050;
+  --sidebar-primary-foreground: #1A1210;
+  --sidebar-accent: #3D2A24;
+  --sidebar-accent-foreground: #F5EDE0;
+  --sidebar-border: #3D2A24;
+  --sidebar-ring: #E07050;
 }
 
 @layer base {
@@ -121,10 +324,698 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-nunito), 'Nunito', system-ui, sans-serif;
+    font-weight: 600;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
   }
 }
 
-/* Quest System Animations */
+/* ============================================================================
+   JALAN-JALAN BUTTON STYLES
+   Primary buttons use terracotta, secondary use sky blue
+   ============================================================================ */
+
+.duo-btn {
+  @apply relative inline-flex items-center justify-center gap-2 font-bold text-lg rounded-2xl px-6 py-3;
+  @apply transition-all duration-150 ease-out;
+  @apply active:translate-y-1 active:shadow-none;
+  box-shadow: 0 4px 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+  background: var(--jj-terracotta, var(--duo-orange));
+  color: white;
+}
+
+.duo-btn:hover {
+  filter: brightness(1.05);
+}
+
+.duo-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+}
+
+/* Sky blue secondary button */
+.duo-btn-blue {
+  background: var(--jj-sky, var(--duo-blue));
+  box-shadow: 0 4px 0 var(--jj-sky-dark, var(--duo-blue-dark));
+}
+
+/* Green success button */
+.duo-btn-green {
+  background: var(--jj-green, var(--duo-green));
+  box-shadow: 0 4px 0 var(--jj-green-dark, var(--duo-green-dark));
+}
+
+/* Coral/Orange accent button */
+.duo-btn-orange {
+  background: var(--jj-coral, var(--duo-red));
+  box-shadow: 0 4px 0 var(--jj-coral-dark, var(--duo-red-dark));
+}
+
+/* Navy button for premium/special actions */
+.duo-btn-purple {
+  background: var(--jj-navy, var(--duo-purple));
+  box-shadow: 0 4px 0 var(--jj-navy-light, var(--duo-purple-dark));
+}
+
+/* Coral alert button */
+.duo-btn-red {
+  background: var(--jj-coral, var(--duo-red));
+  box-shadow: 0 4px 0 var(--jj-coral-dark, var(--duo-red-dark));
+}
+
+.duo-btn-outline {
+  background: transparent;
+  border: 2px solid var(--duo-gray-light);
+  color: var(--duo-blue);
+  box-shadow: 0 4px 0 var(--duo-gray-light);
+}
+
+.duo-btn-outline:hover {
+  background: var(--duo-gray-light);
+}
+
+.duo-btn-disabled {
+  background: var(--duo-gray-light);
+  color: var(--duo-gray);
+  box-shadow: 0 4px 0 #CCCCCC;
+  cursor: not-allowed;
+}
+
+/* Large button variant */
+.duo-btn-lg {
+  @apply text-xl px-8 py-4 rounded-3xl;
+  box-shadow: 0 6px 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+}
+
+.duo-btn-lg:active {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+}
+
+/* Small button variant */
+.duo-btn-sm {
+  @apply text-base px-4 py-2 rounded-xl;
+  box-shadow: 0 3px 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+}
+
+.duo-btn-sm:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+}
+
+/* ============================================================================
+   JALAN-JALAN CARD STYLES
+   ============================================================================ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   JALAN-JALAN CARD SYSTEM
+   Clean elevated cards with 3D shadow effect, cream-toned borders
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.duo-card {
+  @apply bg-white rounded-3xl border-2 p-6;
+  border-color: var(--jj-cream-dark, #E8DCC8);
+  box-shadow: 0 4px 0 var(--jj-cream-dark, #E8DCC8);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  color: var(--jj-brown, #3D1F1A);
+}
+
+.duo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--jj-cream-dark, #E8DCC8);
+}
+
+.duo-card-interactive {
+  @apply cursor-pointer;
+}
+
+.duo-card-interactive:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--jj-cream-dark, #E8DCC8);
+}
+
+/* Colored card variants - Jalan-Jalan palette */
+.duo-card-green {
+  border-color: var(--jj-green, var(--duo-green));
+  box-shadow: 0 4px 0 var(--jj-green-dark, var(--duo-green-dark));
+}
+
+.duo-card-blue {
+  border-color: var(--jj-sky, var(--duo-blue));
+  box-shadow: 0 4px 0 var(--jj-sky-dark, var(--duo-blue-dark));
+}
+
+.duo-card-orange, .duo-card-terracotta {
+  border-color: var(--jj-terracotta, var(--duo-orange));
+  box-shadow: 0 4px 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+}
+
+.duo-card-purple, .duo-card-navy {
+  border-color: var(--jj-navy, var(--duo-purple));
+  box-shadow: 0 4px 0 var(--jj-navy-light, var(--duo-purple-dark));
+}
+
+.duo-card-coral {
+  border-color: var(--jj-coral, var(--duo-red));
+  box-shadow: 0 4px 0 var(--jj-coral-dark, var(--duo-red-dark));
+}
+
+.duo-card-cyan {
+  border-color: var(--jj-cyan, #7DD4E4);
+  box-shadow: 0 4px 0 var(--jj-cyan-dark, #5AC0D3);
+}
+
+/* ============================================================================
+   JALAN-JALAN PROGRESS BAR
+   ============================================================================ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   JALAN-JALAN PROGRESS BARS
+   Uses green for success/completion
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.duo-progress {
+  @apply relative h-5 rounded-full overflow-hidden;
+  background: var(--jj-cream-dark, #E8DCC8);
+}
+
+.duo-progress-bar {
+  @apply h-full rounded-full transition-all duration-500 ease-out;
+  background: linear-gradient(180deg, var(--jj-green-light, #4CB76D) 0%, var(--jj-green, #389B59) 100%);
+}
+
+.duo-progress-bar::after {
+  content: '';
+  @apply absolute top-1 left-1 right-1 h-2 rounded-full;
+  background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 100%);
+}
+
+/* XP Progress */
+.duo-xp-bar {
+  @apply relative h-3 rounded-full overflow-hidden;
+  background: var(--jj-cream-dark, #E8DCC8);
+}
+
+.duo-xp-fill {
+  @apply h-full rounded-full;
+  background: linear-gradient(90deg, var(--duo-yellow, #FBBF24) 0%, var(--jj-terracotta, #C75A3B) 100%);
+}
+
+/* ============================================================================
+   JALAN-JALAN STREAK & STATS
+   ============================================================================ */
+
+.duo-streak {
+  @apply inline-flex items-center gap-2 rounded-2xl font-bold;
+  background: linear-gradient(135deg, var(--jj-terracotta, #C75A3B) 0%, var(--jj-coral, #E85D3B) 100%);
+  color: white;
+}
+
+.duo-streak-flame {
+  @apply text-2xl;
+  animation: flame-dance 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes flame-dance {
+  0% { transform: scale(1) rotate(-5deg); }
+  100% { transform: scale(1.1) rotate(5deg); }
+}
+
+.duo-hearts {
+  @apply inline-flex items-center gap-1 rounded-xl font-bold;
+  background: var(--jj-coral, #E85D3B);
+  color: white;
+}
+
+.duo-xp-badge {
+  @apply inline-flex items-center gap-1 px-3 py-1.5 rounded-xl font-bold;
+  background: var(--duo-yellow, #FBBF24);
+  color: var(--jj-brown, #3D1F1A);
+}
+
+/* ============================================================================
+   JALAN-JALAN MASCOT (BUS) ANIMATIONS
+   Use with the mascot.png bus character
+   ============================================================================ */
+
+.duo-mascot {
+  @apply relative;
+  animation: mascot-bounce 2s ease-in-out infinite;
+}
+
+@keyframes mascot-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.duo-mascot-celebrate {
+  animation: mascot-celebrate 0.6s ease-out;
+}
+
+@keyframes mascot-celebrate {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.2) rotate(-10deg); }
+  50% { transform: scale(1.2) rotate(10deg); }
+  75% { transform: scale(1.1) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.duo-mascot-wave {
+  animation: mascot-wave 1s ease-in-out infinite;
+}
+
+@keyframes mascot-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  75% { transform: rotate(-20deg); }
+}
+
+/* ============================================================================
+   JALAN-JALAN LESSON/WIZARD STYLES
+   ============================================================================ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   JALAN-JALAN WIZARD/LESSON SYSTEM
+   Full-screen experience with warm cream tones
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.duo-wizard-container {
+  @apply min-h-screen flex flex-col;
+  background: var(--jj-cream-light, #FDF8F2);
+}
+
+.dark .duo-wizard-container {
+  background: linear-gradient(180deg, #1A1210 0%, #2A1F1A 50%, #3D2A24 100%);
+}
+
+.duo-wizard-progress {
+  @apply fixed top-0 left-0 right-0 h-2 z-50;
+  background: var(--jj-cream-dark, #E8DCC8);
+}
+
+.duo-wizard-progress-fill {
+  @apply h-full transition-all duration-500 ease-out;
+  background: var(--jj-green, #389B59);
+}
+
+.duo-wizard-content {
+  @apply flex-1 flex flex-col items-center px-4 pt-4;
+  max-width: 600px;
+  margin: 0 auto;
+  /* Add padding for the fixed footer + safe area */
+  padding-bottom: calc(6rem + env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+
+.duo-wizard-title {
+  @apply text-3xl md:text-4xl font-extrabold text-center mb-4;
+  color: var(--jj-brown, #3D1F1A);
+}
+
+.duo-wizard-subtitle {
+  @apply text-lg text-center mb-8;
+  color: var(--jj-brown-light, #5C3830);
+}
+
+.duo-wizard-options {
+  @apply w-full space-y-3;
+}
+
+.duo-wizard-option {
+  @apply w-full flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer;
+  @apply transition-all duration-150;
+  border-color: var(--jj-cream-dark, #E8DCC8);
+  background: #FFFFFF;
+  box-shadow: 0 4px 0 var(--jj-cream-dark, #E8DCC8);
+  color: var(--jj-brown, #3D1F1A);
+}
+
+.duo-wizard-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--jj-cream-dark, #E8DCC8);
+}
+
+.duo-wizard-option:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--jj-cream-dark, #E8DCC8);
+}
+
+.duo-wizard-option.selected {
+  border-color: var(--jj-terracotta, #C75A3B);
+  background: rgba(199, 90, 59, 0.08);
+  box-shadow: 0 4px 0 var(--jj-terracotta-dark, #A84832);
+}
+
+.duo-wizard-footer {
+  @apply fixed bottom-0 left-0 right-0 px-4 pt-4;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  background: #FFFFFF;
+  border-top: 2px solid var(--jj-cream-dark, #E8DCC8);
+}
+
+.duo-wizard-footer-inner {
+  @apply max-w-lg mx-auto flex items-center justify-between gap-4;
+}
+
+/* ============================================================================
+   JALAN-JALAN BOTTOM NAVIGATION
+   ============================================================================ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   JALAN-JALAN BOTTOM NAVIGATION
+   Cream-toned nav bar with terracotta active states
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.duo-bottom-nav {
+  @apply fixed bottom-0 left-0 right-0 z-50;
+  background: #FFFFFF;
+  border-top: 2px solid var(--jj-cream-dark, #E8DCC8);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.duo-bottom-nav-inner {
+  @apply flex items-center py-2 max-w-lg mx-auto;
+  gap: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.duo-nav-item {
+  @apply flex flex-col items-center justify-center;
+  @apply transition-all duration-200;
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.125rem;
+  gap: 0.25rem;
+  border-radius: 0.75rem;
+  border: 2px solid transparent;
+  position: relative;
+  color: var(--jj-brown-light, #5C3830);
+  background: transparent;
+  transform: scale(1);
+  overflow: hidden;
+}
+
+.duo-nav-item:hover {
+  color: var(--jj-terracotta, #C75A3B);
+  transform: scale(1.05);
+  background: rgba(199, 90, 59, 0.08);
+  border-color: rgba(199, 90, 59, 0.2);
+}
+
+.duo-nav-item.active {
+  color: var(--jj-terracotta, #C75A3B);
+  background: linear-gradient(135deg, rgba(199, 90, 59, 0.15) 0%, rgba(199, 90, 59, 0.25) 100%);
+  border-color: var(--jj-terracotta, #C75A3B);
+  box-shadow: 0 2px 8px rgba(199, 90, 59, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.duo-nav-item.active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 3px;
+  background: var(--jj-terracotta, #C75A3B);
+  border-radius: 0 0 4px 4px;
+}
+
+.duo-nav-item-icon {
+  @apply text-xl;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  transition: filter 0.2s;
+  flex-shrink: 0;
+}
+
+.duo-nav-item.active .duo-nav-item-icon {
+  filter: drop-shadow(0 2px 4px rgba(199, 90, 59, 0.4));
+}
+
+.duo-nav-item-label {
+  @apply text-[10px] font-bold;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ============================================================================
+   JALAN-JALAN CELEBRATION EFFECTS
+   ============================================================================ */
+
+.duo-confetti {
+  @apply fixed inset-0 pointer-events-none z-50;
+}
+
+.duo-sparkle {
+  @apply absolute w-2 h-2 rounded-full;
+  animation: sparkle 0.6s ease-out forwards;
+}
+
+@keyframes sparkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 1; }
+  100% { transform: scale(1) rotate(180deg); opacity: 0; }
+}
+
+.duo-celebration-text {
+  @apply text-4xl font-extrabold text-center;
+  animation: celebration-pop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes celebration-pop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================================================
+   JALAN-JALAN INPUT STYLES
+   ============================================================================ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   JALAN-JALAN INPUT SYSTEM
+   Clean white inputs with warm brown text and terracotta focus
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.duo-input {
+  @apply w-full px-4 py-3 text-lg font-semibold rounded-2xl border-2;
+  @apply transition-all duration-150;
+  @apply focus:outline-none focus:ring-0;
+  border-color: var(--jj-cream-dark, #E8DCC8);
+  background: #FFFFFF;
+  color: var(--jj-brown, #3D1F1A);
+}
+
+.duo-input::placeholder {
+  color: var(--jj-brown-light, #5C3830);
+  opacity: 0.6;
+}
+
+.duo-input:focus {
+  border-color: var(--jj-terracotta, #C75A3B);
+  box-shadow: 0 0 0 3px rgba(199, 90, 59, 0.2);
+}
+
+.duo-input-error {
+  border-color: var(--jj-coral, #E85D3B);
+}
+
+.duo-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(232, 93, 59, 0.2);
+}
+
+/* ============================================================================
+   JALAN-JALAN SLIDER
+   ============================================================================ */
+
+.duo-slider {
+  @apply relative w-full h-3 rounded-full cursor-pointer;
+  background: var(--jj-cream-dark, #E8DCC8);
+}
+
+.duo-slider-track {
+  @apply absolute h-full rounded-full;
+  background: var(--jj-terracotta, #C75A3B);
+}
+
+.duo-slider-thumb {
+  @apply absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded-full border-4 border-white;
+  background: var(--jj-terracotta, #C75A3B);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  cursor: grab;
+}
+
+.duo-slider-thumb:active {
+  cursor: grabbing;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* ============================================================================
+   JALAN-JALAN AVATAR/PROFILE
+   ============================================================================ */
+
+.duo-avatar {
+  @apply relative rounded-full overflow-hidden border-4;
+  border-color: var(--jj-terracotta, #C75A3B);
+  box-shadow: 0 4px 0 var(--jj-terracotta-dark, #A84832);
+}
+
+.duo-avatar-sm {
+  @apply w-10 h-10 border-2;
+  box-shadow: 0 2px 0 var(--jj-terracotta-dark, #A84832);
+}
+
+.duo-avatar-md {
+  @apply w-16 h-16 border-3;
+  box-shadow: 0 3px 0 var(--jj-terracotta-dark, #A84832);
+}
+
+.duo-avatar-lg {
+  @apply w-24 h-24 border-4;
+  box-shadow: 0 4px 0 var(--jj-terracotta-dark, #A84832);
+}
+
+.duo-avatar-xl {
+  @apply w-32 h-32;
+  border-width: 5px;
+  box-shadow: 0 5px 0 var(--jj-terracotta-dark, #A84832);
+}
+
+/* ============================================================================
+   JALAN-JALAN LEVEL BADGE
+   ============================================================================ */
+
+.duo-level-badge {
+  @apply inline-flex items-center justify-center font-extrabold rounded-full;
+  background: linear-gradient(135deg, var(--duo-yellow, #FBBF24) 0%, var(--jj-terracotta, #C75A3B) 100%);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.duo-level-badge-sm {
+  @apply w-6 h-6 text-xs;
+}
+
+.duo-level-badge-md {
+  @apply w-10 h-10 text-lg;
+}
+
+.duo-level-badge-lg {
+  @apply w-14 h-14 text-2xl;
+}
+
+/* ============================================================================
+   JALAN-JALAN TOOLTIP
+   ============================================================================ */
+
+.duo-tooltip {
+  @apply absolute px-4 py-2 rounded-2xl font-bold text-sm;
+  background: var(--foreground);
+  color: var(--background);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  z-index: 100;
+}
+
+.duo-tooltip::after {
+  content: '';
+  @apply absolute left-1/2 -translate-x-1/2 w-3 h-3 rotate-45;
+  background: var(--foreground);
+}
+
+.duo-tooltip-top::after {
+  @apply -bottom-1.5;
+}
+
+.duo-tooltip-bottom::after {
+  @apply -top-1.5;
+}
+
+/* ============================================================================
+   JALAN-JALAN FLOATING ACTION BUTTON
+   ============================================================================ */
+
+.duo-fab {
+  @apply fixed right-4 w-14 h-14 rounded-full flex items-center justify-center;
+  @apply transition-all duration-200;
+  background: var(--jj-terracotta, #C75A3B);
+  box-shadow: 0 4px 0 var(--jj-terracotta-dark, #A84832), 0 8px 20px rgba(199, 90, 59, 0.3);
+  bottom: calc(5rem + env(safe-area-inset-bottom));
+  color: white;
+}
+
+.duo-fab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--jj-terracotta-dark, #A84832), 0 12px 25px rgba(199, 90, 59, 0.4);
+}
+
+.duo-fab:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--jj-terracotta-dark, #A84832), 0 4px 10px rgba(199, 90, 59, 0.3);
+}
+
+/* ============================================================================
+   JALAN-JALAN NOTIFICATION BADGE
+   ============================================================================ */
+
+.duo-badge {
+  @apply absolute -top-1 -right-1 min-w-5 h-5 px-1.5 flex items-center justify-center;
+  @apply rounded-full text-xs font-bold;
+  background: var(--jj-coral, #E85D3B);
+  color: white;
+}
+
+/* ============================================================================
+   JALAN-JALAN ACHIEVEMENT/REWARD MODAL
+   ============================================================================ */
+
+.duo-reward-overlay {
+  @apply fixed inset-0 bg-black/60 flex items-center justify-center z-50;
+  animation: fade-in 0.3s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.duo-reward-modal {
+  @apply bg-card rounded-3xl p-8 text-center max-w-sm mx-4;
+  animation: reward-pop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes reward-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.duo-reward-icon {
+  @apply mx-auto mb-4 text-6xl;
+  animation: icon-bounce 0.6s ease-out 0.2s both;
+}
+
+@keyframes icon-bounce {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================================================
+   LEGACY ANIMATIONS (kept for compatibility)
+   ============================================================================ */
+
 @keyframes float-bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
@@ -142,11 +1033,11 @@
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 0 0 rgba(199, 90, 59, 0.4);
     transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 20px 10px rgba(99, 102, 241, 0);
+    box-shadow: 0 0 20px 10px rgba(199, 90, 59, 0);
     transform: scale(1.02);
   }
 }
@@ -179,7 +1070,6 @@
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Quest Animation Utility Classes */
 .animate-float-bounce {
   animation: float-bounce 3s ease-in-out infinite;
 }
@@ -228,36 +1118,217 @@
   background-size: 200% 100%;
 }
 
-/* Quest Glass Effect */
+/* Quest Glass Effect (updated with Duolingo colors) */
 .quest-glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 2px solid var(--border);
+  border-radius: 1rem;
 }
 
 .dark .quest-glass {
-  background: rgba(23, 23, 23, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(26, 44, 53, 0.95);
+  border: 2px solid var(--border);
 }
 
-/* Quest Gradient Overlays */
-.quest-gradient-emerald {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(20, 184, 166, 0.1) 100%);
+/* Quest Gradient Overlays (Jalan-Jalan palette) */
+.quest-gradient-emerald, .quest-gradient-green {
+  background: linear-gradient(135deg, rgba(56, 155, 89, 0.15) 0%, rgba(56, 155, 89, 0.05) 100%);
 }
 
-.quest-gradient-blue {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(99, 102, 241, 0.1) 100%);
+.quest-gradient-blue, .quest-gradient-sky {
+  background: linear-gradient(135deg, rgba(124, 185, 232, 0.15) 0%, rgba(124, 185, 232, 0.05) 100%);
 }
 
-.quest-gradient-violet {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.1) 100%);
+.quest-gradient-violet, .quest-gradient-navy {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.15) 0%, rgba(30, 58, 138, 0.05) 100%);
 }
 
-.quest-gradient-orange {
-  background: linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, rgba(251, 146, 60, 0.1) 100%);
+.quest-gradient-orange, .quest-gradient-terracotta {
+  background: linear-gradient(135deg, rgba(199, 90, 59, 0.15) 0%, rgba(199, 90, 59, 0.05) 100%);
 }
 
-.quest-gradient-rose {
-  background: linear-gradient(135deg, rgba(244, 63, 94, 0.15) 0%, rgba(251, 113, 133, 0.1) 100%);
+.quest-gradient-rose, .quest-gradient-coral {
+  background: linear-gradient(135deg, rgba(232, 93, 59, 0.15) 0%, rgba(232, 93, 59, 0.05) 100%);
+}
+
+.quest-gradient-cyan {
+  background: linear-gradient(135deg, rgba(125, 212, 228, 0.15) 0%, rgba(125, 212, 228, 0.05) 100%);
+}
+
+.quest-gradient-cream {
+  background: linear-gradient(135deg, rgba(245, 237, 224, 0.3) 0%, rgba(245, 237, 224, 0.1) 100%);
+}
+
+/* ============================================================================
+   SCROLLBAR STYLING
+   ============================================================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--duo-gray);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--duo-gray-dark);
+}
+
+/* ============================================================================
+   SAFE AREA PADDING FOR MOBILE
+   ============================================================================ */
+
+.safe-bottom {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* ============================================================================
+   60FPS PERFORMANCE OPTIMIZATIONS
+   ============================================================================ */
+
+/* GPU acceleration for animated elements */
+.duo-card,
+.duo-btn,
+.duo-wizard-option,
+.duo-nav-item,
+.duo-mascot {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize animations to use GPU */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-smooth {
+    will-change: transform, opacity;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .duo-mascot,
+  .duo-streak-flame {
+    animation: none !important;
+  }
+}
+
+/* Optimize scroll performance */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hardware-accelerated scrolling */
+.scroll-smooth {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optimize font rendering */
+body {
+  text-rendering: optimizeLegibility;
+}
+
+/* Containment for better rendering */
+.contain-layout {
+  contain: layout;
+}
+
+.contain-paint {
+  contain: paint;
+}
+
+.contain-strict {
+  contain: strict;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   JALAN-JALAN TEXT UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Text for colored backgrounds (buttons, badges) - WHITE */
+.duo-text-on-color, .jj-text-on-color {
+  color: #FFFFFF !important;
+}
+
+/* Dark text utilities using brand brown */
+.duo-text-dark, .jj-text-dark {
+  color: var(--jj-brown, #3D1F1A) !important;
+}
+
+.duo-text-darker, .jj-text-darker {
+  color: var(--jj-brown, #2A1512) !important;
+}
+
+.duo-text-muted, .jj-text-muted {
+  color: var(--jj-brown-light, #5C3830) !important;
+  opacity: 0.7;
+}
+
+/* Brand color text utilities */
+.jj-text-terracotta {
+  color: var(--jj-terracotta, #C75A3B) !important;
+}
+
+.jj-text-sky {
+  color: var(--jj-sky, #7CB9E8) !important;
+}
+
+.jj-text-green {
+  color: var(--jj-green, #389B59) !important;
+}
+
+.jj-text-navy {
+  color: var(--jj-navy, #1E3A8A) !important;
+}
+
+.jj-text-coral {
+  color: var(--jj-coral, #E85D3B) !important;
+}
+
+/* Tags/badges */
+.duo-tag, .jj-tag {
+  @apply px-3 py-1 rounded-full text-xs font-bold;
+  background: var(--jj-cream, #F5EDE0);
+  color: var(--jj-brown, #3D1F1A);
+}
+
+.jj-tag-terracotta {
+  background: rgba(199, 90, 59, 0.15);
+  color: var(--jj-terracotta, #C75A3B);
+}
+
+.jj-tag-sky {
+  background: rgba(124, 185, 232, 0.2);
+  color: var(--jj-sky-dark, #5A9FD4);
+}
+
+.jj-tag-green {
+  background: rgba(56, 155, 89, 0.15);
+  color: var(--jj-green-dark, #2D7D46);
 }

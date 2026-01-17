@@ -19,3 +19,29 @@ export {
 
 // Player
 export { PlayerAvatar } from "./player-avatar";
+
+// Duolingo-style Components
+export {
+  DuoWizardLayout,
+  DuoWizardOption,
+  DuoWizardMultiOption,
+  DuoWizardFooter,
+  DuoButton,
+  DuoProgressRing,
+  DuoSlider,
+} from "./duo-wizard-layout";
+
+export {
+  DuoBottomNav,
+  DuoTopStatsBar,
+  DuoAppShell,
+  DuoRewardModal,
+  DuoFab,
+  DuoMiniStats,
+} from "./duo-bottom-nav";
+
+export {
+  DuoMascot,
+  DuoMascotWithSpeech,
+  mascotMessages,
+} from "./duo-mascot";

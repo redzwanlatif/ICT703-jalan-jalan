@@ -1,18 +1,35 @@
 "use client";
 
-import Link from "next/link";
-import { AlertCircle, ChevronLeft, ChevronRight, PlaneTakeoff, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { GroupLabel } from "@/components/shared/group-label";
 import { useState } from "react";
+import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+  ChevronLeft,
+  ChevronRight,
+  PlaneTakeoff,
+  X,
+  FileWarning,
+  Calendar,
+  Mail,
+  AlertTriangle,
+  FileText,
+  Trash2,
+  XCircle,
+  Check,
+  ChevronDown,
+  Sparkles,
+} from "lucide-react";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DuoButton } from "@/components/shared/duo-wizard-layout";
+import { cn } from "@/lib/utils";
+
+const deleteReasons = [
+  { id: "misleading", label: "The community story contains misleading information" },
+  { id: "inappropriate", label: "Inappropriate content" },
+  { id: "spam", label: "Spam or promotional content" },
+  { id: "other", label: "Other" },
+];
 
 // Mock report data
 const reportData = {
@@ -42,231 +59,290 @@ const reportData = {
 
 export default function AdminReportDetailPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteReason, setDeleteReason] = useState("misleading");
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const selectedReason = deleteReasons.find((r) => r.id === deleteReason);
 
   return (
-    <div className="min-h-screen bg-[#F0F0F0]">
-      <GroupLabel group={4} />
-      {/* Left Sidebar */}
-      <aside className="fixed left-0 top-0 bottom-0 w-[260px] bg-white border-r border-[#D9D9D9]">
-        {/* Logo */}
-        <div className="flex justify-center py-6">
-          <span className="text-[23px] font-semibold text-black">Jalan²</span>
-        </div>
-
-        {/* Menu */}
-        <div className="flex flex-col items-center gap-4 px-8 pt-6">
-          <span className="self-start text-xs font-bold tracking-[0.19em] text-[#232323]">
-            MENU
-          </span>
-
-          <div className="flex flex-col items-center gap-2 w-full">
-            <Link
-              href="/admin"
-              className="w-full flex items-center gap-3 px-8 py-4 bg-emerald-50 border-l-[5px] border-emerald-700"
-            >
-              <AlertCircle className="w-6 h-6 text-emerald-700" />
-              <span className="text-base font-bold text-emerald-700">Report</span>
-            </Link>
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <Link href="/admin">
+            <button className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors">
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          </Link>
+          <div className="flex-1">
+            <h1 className="text-2xl font-extrabold">Report Details</h1>
+            <p className="text-muted-foreground">Review and take action</p>
           </div>
-        </div>
-      </aside>
+          <DuoMascot mood="thinking" size="sm" />
+        </motion.div>
 
-      {/* Main Content */}
-      <main className="ml-[260px]">
-        <div className="p-10">
-          {/* Page Title */}
-          <h1 className="text-[30px] font-semibold tracking-tight text-slate-700 mb-6">
-            Community Story Report
-          </h1>
+        {/* Story Preview Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="duo-card overflow-hidden"
+        >
+          {/* Location Header */}
+          <div className="p-5 border-b-2 border-border">
+            <h2 className="font-extrabold text-lg">{reportData.story.location}</h2>
+            <p className="text-sm text-muted-foreground">{reportData.story.address}</p>
+          </div>
 
-          {/* Story Preview Section */}
-          <div className="mb-8">
-            {/* Location Header */}
-            <div className="p-6">
-              <h2 className="text-base font-semibold text-slate-700">
-                {reportData.story.location}
-              </h2>
-              <p className="text-sm text-slate-500">
-                {reportData.story.address}
-              </p>
-            </div>
+          {/* Main Image */}
+          <div className="w-full h-64 md:h-80 bg-gradient-to-br from-[var(--duo-green)] to-[var(--duo-green-dark)]" />
 
-            {/* Main Image */}
-            <div className="w-[675px] h-[450px] bg-gradient-to-br from-emerald-700 to-emerald-500 rounded-lg mx-auto" />
+          {/* Image Carousel */}
+          <div className="p-4">
+            <div className="flex items-center gap-3">
+              <button className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors shrink-0">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
 
-            {/* Image Carousel */}
-            <div className="flex items-center gap-4 mt-6 px-6 max-w-[720px] mx-auto">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9 rounded-lg border border-white shadow-sm bg-white/10"
-              >
-                <ChevronLeft className="h-4 w-4 text-slate-700" />
-              </Button>
-
-              <div className="flex-1 flex gap-4">
-                {reportData.story.images.map((image) => (
-                  <div
+              <div className="flex-1 grid grid-cols-3 gap-3">
+                {reportData.story.images.map((image, index) => (
+                  <motion.div
                     key={image.id}
-                    className="flex-1 h-[180px] bg-gradient-to-br from-sky-200 to-sky-400 rounded-lg border border-white shadow-sm"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 + index * 0.05 }}
+                    className="aspect-video rounded-xl bg-gradient-to-br from-[var(--duo-blue)]/30 to-[var(--duo-blue)]/50 border-2 border-border"
                   />
                 ))}
               </div>
 
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9 rounded-lg border border-white shadow-sm bg-white/10"
-              >
-                <ChevronRight className="h-4 w-4 text-slate-700" />
-              </Button>
+              <button className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors shrink-0">
+                <ChevronRight className="w-5 h-5" />
+              </button>
             </div>
           </div>
 
-          {/* Story Content Section */}
-          <div className="max-w-[600px] mx-auto mb-8">
+          {/* Author & Story Content */}
+          <div className="p-5 border-t-2 border-border space-y-4">
             {/* Author Info */}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-6 h-6 rounded-full bg-emerald-700 flex items-center justify-center">
-                <span className="text-[10px] font-semibold text-white">
-                  {reportData.story.author.avatar}
-                </span>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[var(--duo-green)] flex items-center justify-center text-white font-bold text-sm">
+                {reportData.story.author.avatar}
               </div>
-              <span className="text-base font-semibold text-slate-700">
-                {reportData.story.author.name}
-              </span>
-              <PlaneTakeoff className="w-6 h-6 text-emerald-700" />
-              <span className="px-2 py-[3px] text-xs font-semibold text-slate-700 border border-emerald-700 rounded-lg bg-slate-50">
+              <span className="font-bold">{reportData.story.author.name}</span>
+              <PlaneTakeoff className="w-5 h-5 text-[var(--duo-purple)]" />
+              <span className="text-xs px-2 py-1 rounded-full bg-[var(--duo-purple)]/10 text-[var(--duo-purple)] font-bold border border-[var(--duo-purple)]/30">
                 {reportData.story.author.badge}
               </span>
             </div>
 
             {/* Story Title & Content */}
-            <h3 className="text-base font-semibold text-slate-700 mb-4">
-              {reportData.story.title}
-            </h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
+            <h3 className="font-extrabold">{reportData.story.title}</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
               {reportData.story.content}
             </p>
           </div>
+        </motion.div>
 
-          {/* Report Details Card */}
-          <div className="bg-white rounded-xl p-8 max-w-[1052px] mx-auto">
-            <h2 className="text-[30px] font-semibold tracking-tight text-slate-700 mb-6">
-              Report Details
-            </h2>
+        {/* Report Details Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="duo-card p-5 space-y-5"
+        >
+          <h2 className="text-lg font-extrabold flex items-center gap-2">
+            <FileWarning className="w-5 h-5 text-[var(--duo-red)]" />
+            Report Information
+          </h2>
 
-            <div className="flex flex-col gap-2 mb-8">
-              <div className="flex items-center gap-2">
-                <span className="text-base font-semibold text-slate-700 w-[120px]">
-                  Report Date:
-                </span>
-                <span className="text-base font-semibold text-slate-700">
-                  {reportData.reportDate}
-                </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Report Date */}
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/50">
+              <div className="w-10 h-10 rounded-xl bg-[var(--duo-blue)]/20 flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-[var(--duo-blue)]" />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-base font-semibold text-slate-700 w-[120px]">
-                  Email:
-                </span>
-                <span className="text-base font-semibold text-slate-700">
-                  {reportData.email}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-base font-semibold text-slate-700 w-[120px]">
-                  Type of Report:
-                </span>
-                <span className="text-base font-semibold text-slate-700">
-                  {reportData.typeOfReport}
-                </span>
-              </div>
-              <div className="flex gap-2">
-                <span className="text-base font-semibold text-slate-700 w-[120px] shrink-0">
-                  Justification:
-                </span>
-                <span className="text-base font-semibold text-slate-700">
-                  {reportData.justification}
-                </span>
+              <div>
+                <p className="text-xs text-muted-foreground font-medium">Report Date</p>
+                <p className="font-bold">{reportData.reportDate}</p>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                className="w-[420px] h-[51px] border-emerald-700 text-emerald-700 text-sm font-semibold"
-              >
-                Reject Report
-              </Button>
-              <Button
-                className="w-[420px] h-[51px] bg-[#DC2626] hover:bg-[#DC2626]/90 text-slate-50 text-sm font-semibold"
-                onClick={() => setShowDeleteModal(true)}
-              >
-                Delete Community Story
-              </Button>
+            {/* Email */}
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/50">
+              <div className="w-10 h-10 rounded-xl bg-[var(--duo-purple)]/20 flex items-center justify-center">
+                <Mail className="w-5 h-5 text-[var(--duo-purple)]" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground font-medium">Reporter Email</p>
+                <p className="font-bold">{reportData.email}</p>
+              </div>
+            </div>
+
+            {/* Type of Report */}
+            <div className="flex items-center gap-3 p-4 rounded-xl bg-muted/50">
+              <div className="w-10 h-10 rounded-xl bg-[var(--duo-orange)]/20 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-[var(--duo-orange)]" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground font-medium">Type of Report</p>
+                <p className="font-bold">{reportData.typeOfReport}</p>
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+
+          {/* Justification */}
+          <div className="p-4 rounded-xl bg-[var(--duo-red)]/5 border-2 border-[var(--duo-red)]/20">
+            <div className="flex items-center gap-2 mb-2">
+              <FileText className="w-5 h-5 text-[var(--duo-red)]" />
+              <span className="font-bold text-sm">Justification</span>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {reportData.justification}
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <button className="flex-1 py-3 px-4 rounded-xl border-2 border-[var(--duo-green)] text-[var(--duo-green)] font-bold hover:bg-[var(--duo-green)]/10 transition-colors flex items-center justify-center gap-2">
+              <XCircle className="w-5 h-5" />
+              Reject Report
+            </button>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="flex-1 py-3 px-4 rounded-xl bg-[var(--duo-red)] text-white font-bold hover:bg-[var(--duo-red)]/90 transition-colors shadow-[0_4px_0_#B91C1C] hover:translate-y-[2px] hover:shadow-[0_2px_0_#B91C1C] flex items-center justify-center gap-2"
+            >
+              <Trash2 className="w-5 h-5" />
+              Delete Story
+            </button>
+          </div>
+        </motion.div>
+
+        {/* XP Hint */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-4"
+        >
+          <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+          <span>
+            Earn <strong className="text-[var(--duo-green)]">+15 XP</strong> for reviewing this report!
+          </span>
+        </motion.div>
+      </div>
 
       {/* Delete Modal */}
-      {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-[20px] w-[593px] p-8 flex flex-col gap-8">
-            {/* Modal Header */}
-            <div className="flex justify-between items-center">
-              <h2 className="text-[30px] font-semibold tracking-tight text-slate-700">
-                Delete Community Story
-              </h2>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-slate-500 w-[37px] h-[37px]"
-                onClick={() => setShowDeleteModal(false)}
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
+      <AnimatePresence>
+        {showDeleteModal && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-40"
+              onClick={() => setShowDeleteModal(false)}
+            />
 
-            {/* Form */}
-            <div className="flex flex-col gap-2">
-              <label className="text-base font-semibold text-slate-700">
-                Reasons
-              </label>
-              <Select defaultValue="misleading">
-                <SelectTrigger className="w-full border-emerald-700 shadow-sm">
-                  <SelectValue placeholder="Select a reason" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="misleading">
-                    The community story contains misleading informations
-                  </SelectItem>
-                  <SelectItem value="inappropriate">
-                    Inappropriate content
-                  </SelectItem>
-                  <SelectItem value="spam">Spam or promotional</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-lg bg-white rounded-2xl z-50 border-2 border-border shadow-[0_8px_0_rgba(0,0,0,0.1)]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6 space-y-6">
+                {/* Modal Header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-[var(--duo-red)]/10 flex items-center justify-center">
+                      <Trash2 className="w-6 h-6 text-[var(--duo-red)]" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-extrabold">Delete Story</h2>
+                      <p className="text-sm text-muted-foreground">This action cannot be undone</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowDeleteModal(false)}
+                    className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center gap-4">
-              <Input
-                type="button"
-                value="Back"
-                className="w-[243px] border-emerald-700 shadow-sm text-center text-slate-500 cursor-pointer hover:bg-slate-50"
-                onClick={() => setShowDeleteModal(false)}
-              />
-              <Button className="w-[243px] bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-slate-50 text-sm font-semibold">
-                Confirm
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+                {/* Reason Selection */}
+                <div className="space-y-2">
+                  <label className="font-bold text-sm">Reason for deletion</label>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowDropdown(!showDropdown)}
+                      className="duo-input w-full flex items-center justify-between text-left"
+                    >
+                      <span className="text-sm">{selectedReason?.label || "Select reason"}</span>
+                      <ChevronDown className={cn(
+                        "w-5 h-5 transition-transform",
+                        showDropdown && "rotate-180"
+                      )} />
+                    </button>
+
+                    <AnimatePresence>
+                      {showDropdown && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-border rounded-xl shadow-lg z-10 overflow-hidden"
+                        >
+                          {deleteReasons.map((reason) => (
+                            <button
+                              key={reason.id}
+                              onClick={() => {
+                                setDeleteReason(reason.id);
+                                setShowDropdown(false);
+                              }}
+                              className={cn(
+                                "w-full px-4 py-3 text-left text-sm font-medium hover:bg-muted transition-colors flex items-center justify-between",
+                                deleteReason === reason.id && "bg-[var(--duo-red)]/10 text-[var(--duo-red)]"
+                              )}
+                            >
+                              {reason.label}
+                              {deleteReason === reason.id && (
+                                <Check className="w-4 h-4" />
+                              )}
+                            </button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowDeleteModal(false)}
+                    className="flex-1 py-3 px-4 rounded-xl border-2 border-border font-bold hover:bg-muted transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <Link href="/admin" className="flex-1">
+                    <button className="w-full py-3 px-4 rounded-xl bg-[var(--duo-red)] text-white font-bold hover:bg-[var(--duo-red)]/90 transition-colors shadow-[0_4px_0_#B91C1C] hover:translate-y-[2px] hover:shadow-[0_2px_0_#B91C1C]">
+                      Confirm Delete
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </DuoAppShell>
   );
 }
-

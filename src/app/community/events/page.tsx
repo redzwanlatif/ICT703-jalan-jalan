@@ -1,7 +1,9 @@
 "use client";
 
-import { Navigation } from "@/components/shared/navigation";
-import { GroupLabel } from "@/components/shared/group-label";
+import { motion } from "framer-motion";
+import { Ticket, Calendar, Sparkles } from "lucide-react";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
 import { EventCard } from "@/components/community/event-card";
 
 export default function UpcomingEventsPage() {
@@ -129,28 +131,79 @@ export default function UpcomingEventsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navigation />
-      <GroupLabel group={4} />
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <DuoMascot mood="excited" size="sm" />
+          <div className="flex-1">
+            <h1 className="text-2xl font-extrabold">Upcoming Events</h1>
+            <p className="text-muted-foreground">Discover travel events near you</p>
+          </div>
+        </motion.div>
 
-      <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-8">
-        {/* Title Section */}
-        <section className="relative z-10 py-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
-            Upcoming Events
-          </h2>
-        </section>
+        {/* Featured Event Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="duo-card p-5"
+          style={{
+            background: "linear-gradient(135deg, var(--duo-yellow) 0%, var(--duo-orange) 100%)",
+            borderColor: "#E5A800",
+          }}
+        >
+          <div className="flex items-center gap-3 text-white">
+            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+              <Ticket className="w-6 h-6" />
+            </div>
+            <div>
+              <h2 className="font-extrabold">School Holiday Special!</h2>
+              <p className="text-sm text-white/80 flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                12 - 15 January 2025
+              </p>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Events Grid */}
-        <section className="relative z-10 pb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-            {events.map((event, i) => (
-              <EventCard key={i} {...event} />
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {events.map((event, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 + index * 0.03 }}
+              >
+                <EventCard {...event} />
+              </motion.div>
             ))}
           </div>
-        </section>
-      </main>
-    </div>
+        </motion.section>
+
+        {/* XP Hint */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-4"
+        >
+          <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+          <span>
+            Earn <strong className="text-[var(--duo-green)]">+10 XP</strong> for attending events!
+          </span>
+        </motion.div>
+      </div>
+    </DuoAppShell>
   );
 }
-

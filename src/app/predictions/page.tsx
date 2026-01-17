@@ -1,15 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  PageLayout,
-  PageHeader,
-  UnifiedCard,
-} from "@/components/shared/page-layout";
+import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   Sparkles,
   MapPin,
@@ -17,178 +11,296 @@ import {
   Users,
   Minus,
   Plus,
-  ArrowRight
+  ChevronRight,
+  UsersRound,
 } from "lucide-react";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DuoButton } from "@/components/shared/duo-wizard-layout";
+import { useGamification } from "@/contexts/gamification-context";
 import { cn } from "@/lib/utils";
+
+const popularDestinations = [
+  { name: "Langkawi", emoji: "🏝️" },
+  { name: "Penang", emoji: "🍜" },
+  { name: "Cameron Highlands", emoji: "🍓" },
+  { name: "Tioman", emoji: "🐠" },
+  { name: "Malacca", emoji: "🏛️" },
+  { name: "Kuching", emoji: "🐱" },
+];
 
 export default function PredictionsPage() {
   const router = useRouter();
-  const [destination, setDestination] = useState("");
-  const [travelDates, setTravelDates] = useState("");
-  const [travelers, setTravelers] = useState(2);
+  const searchParams = useSearchParams();
+  const { addXp } = useGamification();
 
-  const canContinue = destination && travelDates;
+  const initialDestination = searchParams.get("destination") || "";
+
+  const [destination, setDestination] = useState(initialDestination);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [travelers, setTravelers] = useState(1);
+
+  const canContinue = destination && startDate && endDate;
 
   const handleContinue = () => {
+    // Save trip details to sessionStorage for both flows
     sessionStorage.setItem("tripDetails", JSON.stringify({
       destination,
-      travelDates,
+      startDate,
+      endDate,
       travelers
     }));
-    router.push("/predictions/preferences");
+
+    if (travelers > 1) {
+      // Multiple travelers - go to group trip wizard
+      router.push("/trip/new");
+    } else {
+      // Solo traveler - continue with regular flow
+      addXp(10, "Started planning!");
+      router.push("/predictions/preferences");
+    }
   };
 
   return (
-    <PageLayout
-      group={5}
-      background="vibrant"
-      maxWidth="md"
-      flowGuideVariant="inline"
-      flowGuideTitle="Need assistance?"
-    >
-      {/* Hero Section */}
-      <div className="text-center mb-10">
-        <div className="relative inline-flex">
-          <div className="size-20 rounded-2xl bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center mx-auto shadow-xl shadow-rose-500/30 animate-float-bounce">
-            <Sparkles className="size-10 text-white" />
+    <DuoAppShell>
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <DuoMascot mood="excited" size="sm" />
+          <div className="flex-1">
+            <h1 className="text-2xl font-extrabold">Plan Your Trip</h1>
+            <p className="text-muted-foreground">Where to next, explorer?</p>
           </div>
-          <Badge className="absolute -top-1 -right-1 bg-amber-400 text-amber-900 border-0 shadow-lg">
-            AI
-          </Badge>
-        </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-neutral-800 dark:text-neutral-100 mt-6 mb-3">
-          Plan Your Perfect Trip
-        </h1>
-        <p className="text-neutral-500 dark:text-neutral-400 max-w-md mx-auto">
-          Tell us about your upcoming adventure and we&apos;ll create a personalized itinerary powered by AI
-        </p>
-      </div>
+        </motion.div>
 
-      {/* Trip Details Form */}
-      <UnifiedCard gradient className="p-6 md:p-8">
-        {/* Section Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="size-12 rounded-xl bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center shadow-lg shadow-rose-500/25">
-            <Sparkles className="size-6 text-white" />
-          </div>
-          <div>
-            <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-100">
-              Trip Details
-            </h2>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              Enter your travel information to get started
-            </p>
-          </div>
-        </div>
+        {/* Destination */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="space-y-3"
+        >
+          <label className="flex items-center gap-2 font-bold">
+            <div className="w-8 h-8 rounded-lg bg-[var(--duo-green)]/20 flex items-center justify-center">
+              <MapPin className="w-4 h-4 text-[var(--duo-green)]" />
+            </div>
+            Where are you going?
+          </label>
 
-        <div className="space-y-6">
-          {/* Destination Input */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
-              <div className="size-6 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center">
-                <MapPin className="size-3.5 text-rose-600 dark:text-rose-400" />
-              </div>
-              Destination
-            </label>
-            <Input
+          <div className="relative">
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <input
               type="text"
-              placeholder="Search Malaysian destinations..."
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
-              className={cn(
-                "h-14 text-base",
-                "bg-white/50 dark:bg-neutral-800/50",
-                "border-neutral-200 dark:border-neutral-700",
-                "focus:border-rose-500 focus:ring-rose-500/20",
-                "transition-all duration-200"
-              )}
+              placeholder="Enter destination..."
+              className="duo-input !pl-12"
             />
           </div>
 
-          {/* Travel Dates Input */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
-              <div className="size-6 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center">
-                <Calendar className="size-3.5 text-rose-600 dark:text-rose-400" />
-              </div>
-              Travel Dates
-            </label>
-            <div className="relative">
-              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-neutral-400" />
-              <Input
-                type="text"
-                placeholder="Select travel dates"
-                value={travelDates}
-                onChange={(e) => setTravelDates(e.target.value)}
+          {/* Quick destinations */}
+          <div className="flex flex-wrap gap-2">
+            {popularDestinations.map((dest) => (
+              <button
+                key={dest.name}
+                onClick={() => setDestination(dest.name)}
                 className={cn(
-                  "h-14 pl-12 text-base",
-                  "bg-white/50 dark:bg-neutral-800/50",
-                  "border-neutral-200 dark:border-neutral-700",
-                  "focus:border-rose-500 focus:ring-rose-500/20",
-                  "transition-all duration-200"
+                  "px-3 py-1.5 rounded-full border-2 text-sm font-bold transition-all",
+                  destination === dest.name
+                    ? "border-[var(--duo-green)] bg-[var(--duo-green)]/10 text-[var(--duo-green)]"
+                    : "border-border hover:border-[var(--duo-blue)]"
                 )}
+              >
+                {dest.emoji} {dest.name}
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Dates */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="space-y-3"
+        >
+          <label className="flex items-center gap-2 font-bold">
+            <div className="w-8 h-8 rounded-lg bg-[var(--duo-blue)]/20 flex items-center justify-center">
+              <Calendar className="w-4 h-4 text-[var(--duo-blue)]" />
+            </div>
+            When are you traveling?
+          </label>
+
+          <div className="duo-card p-4 space-y-4">
+            <div>
+              <label className="block text-sm font-semibold mb-2">From</label>
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                min={new Date().toISOString().split("T")[0]}
+                className="duo-input"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold mb-2">To</label>
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                min={startDate || new Date().toISOString().split("T")[0]}
+                className="duo-input"
               />
             </div>
           </div>
+        </motion.div>
 
-          {/* Number of Travelers */}
-          <div className="space-y-2">
-            <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">
-              <div className="size-6 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center">
-                <Users className="size-3.5 text-rose-600 dark:text-rose-400" />
-              </div>
-              Number of Travelers
-            </label>
-            <div className="flex items-center gap-6">
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
+        {/* Travelers */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="space-y-3"
+        >
+          <label className="flex items-center gap-2 font-bold">
+            <div className="w-8 h-8 rounded-lg bg-[var(--duo-orange)]/20 flex items-center justify-center">
+              <Users className="w-4 h-4 text-[var(--duo-orange)]" />
+            </div>
+            How many travelers?
+          </label>
+
+          <div className="duo-card p-6">
+            <div className="flex items-center justify-center gap-6">
+              <button
                 onClick={() => setTravelers(Math.max(1, travelers - 1))}
-                className="size-12 rounded-full border-neutral-200 dark:border-neutral-700 hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:border-rose-300 transition-all"
+                className="w-14 h-14 rounded-full border-2 border-border flex items-center justify-center hover:border-[var(--duo-blue)] transition-colors"
+                style={{ boxShadow: "0 4px 0 var(--border)" }}
               >
-                <Minus className="size-5" />
-              </Button>
-              <span className="text-4xl font-bold text-neutral-800 dark:text-neutral-100 min-w-[4rem] text-center tabular-nums">
-                {travelers}
-              </span>
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
+                <Minus className="w-6 h-6" />
+              </button>
+
+              <div className="text-center">
+                <span className="text-5xl font-extrabold">{travelers}</span>
+                <p className="text-sm text-muted-foreground">
+                  {travelers === 1 ? "traveler" : "travelers"}
+                </p>
+              </div>
+
+              <button
                 onClick={() => setTravelers(travelers + 1)}
-                className="size-12 rounded-full border-neutral-200 dark:border-neutral-700 hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:border-rose-300 transition-all"
+                className="w-14 h-14 rounded-full border-2 border-border flex items-center justify-center hover:border-[var(--duo-blue)] transition-colors"
+                style={{ boxShadow: "0 4px 0 var(--border)" }}
               >
-                <Plus className="size-5" />
-              </Button>
+                <Plus className="w-6 h-6" />
+              </button>
             </div>
           </div>
-        </div>
-      </UnifiedCard>
 
-      {/* Continue Button */}
-      <div className="mt-8">
-        <Button
-          onClick={handleContinue}
-          disabled={!canContinue}
-          className={cn(
-            "group w-full h-16 text-lg font-semibold",
-            "bg-gradient-to-r from-rose-500 to-pink-500",
-            "hover:from-rose-600 hover:to-pink-600",
-            "text-white border-0",
-            "shadow-xl shadow-rose-500/30 hover:shadow-2xl hover:shadow-rose-500/40",
-            "disabled:opacity-50 disabled:shadow-none",
-            "transition-all duration-300"
+          {/* Group trip hint */}
+          {travelers > 1 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="duo-card p-4 flex items-center gap-3"
+              style={{
+                borderColor: "var(--duo-purple)",
+                background: "color-mix(in srgb, var(--duo-purple) 10%, var(--card))",
+              }}
+            >
+              <UsersRound className="w-6 h-6 text-[var(--duo-purple)] shrink-0" />
+              <div className="flex-1">
+                <p className="font-bold text-sm">Group trip detected!</p>
+                <p className="text-xs text-muted-foreground">
+                  You&apos;ll set up a group trip where everyone can add their preferences.
+                </p>
+              </div>
+            </motion.div>
           )}
-          size="lg"
+        </motion.div>
+
+        {/* Trip Summary */}
+        {destination && startDate && endDate && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="duo-card p-4"
+            style={{
+              background: "linear-gradient(135deg, var(--duo-green) 0%, var(--duo-green-dark) 100%)",
+              borderColor: "var(--duo-green-dark)",
+            }}
+          >
+            <div className="text-white">
+              <h3 className="font-extrabold text-lg mb-2">Trip Summary</h3>
+              <div className="space-y-1 text-white/90">
+                <p className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  {destination}
+                </p>
+                <p className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4" />
+                  {Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1} days
+                </p>
+                <p className="flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  {travelers} {travelers === 1 ? "person" : "people"}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Continue Button */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="space-y-3 pt-4"
         >
-          Continue to Preferences
-          <ArrowRight className="size-5 ml-2 group-hover:translate-x-1 transition-transform" />
-        </Button>
-        <p className="text-center text-sm text-neutral-400 dark:text-neutral-500 mt-4">
-          Please fill in all fields to continue
-        </p>
+          <DuoButton
+            onClick={handleContinue}
+            disabled={!canContinue}
+            fullWidth
+            size="lg"
+          >
+            {travelers > 1 ? (
+              <>
+                <UsersRound className="w-5 h-5 mr-2" />
+                Set Up Group Trip
+              </>
+            ) : (
+              <>
+                Continue
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </>
+            )}
+          </DuoButton>
+
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Sparkles className="w-4 h-4" />
+            <span>Earn 25+ XP by planning a trip!</span>
+          </div>
+        </motion.div>
+
+        {/* Quick Links */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="flex justify-center gap-4 text-sm"
+        >
+          <Link
+            href="/chat"
+            className="text-[var(--duo-blue)] hover:underline font-semibold"
+          >
+            Need help? Chat with AI →
+          </Link>
+        </motion.div>
       </div>
-    </PageLayout>
+    </DuoAppShell>
   );
 }

@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { StoryCard } from "@/components/community/story-card";
-import { Navigation } from "@/components/shared/navigation";
-import { GroupLabel } from "@/components/shared/group-label";
+import { motion } from "framer-motion";
 import Link from "next/link";
-
-
+import { Plus, BookOpen, Sparkles, ChevronRight } from "lucide-react";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DuoButton } from "@/components/shared/duo-wizard-layout";
+import { StoryCard } from "@/components/community/story-card";
 
 export default function CommunityStoriesPage() {
   const stories = [
@@ -133,36 +133,84 @@ export default function CommunityStoriesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navigation />
-      <GroupLabel group={4} />
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <DuoMascot mood="happy" size="sm" />
+          <div className="flex-1">
+            <h1 className="text-2xl font-extrabold">Community Stories</h1>
+            <p className="text-muted-foreground">Discover travel experiences</p>
+          </div>
+        </motion.div>
 
-      <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-8">
-        {/* Title Section */}
-        <section className="relative py-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
-              Community Story
-            </h2>
+        {/* Create Story CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="duo-card p-5"
+          style={{
+            background: "linear-gradient(135deg, var(--duo-purple) 0%, #A855F7 100%)",
+            borderColor: "#7C3AED",
+          }}
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 text-white">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <BookOpen className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="font-extrabold">Share Your Story</h2>
+                <p className="text-sm text-white/80">Inspire fellow travelers</p>
+              </div>
+            </div>
             <Link href="/community/stories/create">
-              <Button className="bg-blue-900 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg w-full sm:w-auto">
-                Create Community Story
-              </Button>
+              <button className="px-4 py-2 rounded-xl bg-white text-[var(--duo-purple)] font-bold shadow-[0_4px_0_rgba(0,0,0,0.2)] hover:translate-y-[2px] hover:shadow-[0_2px_0_rgba(0,0,0,0.2)] transition-all flex items-center gap-2">
+                <Plus className="w-5 h-5" />
+                Create
+              </button>
             </Link>
           </div>
-        </section>
+        </motion.div>
 
         {/* Stories Grid */}
-        <section className="relative pb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-            {stories.map((story) => (
-              <StoryCard key={story.id} {...story} />
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {stories.map((story, index) => (
+              <motion.div
+                key={story.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 + index * 0.03 }}
+              >
+                <StoryCard {...story} />
+              </motion.div>
             ))}
           </div>
-        </section>
-      </main>
+        </motion.section>
 
-    </div>
+        {/* XP Hint */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-4"
+        >
+          <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+          <span>
+            Earn <strong className="text-[var(--duo-green)]">+25 XP</strong> for sharing stories!
+          </span>
+        </motion.div>
+      </div>
+    </DuoAppShell>
   );
 }
-

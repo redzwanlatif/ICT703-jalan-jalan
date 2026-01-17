@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ChatInput } from "./chat-input";
@@ -51,11 +52,15 @@ export function ChatLanding({ onSend, onQuickAction, onBack }: ChatLandingProps)
         {/* Header */}
         <div className="flex flex-col items-center gap-3">
           {/* Logo */}
-          <div className="w-8 h-8 rounded-lg bg-[#313131] flex items-center justify-center shadow-md">
-            <span className="text-white font-bold text-sm">T</span>
-          </div>
-          <h1 className="text-2xl font-semibold text-neutral-600 text-center tracking-tight">
-            Trevllo.ai — Smarter Planning. Smoother Journeys.
+          <Image
+            src="/logo.png"
+            alt="Jalan-Jalan"
+            width={64}
+            height={64}
+            className="w-16 h-16 object-contain"
+          />
+          <h1 className="text-2xl font-semibold text-jj-brown text-center tracking-tight">
+            Jalan-Jalan AI — Smarter Planning. Smoother Journeys.
           </h1>
         </div>
 

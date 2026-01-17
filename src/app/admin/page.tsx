@@ -1,8 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { AlertCircle } from "lucide-react";
-import { GroupLabel } from "@/components/shared/group-label";
+import { motion } from "framer-motion";
+import {
+  AlertCircle,
+  Shield,
+  FileWarning,
+  Clock,
+  CheckCircle2,
+  ChevronRight,
+  BarChart3,
+  Sparkles,
+} from "lucide-react";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { cn } from "@/lib/utils";
 
 // Mock report data
 const reports = [
@@ -51,177 +63,206 @@ const reports = [
 export default function AdminDashboardPage() {
   const totalReports = reports.length;
   const pendingReports = reports.filter((r) => r.status === "Pending").length;
+  const resolvedReports = reports.filter((r) => r.status === "Resolved").length;
 
   return (
-    <div className="min-h-screen bg-[#F0F0F0]">
-      <GroupLabel group={4} />
-      {/* Top Header Bar */}
-      <header className="fixed top-0 left-0 right-0 h-[100px] bg-white border-b border-[#D9D9D9] z-10">
-        <div className="flex items-center justify-between h-full px-6">
-          {/* Logo in sidebar area */}
-          <div className="w-[260px] flex justify-center">
-            <span className="text-[23px] font-semibold text-black">Jalan²</span>
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <div className="w-12 h-12 rounded-xl bg-[var(--duo-green)]/20 flex items-center justify-center">
+            <Shield className="w-6 h-6 text-[var(--duo-green)]" />
           </div>
-          {/* Right side - Avatar */}
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-sm font-semibold text-slate-600">
-            AD
+          <div className="flex-1">
+            <h1 className="text-2xl font-extrabold">Admin Dashboard</h1>
+            <p className="text-muted-foreground">Manage community reports</p>
           </div>
-        </div>
-      </header>
+          <DuoMascot mood="thinking" size="sm" />
+        </motion.div>
 
-      {/* Left Sidebar */}
-      <aside className="fixed left-0 top-0 bottom-0 w-[260px] bg-white border-r border-[#D9D9D9] pt-[100px]">
-        <div className="flex flex-col items-center gap-4 px-8 pt-6">
-          {/* Menu Label */}
-          <span className="self-start text-xs font-bold tracking-[0.19em] text-[#232323]">
-            MENU
+        {/* Stats Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+        >
+          {/* Total Reports */}
+          <div className="duo-card p-5">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-[var(--duo-blue)]/20 flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-[var(--duo-blue)]" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground font-medium">Total Reports</p>
+                <p className="text-3xl font-extrabold">{totalReports}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Pending Reports */}
+          <div
+            className="duo-card p-5"
+            style={{
+              background: "linear-gradient(135deg, var(--duo-orange) 0%, #F97316 100%)",
+              borderColor: "#EA580C",
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <Clock className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-white/80 font-medium">Pending</p>
+                <p className="text-3xl font-extrabold text-white">{pendingReports}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Resolved Reports */}
+          <div
+            className="duo-card p-5"
+            style={{
+              background: "linear-gradient(135deg, var(--duo-green) 0%, var(--duo-green-dark) 100%)",
+              borderColor: "var(--duo-green-dark)",
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <CheckCircle2 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-white/80 font-medium">Resolved</p>
+                <p className="text-3xl font-extrabold text-white">{resolvedReports}</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Reports Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="duo-card overflow-hidden"
+        >
+          <div className="p-5 border-b-2 border-border">
+            <h2 className="text-lg font-extrabold flex items-center gap-2">
+              <FileWarning className="w-5 h-5 text-[var(--duo-purple)]" />
+              Community Story Reports
+            </h2>
+          </div>
+
+          {/* Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-muted/50">
+                  <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    #
+                  </th>
+                  <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Reporter
+                  </th>
+                  <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Date
+                  </th>
+                  <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Type
+                  </th>
+                  <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {reports.map((report, index) => (
+                  <motion.tr
+                    key={report.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + index * 0.05 }}
+                    className="hover:bg-muted/30 transition-colors"
+                  >
+                    <td className="px-5 py-4 text-sm font-bold">{report.id}</td>
+                    <td className="px-5 py-4">
+                      <span className="text-sm font-medium">{report.name}</span>
+                    </td>
+                    <td className="px-5 py-4 text-sm text-muted-foreground">
+                      {report.dateOfReport}
+                    </td>
+                    <td className="px-5 py-4">
+                      <span className="text-xs font-bold px-2 py-1 rounded-lg bg-[var(--duo-purple)]/10 text-[var(--duo-purple)]">
+                        {report.typeOfReport}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span
+                        className={cn(
+                          "inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full",
+                          report.status === "Resolved"
+                            ? "bg-[var(--duo-green)]/10 text-[var(--duo-green)]"
+                            : "bg-[var(--duo-orange)]/10 text-[var(--duo-orange)]"
+                        )}
+                      >
+                        {report.status === "Resolved" ? (
+                          <CheckCircle2 className="w-3 h-3" />
+                        ) : (
+                          <Clock className="w-3 h-3" />
+                        )}
+                        {report.status}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <Link href={`/admin/reports/${report.id}`}>
+                        <button className="inline-flex items-center gap-1 text-xs font-bold px-4 py-2 rounded-xl bg-[var(--duo-green)] text-white hover:bg-[var(--duo-green-dark)] transition-colors shadow-[0_2px_0_var(--duo-green-dark)]">
+                          View
+                          <ChevronRight className="w-3 h-3" />
+                        </button>
+                      </Link>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          <div className="p-4 border-t-2 border-border flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">
+              Showing <strong>1-{reports.length}</strong> of <strong>{reports.length}</strong> reports
+            </p>
+            <div className="flex gap-2">
+              <button className="w-10 h-10 rounded-xl bg-[var(--duo-green)] text-white font-bold shadow-[0_3px_0_var(--duo-green-dark)]">
+                1
+              </button>
+              <button className="px-4 h-10 rounded-xl border-2 border-border font-bold hover:bg-muted transition-colors">
+                Next
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* XP Hint */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-4"
+        >
+          <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+          <span>
+            Earn <strong className="text-[var(--duo-green)]">+15 XP</strong> for each report reviewed!
           </span>
-
-          {/* Menu Items */}
-          <div className="flex flex-col items-center gap-2 w-full">
-            <Link
-              href="/admin"
-              className="w-full flex items-center gap-3 px-8 py-4 bg-emerald-50 border-l-[5px] border-emerald-700"
-            >
-              <AlertCircle className="w-6 h-6 text-emerald-700" />
-              <span className="text-base font-bold text-emerald-700">Report</span>
-            </Link>
-          </div>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="ml-[260px] pt-[100px]">
-        <div className="p-6">
-          <div className="flex flex-col gap-5">
-            {/* Page Title */}
-            <h1 className="text-[30px] font-semibold tracking-tight text-slate-700">
-              Report
-            </h1>
-
-            {/* Summary Cards Row */}
-            <div className="flex gap-4">
-              {/* Total Reports Card */}
-              <div className="flex-1 bg-white rounded-xl p-5">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-[#232323]">
-                    Total of Community Story Report
-                  </span>
-                </div>
-                <div className="flex justify-end mt-4">
-                  <span className="text-2xl font-bold text-[#232323]">
-                    {totalReports}
-                  </span>
-                </div>
-              </div>
-
-              {/* Pending Reports Card */}
-              <div className="flex-1 bg-white rounded-xl p-5">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-[#232323]">
-                    Pending Report
-                  </span>
-                </div>
-                <div className="flex justify-end mt-4">
-                  <span className="text-2xl font-bold text-[#232323]">
-                    {pendingReports}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Reports Table Card */}
-            <div className="bg-white rounded-xl p-5">
-              {/* Table Header */}
-              <h2 className="text-xl font-bold text-[#232323] mb-4">
-                Community Story Report
-              </h2>
-
-              {/* Table */}
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-[#F9F9F9]">
-                      <th className="px-4 py-4 text-left text-xs font-bold text-[#575757]">
-                        Bil
-                      </th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-[#575757]">
-                        Name
-                      </th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-[#575757]">
-                        Date of Report
-                      </th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-[#575757]">
-                        Type of Report
-                      </th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-[#575757]">
-                        Status
-                      </th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-[#575757]">
-                        Action
-                      </th>
-                      <th className="px-4 py-4 text-left text-xs font-bold text-[#575757]">
-                        Action Taken
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {reports.map((report) => (
-                      <tr key={report.id} className="border-b border-[#D9D9D9]">
-                        <td className="px-4 py-4 text-xs font-medium text-[#232323]">
-                          {report.id}
-                        </td>
-                        <td className="px-4 py-4 text-xs font-medium text-[#232323]">
-                          {report.name}
-                        </td>
-                        <td className="px-4 py-4 text-xs font-medium text-[#232323]">
-                          {report.dateOfReport}
-                        </td>
-                        <td className="px-4 py-4 text-xs font-medium text-[#232323]">
-                          {report.typeOfReport}
-                        </td>
-                        <td className="px-4 py-4">
-                          <span
-                            className={`inline-flex items-center px-4 py-1 rounded-md text-[10px] font-bold ${
-                              report.status === "Resolved"
-                                ? "bg-[#EFFCEC] text-[#54C93C]"
-                                : "bg-[#FCECEC] text-[#C9443C]"
-                            }`}
-                          >
-                            {report.status}
-                          </span>
-                        </td>
-                        <td className="px-4 py-4">
-                          <Link
-                            href={`/admin/reports/${report.id}`}
-                            className="inline-flex items-center px-4 py-1 rounded-md text-[10px] font-bold bg-emerald-700 text-white"
-                          >
-                            View More
-                          </Link>
-                        </td>
-                        <td className="px-4 py-4 text-xs font-medium text-[#232323]">
-                          {report.actionTaken}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Pagination */}
-              <div className="flex justify-end items-center gap-2 mt-4">
-                <button className="w-8 h-8 flex items-center justify-center rounded-md bg-emerald-700 text-white text-xs font-semibold">
-                  1
-                </button>
-                <button className="px-4 h-8 flex items-center justify-center rounded-md bg-white border border-[#D9D9D9] text-emerald-700 text-xs font-semibold">
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+        </motion.div>
+      </div>
+    </DuoAppShell>
   );
 }
-

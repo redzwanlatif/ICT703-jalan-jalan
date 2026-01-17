@@ -1,330 +1,455 @@
+"use client";
+
+import React, { useEffect } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Navigation } from "@/components/shared/navigation";
-import { Footer } from "@/components/shared/footer";
-import { JourneySelector } from "@/components/shared/journey-selector";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   Map,
   Users,
   BarChart3,
   MessageCircle,
   Sparkles,
-  Globe,
+  ChevronRight,
+  Flame,
+  Trophy,
+  Target,
   Compass,
-  ArrowRight,
-  CheckCircle2,
-  Search,
+  Calendar,
+  TrendingUp,
 } from "lucide-react";
+import { useGamification, getXpProgress } from "@/contexts/gamification-context";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot, DuoMascotWithSpeech } from "@/components/shared/duo-mascot";
+import { DuoButton, DuoProgressRing } from "@/components/shared/duo-wizard-layout";
+import { cn } from "@/lib/utils";
+
+// ============================================================================
+// Feature Cards
+// ============================================================================
 
 const features = [
   {
-    title: "AI Planning Assistant",
-    description: "Chat with our AI to plan smarter trips with context-aware recommendations for local events, traffic, and cultural holidays.",
-    icon: MessageCircle,
-    group: "Group 1",
-    href: "/chat",
-    color: "from-emerald-500 to-teal-600",
-  },
-  {
-    title: "Live Travel Dashboard",
-    description: "Real-time dashboard with weather, crowd levels, trending spots, and booking status for your destination.",
+    title: "Plan a Trip",
+    description: "Create your perfect itinerary",
     icon: Map,
-    group: "Group 2",
-    href: "/dashboard",
-    color: "from-blue-500 to-indigo-600",
-  },
-  {
-    title: "Personal Travel Hub",
-    description: "Track your travel goals, budgets, expenses and reflect on past trips with personalized insights.",
-    icon: BarChart3,
-    group: "Group 3",
-    href: "/informatics/dashboard",
-    color: "from-violet-500 to-purple-600",
-  },
-  {
-    title: "Community & Stories",
-    description: "Discover local tips, community stories, and authentic experiences from verified travelers.",
-    icon: Users,
-    group: "Group 4",
-    href: "/community",
-    color: "from-orange-500 to-amber-600",
-  },
-  {
-    title: "Smart Trip Planner",
-    description: "AI-powered trip planner with crowd predictions, weather alerts, and budget optimization.",
-    icon: Sparkles,
-    group: "Group 5",
     href: "/predictions",
-    color: "from-rose-500 to-pink-600",
+    color: "var(--duo-green)",
+    colorDark: "var(--duo-green-dark)",
+    xp: 25,
+  },
+  {
+    title: "AI Chat",
+    description: "Get instant travel advice",
+    icon: MessageCircle,
+    href: "/chat",
+    color: "var(--duo-blue)",
+    colorDark: "var(--duo-blue-dark)",
+    xp: 15,
+  },
+  {
+    title: "Dashboard",
+    description: "Live travel data & insights",
+    icon: BarChart3,
+    href: "/dashboard",
+    color: "var(--duo-orange)",
+    colorDark: "var(--duo-orange-dark)",
+    xp: 10,
+  },
+  {
+    title: "Community",
+    description: "Connect with travelers",
+    icon: Users,
+    href: "/community",
+    color: "var(--duo-purple)",
+    colorDark: "var(--duo-purple-dark)",
+    xp: 20,
   },
 ];
 
-const popularDestinations = [
+// ============================================================================
+// Daily Quests
+// ============================================================================
+
+const dailyQuests = [
   {
-    name: "Langkawi",
-    country: "Malaysia",
-    image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&h=300&fit=crop",
-    rating: 4.8,
+    id: "plan-trip",
+    title: "Plan a trip",
+    description: "Start planning your next adventure",
+    xp: 25,
+    progress: 0,
+    target: 1,
+    icon: Compass,
   },
   {
-    name: "Penang",
-    country: "Malaysia",
-    image: "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=400&h=300&fit=crop",
-    rating: 4.7,
+    id: "chat-ai",
+    title: "Chat with AI",
+    description: "Ask a travel question",
+    xp: 15,
+    progress: 0,
+    target: 1,
+    icon: MessageCircle,
   },
   {
-    name: "Cameron Highlands",
-    country: "Malaysia",
-    image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&h=300&fit=crop",
-    rating: 4.6,
+    id: "explore-dashboard",
+    title: "Check dashboard",
+    description: "View travel insights",
+    xp: 10,
+    progress: 0,
+    target: 1,
+    icon: BarChart3,
   },
 ];
 
-const benefits = [
-  "AI-powered context-aware recommendations",
-  "Real-time event and holiday integration",
-  "Group travel coordination tools",
-  "Budget tracking and optimization",
-  "Community-verified local tips",
-  "Predictive crowd and availability insights",
-];
+// ============================================================================
+// Feature Card Component
+// ============================================================================
 
-export default function Home() {
+interface FeatureCardProps {
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  href: string;
+  color: string;
+  colorDark: string;
+  xp: number;
+  index: number;
+}
+
+function FeatureCard({ title, description, icon: Icon, href, color, colorDark, xp, index }: FeatureCardProps) {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Navigation />
-
-      <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative overflow-hidden">
-          {/* Background gradient */}
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-emerald-950/20 dark:via-teal-950/20 dark:to-cyan-950/20" />
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iLjAyIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIgMS44LTQgNC00czQgMS44IDQgNC0xLjggNC00IDQtNC0xLjgtNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
-          
-          <div className="relative container mx-auto px-4 py-20 md:py-32">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
-                <Sparkles className="size-4" />
-                Smart Holiday Planning Platform
-              </div>
-              
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent animate-fade-in">
-                Plan Smarter, Travel Better
-              </h1>
-              
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in">
-                A cognitive travel planning platform that helps you make informed,
-                context-aware decisions for your perfect holiday retreat.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-                <Link href="/predictions">
-                  <Button
-                    size="lg"
-                    className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0 shadow-lg shadow-emerald-500/25"
-                  >
-                    <Sparkles className="size-5 mr-2" />
-                    Start Planning
-                  </Button>
-                </Link>
-                <Link href="/chat">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                    <MessageCircle className="size-5 mr-2" />
-                    Talk to AI
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Journey Selector */}
-              <div className="mt-12 max-w-2xl mx-auto animate-fade-in">
-                <JourneySelector />
-              </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+    >
+      <Link href={href} className="block">
+        <div
+          className="duo-card duo-card-interactive p-5 group"
+          style={{
+            borderColor: color,
+            boxShadow: `0 4px 0 ${colorDark}`,
+          }}
+        >
+          <div className="flex items-center gap-4">
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform"
+              style={{ background: color }}
+            >
+              <Icon className="w-7 h-7 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-bold text-lg truncate">{title}</h3>
+              <p className="text-sm text-muted-foreground truncate">{description}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="duo-xp-badge text-xs">+{xp} XP</span>
+              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
-        </section>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
 
-        {/* Features Grid */}
-        <section className="container mx-auto px-4 py-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Platform Features</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Discover all the tools and features designed to make your travel planning experience seamless and intelligent.
+// ============================================================================
+// Quest Card Component
+// ============================================================================
+
+interface QuestCardProps {
+  quest: typeof dailyQuests[0];
+  index: number;
+}
+
+function QuestCard({ quest, index }: QuestCardProps) {
+  const Icon = quest.icon;
+  const progress = (quest.progress / quest.target) * 100;
+  const completed = quest.progress >= quest.target;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.3 + index * 0.1 }}
+      className={cn(
+        "flex items-center gap-4 p-4 rounded-2xl border-2",
+        completed
+          ? "bg-[var(--duo-green)]/10 border-[var(--duo-green)]"
+          : "bg-card border-border"
+      )}
+      style={{
+        boxShadow: completed
+          ? "0 4px 0 var(--duo-green-dark)"
+          : "0 4px 0 var(--border)",
+      }}
+    >
+      <div
+        className={cn(
+          "w-12 h-12 rounded-xl flex items-center justify-center shrink-0",
+          completed ? "bg-[var(--duo-green)]" : "bg-muted"
+        )}
+      >
+        <Icon className={cn("w-6 h-6", completed ? "text-white" : "text-muted-foreground")} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <h4 className={cn("font-bold", completed && "line-through text-muted-foreground")}>
+          {quest.title}
+        </h4>
+        <p className="text-sm text-muted-foreground">{quest.description}</p>
+      </div>
+      <div className="text-right shrink-0">
+        <span className={cn(
+          "font-bold text-sm",
+          completed ? "text-[var(--duo-green)]" : "text-muted-foreground"
+        )}>
+          +{quest.xp} XP
+        </span>
+        <div className="w-16 h-2 bg-muted rounded-full overflow-hidden mt-1">
+          <div
+            className="h-full rounded-full transition-all"
+            style={{
+              width: `${progress}%`,
+              background: completed ? "var(--duo-green)" : "var(--duo-blue)",
+            }}
+          />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ============================================================================
+// Stats Card
+// ============================================================================
+
+function StatsCard() {
+  const { xp, level, streak } = useGamification();
+  const xpProgress = getXpProgress(xp, level);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.2 }}
+      className="duo-card p-5"
+    >
+      <div className="flex items-center gap-4">
+        {/* Progress Ring */}
+        <DuoProgressRing progress={xpProgress} size={70} strokeWidth={6}>
+          <div className="text-center">
+            <span className="font-extrabold text-lg">{level.level}</span>
+          </div>
+        </DuoProgressRing>
+
+        {/* Stats */}
+        <div className="flex-1 min-w-0">
+          <h3 className="font-extrabold text-lg">{level.title}</h3>
+          <div className="flex items-center gap-4 mt-1">
+            <div className="flex items-center gap-1">
+              <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+              <span className="font-bold text-sm">{xp} XP</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Flame className="w-4 h-4 text-[var(--duo-orange)]" />
+              <span className="font-bold text-sm">{streak} day streak</span>
+            </div>
+          </div>
+          {/* XP to next level */}
+          <div className="mt-2">
+            <div className="duo-xp-bar">
+              <div
+                className="duo-xp-fill"
+                style={{ width: `${xpProgress}%` }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              {level.maxXp === Infinity
+                ? "Max level reached!"
+                : `${level.maxXp - xp} XP to next level`}
             </p>
           </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature) => {
-              const Icon = feature.icon;
-              return (
-                <Link key={feature.title} href={feature.href}>
-                  <Card className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1 group cursor-pointer">
-                    <CardHeader>
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
-                        <Icon className="size-6 text-white" />
-                      </div>
-                      <CardTitle className="flex items-center justify-between">
-                        {feature.title}
-                        <ArrowRight className="size-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                      </CardTitle>
-                      <CardDescription className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                        {feature.group}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{feature.description}</p>
-                    </CardContent>
-                  </Card>
-                </Link>
-              );
-            })}
+// ============================================================================
+// Main Page Component
+// ============================================================================
+
+export default function HomePage() {
+  const router = useRouter();
+  const { isFirstTime, onboardingStep, level, travelStyle } = useGamification();
+
+  // Redirect first-time users to onboarding
+  useEffect(() => {
+    if (isFirstTime && onboardingStep !== "complete") {
+      router.replace("/onboarding");
+    }
+  }, [isFirstTime, onboardingStep, router]);
+
+  // Show loading state while checking
+  if (isFirstTime && onboardingStep !== "complete") {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <DuoMascot mood="happy" size="lg" animate />
+      </div>
+    );
+  }
+
+  // Get greeting based on time
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
+  };
+
+  // Get mascot message
+  const getMascotMessage = () => {
+    if (!travelStyle) return "Ready for your next adventure?";
+    switch (travelStyle) {
+      case "budget":
+        return "Let's find some great deals!";
+      case "comfort":
+        return "Time to plan something nice!";
+      case "luxury":
+        return "Premium experiences await!";
+      default:
+        return "Where to next?";
+    }
+  };
+
+  return (
+    <DuoAppShell>
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
+        {/* Greeting with Mascot */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-start gap-4"
+        >
+          <DuoMascot mood="happy" size="md" />
+          <div className="flex-1 pt-2">
+            <h1 className="text-2xl font-extrabold">
+              {getGreeting()}, Explorer!
+            </h1>
+            <p className="text-muted-foreground">{getMascotMessage()}</p>
           </div>
-        </section>
+        </motion.div>
 
-        {/* How It Works */}
-        <section className="bg-muted/30 py-20">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">How It Works</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Three simple steps to plan your perfect trip with context-aware intelligence.
-              </p>
-            </div>
+        {/* Stats Card */}
+        <StatsCard />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/25">
-                  <Search className="size-8 text-white" />
-                </div>
-                <div className="text-4xl font-bold text-emerald-600 mb-2">01</div>
-                <h3 className="font-semibold text-lg mb-2">Search & Discover</h3>
-                <p className="text-muted-foreground text-sm">
-                  Explore destinations with AI-powered search that considers your preferences and travel context.
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/25">
-                  <Compass className="size-8 text-white" />
-                </div>
-                <div className="text-4xl font-bold text-blue-600 mb-2">02</div>
-                <h3 className="font-semibold text-lg mb-2">Plan Your Trip</h3>
-                <p className="text-muted-foreground text-sm">
-                  Create detailed itineraries with smart scheduling that avoids crowds and optimizes your time.
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-violet-500/25">
-                  <Globe className="size-8 text-white" />
-                </div>
-                <div className="text-4xl font-bold text-violet-600 mb-2">03</div>
-                <h3 className="font-semibold text-lg mb-2">Travel & Share</h3>
-                <p className="text-muted-foreground text-sm">
-                  Enjoy your trip with real-time updates and share your experiences with the community.
-                </p>
-              </div>
-            </div>
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          <h2 className="font-extrabold text-lg mb-3 flex items-center gap-2">
+            <Target className="w-5 h-5 text-[var(--duo-green)]" />
+            Quick Actions
+          </h2>
+          <div className="space-y-3">
+            {features.map((feature, index) => (
+              <FeatureCard key={feature.title} {...feature} index={index} />
+            ))}
           </div>
-        </section>
+        </motion.div>
 
-        {/* Benefits */}
-        <section className="container mx-auto px-4 py-20">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-bold mb-6">
-                Everything You Need for Smart Travel Planning
-              </h2>
-              <p className="text-muted-foreground mb-8">
-                Our platform combines cutting-edge AI with human-centered design to deliver 
-                a travel planning experience that&apos;s intuitive, intelligent, and incredibly powerful.
-              </p>
-              
-              <ul className="space-y-4">
-                {benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="size-5 text-emerald-500 mt-0.5 shrink-0" />
-                    <span>{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-8">
-                <Link href="/predictions">
-                  <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0">
-                    Get Started
-                    <ArrowRight className="size-4 ml-2" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-teal-500/20 rounded-3xl blur-3xl" />
-              <Card className="relative">
-                <CardHeader className="text-center border-b">
-                  <CardTitle className="flex items-center justify-center gap-2">
-                    <MessageCircle className="size-5 text-emerald-600" />
-                    AI Travel Assistant
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    <div className="bg-muted rounded-lg p-4 text-sm">
-                      <p className="text-muted-foreground">
-                        &quot;I want to visit Langkawi next month. What should I know about local events?&quot;
-                      </p>
-                    </div>
-                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 rounded-lg p-4 text-sm border border-emerald-100 dark:border-emerald-900">
-                      <p>
-                        <strong className="text-emerald-700 dark:text-emerald-400">AI Assistant:</strong>{" "}
-                        Great choice! In January, Langkawi hosts the annual Eagle Festival. 
-                        I&apos;d recommend visiting the Sky Bridge early morning (before 10 AM) to avoid crowds. 
-                        The weather forecast shows mostly sunny days with occasional evening showers.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+        {/* Daily Quests */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <h2 className="font-extrabold text-lg mb-3 flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-[var(--duo-orange)]" />
+            Daily Quests
+          </h2>
+          <div className="space-y-3">
+            {dailyQuests.map((quest, index) => (
+              <QuestCard key={quest.id} quest={quest} index={index} />
+            ))}
           </div>
-        </section>
+        </motion.div>
 
-        {/* CTA Section */}
-        <section className="bg-gradient-to-br from-emerald-600 to-teal-700 text-white py-20">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Plan Your Perfect Trip?
-            </h2>
-            <p className="text-emerald-100 max-w-2xl mx-auto mb-8 text-lg">
-              Join thousands of travelers who use Jalan-Jalan to create memorable, 
-              well-planned holiday experiences.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/predictions">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto bg-white text-emerald-700 hover:bg-emerald-50"
+        {/* Trending Section */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+        >
+          <h2 className="font-extrabold text-lg mb-3 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-[var(--duo-purple)]" />
+            Trending Destinations
+          </h2>
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+            {[
+              { name: "Langkawi", emoji: "🏝️", travelers: "2.1k" },
+              { name: "Penang", emoji: "🍜", travelers: "1.8k" },
+              { name: "Cameron", emoji: "🍓", travelers: "1.2k" },
+              { name: "Tioman", emoji: "🐠", travelers: "890" },
+            ].map((dest, index) => (
+              <Link key={dest.name} href={`/predictions?destination=${dest.name}`}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.8 + index * 0.1 }}
+                  className="duo-card duo-card-interactive p-4 min-w-[140px] text-center"
                 >
-                  Start Planning Now
-                  <ArrowRight className="size-5 ml-2" />
-                </Button>
+                  <span className="text-3xl">{dest.emoji}</span>
+                  <h4 className="font-bold mt-2">{dest.name}</h4>
+                  <p className="text-xs text-muted-foreground">{dest.travelers} travelers</p>
+                </motion.div>
               </Link>
-              <Link href="/chat">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto border-white text-white hover:bg-white/10"
-                >
-                  Talk to AI Assistant
-                </Button>
-              </Link>
-            </div>
+            ))}
           </div>
-        </section>
-      </main>
+        </motion.div>
 
-      <Footer />
-    </div>
+        {/* Start Planning CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9 }}
+          className="duo-card p-6 text-center"
+          style={{
+            background: "linear-gradient(135deg, var(--duo-green) 0%, var(--duo-green-dark) 100%)",
+            borderColor: "var(--duo-green-dark)",
+            boxShadow: "0 4px 0 var(--duo-green-dark)",
+          }}
+        >
+          <h3 className="font-extrabold text-xl text-white mb-2">
+            Ready to explore?
+          </h3>
+          <p className="text-white/80 text-sm mb-4">
+            Plan your next adventure and earn XP!
+          </p>
+          <Link href="/predictions">
+            <button className="w-full py-3 px-6 bg-white text-[var(--duo-green)] font-bold rounded-2xl hover:bg-white/90 transition-all">
+              Start Planning <ChevronRight className="w-5 h-5 inline ml-1" />
+            </button>
+          </Link>
+        </motion.div>
+
+        {/* User Flow Link */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="text-center"
+        >
+          <Link
+            href="/user-flow"
+            className="text-sm text-muted-foreground hover:text-[var(--duo-blue)] transition-colors"
+          >
+            View User Journey Map →
+          </Link>
+        </motion.div>
+      </div>
+    </DuoAppShell>
   );
 }

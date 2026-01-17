@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   return (
@@ -8,10 +9,14 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="relative size-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                <span className="text-white font-bold">J</span>
-              </div>
-              <span className="font-bold text-lg">Jalan-Jalan</span>
+              <Image
+                src="/logo.png"
+                alt="Jalan-Jalan"
+                width={36}
+                height={36}
+                className="size-9 object-contain"
+              />
+              <span className="font-bold text-lg text-jj-terracotta">Jalan-Jalan</span>
             </div>
             <p className="text-muted-foreground text-sm max-w-md">
               A cognitive travel planning platform that helps individuals and groups 

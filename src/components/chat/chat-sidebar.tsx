@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  Plus, 
-  MessageSquare, 
-  MoreVertical, 
-  Pencil, 
+import Image from "next/image";
+import {
+  Plus,
+  MessageSquare,
+  MoreVertical,
+  Pencil,
   Trash2,
   Menu
 } from "lucide-react";
@@ -53,10 +54,14 @@ export function ChatSidebar({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Logo */}
-            <div className="w-10 h-10 rounded-lg bg-[#313131] flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-sm">T</span>
-            </div>
-            <span className="font-semibold text-foreground">Trevllo.ai</span>
+            <Image
+              src="/logo.png"
+              alt="Jalan-Jalan"
+              width={40}
+              height={40}
+              className="w-10 h-10 object-contain"
+            />
+            <span className="font-semibold text-jj-terracotta">Jalan-Jalan</span>
           </div>
           <Button variant="ghost" size="icon" onClick={onToggle}>
             <Menu className="w-5 h-5" />

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -69,10 +70,15 @@ export function Navigation() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="relative size-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">J</span>
-            </div>
-            <span className="font-bold text-xl tracking-tight bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <Image
+              src="/logo.png"
+              alt="Jalan-Jalan"
+              width={44}
+              height={44}
+              className="size-11 object-contain"
+              priority
+            />
+            <span className="font-bold text-xl tracking-tight text-jj-terracotta hidden sm:inline">
               Jalan-Jalan
             </span>
           </Link>
@@ -98,7 +104,7 @@ export function Navigation() {
                       size="sm"
                       className={cn(
                         "gap-2 transition-all",
-                        (isActive || isDropdownOpen) && "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-300"
+                        (isActive || isDropdownOpen) && "bg-jj-cream text-jj-terracotta hover:bg-jj-cream-dark/50 dark:bg-jj-brown/20 dark:text-jj-terracotta-light"
                       )}
                       onClick={() => setOpenDropdown(isDropdownOpen ? null : item.href)}
                     >
@@ -119,13 +125,13 @@ export function Navigation() {
                               onClick={() => setOpenDropdown(null)}
                             >
                               <div className={cn(
-                                "px-4 py-2 hover:bg-emerald-50 dark:hover:bg-emerald-950 cursor-pointer",
-                                isChildActive && "bg-emerald-50 dark:bg-emerald-950"
+                                "px-4 py-2 hover:bg-jj-cream dark:hover:bg-jj-brown/20 cursor-pointer",
+                                isChildActive && "bg-jj-cream dark:bg-jj-brown/20"
                               )}>
                                 <div className="flex items-center gap-3">
-                                  <ChildIcon className={cn("size-4", isChildActive ? "text-emerald-600" : "text-muted-foreground")} />
+                                  <ChildIcon className={cn("size-4", isChildActive ? "text-jj-terracotta" : "text-muted-foreground")} />
                                   <div>
-                                    <div className={cn("text-sm font-medium", isChildActive && "text-emerald-700 dark:text-emerald-300")}>
+                                    <div className={cn("text-sm font-medium", isChildActive && "text-jj-terracotta dark:text-jj-terracotta-light")}>
                                       {child.label}
                                     </div>
                                     <div className="text-xs text-muted-foreground">{child.description}</div>
@@ -148,7 +154,7 @@ export function Navigation() {
                     size="sm"
                     className={cn(
                       "gap-2 transition-all",
-                      isActive && "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-300"
+                      isActive && "bg-jj-cream text-jj-terracotta hover:bg-jj-cream-dark/50 dark:bg-jj-brown/20 dark:text-jj-terracotta-light"
                     )}
                   >
                     <Icon className="size-4" />
@@ -169,7 +175,7 @@ export function Navigation() {
             <Link href="/register" className="hidden md:block">
               <Button
                 size="sm"
-                className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0"
+                className="bg-jj-terracotta hover:bg-jj-terracotta-dark text-white border-0 shadow-[0_3px_0_var(--jj-terracotta-dark)]"
               >
                 Sign Up
               </Button>
@@ -255,7 +261,7 @@ export function Navigation() {
                   <Button variant="ghost" className="w-full justify-start">Login</Button>
                 </Link>
                 <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+                  <Button className="w-full bg-jj-terracotta hover:bg-jj-terracotta-dark text-white shadow-[0_3px_0_var(--jj-terracotta-dark)]">
                     Sign Up
                   </Button>
                 </Link>

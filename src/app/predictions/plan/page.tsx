@@ -2,25 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Navigation } from "@/components/shared/navigation";
-import { GroupLabel } from "@/components/shared/group-label";
-import { FlowGuide } from "@/components/shared/flow-guide";
-import {
-  AnimatedBackground,
-  UnifiedCard,
-} from "@/components/shared/page-layout";
+import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   Sparkles,
-  ChevronLeft,
   MapPin,
   Calendar,
   Users,
@@ -34,11 +19,16 @@ import {
   Clock,
   Lightbulb,
   Zap,
+  ChevronDown,
+  ChevronRight,
 } from "lucide-react";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { cn } from "@/lib/utils";
 
-// Step Indicator Component
-function StepIndicator({ currentStep }: { currentStep: number }) {
+// Step Indicator Component - Duolingo Style
+function DuoStepIndicator({ currentStep }: { currentStep: number }) {
   const steps = [
     { num: 1, label: "Trip Details" },
     { num: 2, label: "Preferences" },
@@ -46,30 +36,24 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
   ];
 
   return (
-    <div className="flex items-center justify-center gap-4 mb-8">
+    <div className="flex items-center justify-center gap-2 mb-6">
       {steps.map((step, index) => (
         <div key={step.num} className="flex items-center">
           <div className="flex flex-col items-center">
             <div
               className={cn(
-                "w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all shadow-lg",
-                currentStep > step.num
-                  ? "bg-gradient-to-br from-rose-500 to-pink-500 text-white shadow-rose-500/25"
-                  : currentStep === step.num
-                  ? "bg-gradient-to-br from-rose-500 to-pink-500 text-white shadow-rose-500/25"
-                  : "bg-neutral-200 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 shadow-none"
+                "w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold transition-all border-2",
+                currentStep >= step.num
+                  ? "bg-[var(--duo-green)] border-[var(--duo-green-dark)] text-white shadow-[0_4px_0_var(--duo-green-dark)]"
+                  : "bg-muted border-border text-muted-foreground"
               )}
             >
-              {currentStep > step.num ? (
-                <Check className="w-5 h-5" />
-              ) : (
-                step.num
-              )}
+              {currentStep > step.num ? <Check className="w-5 h-5" /> : step.num}
             </div>
             <span
               className={cn(
-                "text-xs mt-2 font-medium",
-                currentStep >= step.num ? "text-rose-600 dark:text-rose-400" : "text-neutral-400 dark:text-neutral-500"
+                "text-xs mt-2 font-bold",
+                currentStep >= step.num ? "text-[var(--duo-green)]" : "text-muted-foreground"
               )}
             >
               {step.label}
@@ -78,8 +62,8 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
           {index < steps.length - 1 && (
             <div
               className={cn(
-                "w-24 h-1 mx-2 rounded-full transition-all",
-                currentStep > step.num ? "bg-gradient-to-r from-rose-500 to-pink-500" : "bg-neutral-200 dark:bg-neutral-700"
+                "w-12 h-2 mx-2 rounded-full transition-all",
+                currentStep > step.num ? "bg-[var(--duo-green)]" : "bg-muted"
               )}
             />
           )}
@@ -89,8 +73,8 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
   );
 }
 
-// Plan Card Component
-function PlanCard({
+// Plan Card Component - Duolingo Style
+function DuoPlanCard({
   plan,
   selected,
   onSelect,
@@ -109,71 +93,68 @@ function PlanCard({
   onSelect: () => void;
   recommended?: boolean;
 }) {
+  const crowdBgColor = plan.crowdColor === "green"
+    ? "bg-[var(--duo-green)]/20 text-[var(--duo-green)]"
+    : plan.crowdColor === "yellow"
+    ? "bg-[var(--duo-yellow)]/20 text-[var(--duo-orange)]"
+    : "bg-[var(--duo-orange)]/20 text-[var(--duo-orange)]";
+
   return (
-    <button
+    <motion.button
       onClick={onSelect}
+      whileTap={{ scale: 0.98 }}
       className={cn(
-        "relative w-full p-5 rounded-xl border-2 text-left transition-all",
+        "relative w-full p-5 rounded-3xl border-2 text-left transition-all",
         selected
-          ? "border-rose-500 bg-white dark:bg-neutral-800 shadow-lg shadow-rose-500/10"
-          : "border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 bg-white dark:bg-neutral-800"
+          ? "border-[var(--duo-green)] bg-[var(--duo-green)]/5 shadow-[0_4px_0_var(--duo-green)]"
+          : "border-border bg-white hover:border-[var(--duo-blue)] shadow-[0_4px_0_#E5E5E5]"
       )}
     >
       {recommended && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-          <Badge className="bg-gradient-to-r from-rose-500 to-pink-500 text-white px-3 py-1 text-xs flex items-center gap-1 shadow-lg shadow-rose-500/25">
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-[var(--duo-yellow)] text-white flex items-center gap-1 shadow-[0_2px_0_#E5A800]">
             <Star className="w-3 h-3" />
             Recommended
-          </Badge>
+          </span>
         </div>
       )}
 
       <div className="flex items-start justify-between mb-3">
-        <h3 className="font-semibold text-neutral-800 dark:text-neutral-100">{plan.title}</h3>
+        <h3 className="font-extrabold">{plan.title}</h3>
         {selected && (
-          <Badge className="bg-gradient-to-r from-rose-500 to-pink-500 text-white">Selected</Badge>
+          <span className="px-2 py-1 rounded-full text-xs font-bold bg-[var(--duo-green)] text-white">
+            Selected
+          </span>
         )}
       </div>
 
-      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">{plan.description}</p>
+      <p className="text-sm text-muted-foreground mb-4">{plan.description}</p>
 
       <div className="flex items-baseline gap-1 mb-4">
-        <span className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">
-          RM {plan.price.toLocaleString()}
-        </span>
-        <span className="text-sm text-neutral-500 dark:text-neutral-400">/ person</span>
+        <span className="text-2xl font-extrabold">RM {plan.price.toLocaleString()}</span>
+        <span className="text-sm text-muted-foreground">/ person</span>
       </div>
 
-      <Badge
-        className={cn(
-          "text-xs font-medium",
-          plan.crowdColor === "green"
-            ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"
-            : plan.crowdColor === "yellow"
-            ? "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400"
-            : "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400"
-        )}
-      >
+      <span className={cn("px-3 py-1 rounded-full text-xs font-bold", crowdBgColor)}>
         {plan.crowdLevel}
-      </Badge>
+      </span>
 
       {plan.features && selected && (
-        <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-700 space-y-2">
+        <div className="mt-4 pt-4 border-t-2 border-border space-y-2">
           {plan.features.map((feature, index) => (
-            <div key={index} className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300">
-              <Check className="w-4 h-4 text-rose-500" />
+            <div key={index} className="flex items-center gap-2 text-sm">
+              <Check className="w-4 h-4 text-[var(--duo-green)]" />
               {feature}
             </div>
           ))}
         </div>
       )}
-    </button>
+    </motion.button>
   );
 }
 
-// Alert Card Component
-function AlertCard({
-  type,
+// Alert Card Component - Duolingo Style
+function DuoAlertCard({
   title,
   location,
   badge,
@@ -181,9 +162,7 @@ function AlertCard({
   details,
   suggestion,
   icon: Icon,
-  iconBgColor,
 }: {
-  type: string;
   title: string;
   location: string;
   badge: string;
@@ -191,65 +170,78 @@ function AlertCard({
   details: { icon: typeof Clock; text: string }[];
   suggestion: string;
   icon: typeof CrowdIcon;
-  iconBgColor: string;
 }) {
-  return (
-    <UnifiedCard hover className="p-5">
-      <div className="flex items-start gap-4">
-        <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center shadow-lg", iconBgColor)}>
-          <Icon className="w-6 h-6" />
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <h4 className="font-semibold text-neutral-800 dark:text-neutral-100">{title}</h4>
-            <Badge
-              className={cn(
-                "text-xs font-medium",
-                badgeColor === "red"
-                  ? "bg-red-500 text-white"
-                  : badgeColor === "orange"
-                  ? "bg-orange-500 text-white"
-                  : "bg-emerald-500 text-white"
-              )}
-            >
-              {badge}
-            </Badge>
-          </div>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">{location}</p>
+  const [expanded, setExpanded] = useState(false);
 
+  const badgeStyles = badgeColor === "red"
+    ? "bg-[var(--duo-red)] text-white"
+    : badgeColor === "orange"
+    ? "bg-[var(--duo-orange)] text-white"
+    : "bg-[var(--duo-green)] text-white";
+
+  const iconBg = badgeColor === "red"
+    ? "bg-[var(--duo-red)]/20"
+    : badgeColor === "orange"
+    ? "bg-[var(--duo-orange)]/20"
+    : "bg-[var(--duo-green)]/20";
+
+  const iconColor = badgeColor === "red"
+    ? "text-[var(--duo-red)]"
+    : badgeColor === "orange"
+    ? "text-[var(--duo-orange)]"
+    : "text-[var(--duo-green)]";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="duo-card p-4"
+    >
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left"
+      >
+        <div className="flex items-start gap-3">
+          <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0", iconBg)}>
+            <Icon className={cn("w-5 h-5", iconColor)} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h4 className="font-bold text-sm">{title}</h4>
+              <span className={cn("px-2 py-0.5 rounded-full text-[10px] font-bold", badgeStyles)}>
+                {badge}
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground">{location}</p>
+          </div>
+          <ChevronDown className={cn("w-5 h-5 text-muted-foreground transition-transform", expanded && "rotate-180")} />
+        </div>
+      </button>
+
+      {expanded && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          className="mt-3 pt-3 border-t-2 border-border"
+        >
           <div className="space-y-1 mb-3">
             {details.map((detail, index) => (
-              <div key={index} className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-                <detail.icon className="w-4 h-4" />
+              <div key={index} className="flex items-center gap-2 text-xs text-muted-foreground">
+                <detail.icon className="w-3 h-3" />
                 {detail.text}
               </div>
             ))}
           </div>
 
-          <div className="pt-3 border-t border-neutral-100 dark:border-neutral-700">
-            <div className="flex items-start gap-2 text-sm text-rose-600 dark:text-rose-400 italic">
-              <Sparkles className="w-4 h-4 mt-0.5 flex-shrink-0" />
-              <span>{suggestion}</span>
+          <div className="p-3 rounded-xl bg-[var(--duo-purple)]/10 border-2 border-[var(--duo-purple)]/20">
+            <div className="flex items-start gap-2 text-xs">
+              <Sparkles className="w-4 h-4 text-[var(--duo-purple)] shrink-0 mt-0.5" />
+              <span className="text-[var(--duo-purple)] font-semibold">{suggestion}</span>
             </div>
           </div>
-        </div>
-      </div>
-    </UnifiedCard>
-  );
-}
-
-// Tip Card Component
-function TipCard({ tipNumber, text }: { tipNumber: number; text: string }) {
-  return (
-    <div className="flex items-start gap-4 p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-rose-500/25">
-        <Sparkles className="w-5 h-5 text-white" />
-      </div>
-      <div className="flex-1">
-        <span className="text-rose-600 dark:text-rose-400 font-semibold">Tip {tipNumber}: </span>
-        <span className="text-neutral-700 dark:text-neutral-300">{text}</span>
-      </div>
-    </div>
+        </motion.div>
+      )}
+    </motion.div>
   );
 }
 
@@ -257,6 +249,7 @@ export default function PlanPage() {
   const router = useRouter();
   const [selectedPlan, setSelectedPlan] = useState("balanced");
   const [alertFilter, setAlertFilter] = useState("all");
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [tripDetails, setTripDetails] = useState({
     destination: "Langkawi, Kedah",
     dates: "Dec 18, 2025 to Dec 20, 2025",
@@ -265,7 +258,6 @@ export default function PlanPage() {
   });
 
   useEffect(() => {
-    // Try to get trip details from sessionStorage
     const stored = sessionStorage.getItem("tripDetails");
     if (stored) {
       const data = JSON.parse(stored);
@@ -314,13 +306,12 @@ export default function PlanPage() {
       badge: "HIGH",
       badgeColor: "red",
       icon: CrowdIcon,
-      iconBgColor: "bg-orange-100 text-orange-600",
       details: [
         { icon: Calendar, text: "Sat, 13 Apr · 5-8 PM" },
         { icon: Clock, text: "Long waiting time expected" },
       ],
       suggestion:
-        "AI Suggestion: Cenang Beach will be quite busy during this time. Your Balanced Plan allows flexibility - you can either visit earlier (9-11 AM) for a quieter experience, or embrace the evening crowd for a more vibrant atmosphere.",
+        "AI Suggestion: Visit earlier (9-11 AM) for a quieter experience, or embrace the evening crowd for a vibrant atmosphere.",
     },
     {
       type: "weather",
@@ -329,13 +320,12 @@ export default function PlanPage() {
       badge: "WARNING",
       badgeColor: "orange",
       icon: CloudRain,
-      iconBgColor: "bg-blue-100 text-blue-600",
       details: [
         { icon: Calendar, text: "13 Apr · Afternoon" },
         { icon: MapPin, text: "Affects: Island hopping activity" },
       ],
       suggestion:
-        "AI Suggestion: Thunderstorms may affect your island hopping. With your Balanced Plan's flexible scheduling, I recommend moving this activity to Day 2 morning when weather conditions are more favorable and you can still enjoy the experience.",
+        "AI Suggestion: Move this activity to Day 2 morning when weather conditions are more favorable.",
     },
     {
       type: "price",
@@ -344,12 +334,9 @@ export default function PlanPage() {
       badge: "SAVE RM 80",
       badgeColor: "green",
       icon: Tag,
-      iconBgColor: "bg-green-100 text-green-600",
-      details: [
-        { icon: Clock, text: "Valid until: Tonight, 11:59 PM" },
-      ],
+      details: [{ icon: Clock, text: "Valid until: Tonight, 11:59 PM" }],
       suggestion:
-        "AI Suggestion: This price drop on Hotel ABC is a great opportunity for your Balanced Plan! It offers a perfect mix of comfort and value, located near both popular attractions and hidden gems - exactly what your plan emphasizes.",
+        "AI Suggestion: This price drop is a great opportunity! It offers a perfect mix of comfort and value.",
     },
     {
       type: "safety",
@@ -358,19 +345,18 @@ export default function PlanPage() {
       badge: "CAUTION",
       badgeColor: "orange",
       icon: Shield,
-      iconBgColor: "bg-red-100 text-red-600",
       details: [
         { icon: MapPin, text: "Night time" },
         { icon: Shield, text: "Use main road / different area" },
       ],
       suggestion:
-        "AI Suggestion: Area X should be avoided at night. Your Balanced Plan includes well-lit areas, so consider exploring this area during daylight hours (10 AM - 6 PM) when it's safer and you can still discover its hidden gems.",
+        "AI Suggestion: Explore this area during daylight hours (10 AM - 6 PM) when it's safer.",
     },
   ];
 
   const tips = [
-    "Mix your itinerary: visit popular spots like Cenang Beach in the morning, then explore hidden gems like Durian Perangin Waterfall in the afternoon.",
-    "Take advantage of flexible timing - many attractions offer discounted rates during off-peak hours while still being enjoyable.",
+    "Mix your itinerary: visit popular spots in the morning, then explore hidden gems in the afternoon.",
+    "Take advantage of flexible timing - many attractions offer discounted rates during off-peak hours.",
     "Consider staying near the main area but in a quieter side street for the best of both worlds.",
   ];
 
@@ -379,64 +365,74 @@ export default function PlanPage() {
       ? alerts
       : alerts.filter((alert) => alert.type === alertFilter);
 
+  const filterOptions = [
+    { value: "all", label: "All Alerts" },
+    { value: "crowd", label: "Crowd" },
+    { value: "weather", label: "Weather" },
+    { value: "price", label: "Price" },
+    { value: "safety", label: "Safety" },
+  ];
+
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950 relative">
-      <Navigation />
-      <GroupLabel group={5} />
-      <AnimatedBackground variant="subtle" />
-
-      {/* Main Content */}
-      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Step Indicator */}
-        <StepIndicator currentStep={3} />
+        <DuoStepIndicator currentStep={3} />
 
-        {/* AI-Generated Travel Plan Header */}
-        <UnifiedCard gradient className="p-5 mb-8">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center shadow-lg shadow-rose-500/25">
-                <Sparkles className="w-6 h-6 text-white" />
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="duo-card p-5"
+          style={{
+            background: "linear-gradient(135deg, var(--duo-green) 0%, var(--duo-green-dark) 100%)",
+            borderColor: "var(--duo-green-dark)",
+          }}
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+              <Sparkles className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1 min-w-0 text-white">
+              <div className="flex items-center gap-2 mb-1">
+                <h1 className="font-extrabold">AI Travel Plan</h1>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20">
+                  <Zap className="w-3 h-3 inline mr-1" />
+                  AI
+                </span>
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-bold text-neutral-800 dark:text-neutral-100">AI-Generated Travel Plan</h1>
-                  <Badge className="bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 flex items-center gap-1">
-                    <Zap className="w-3 h-3" />
-                    AI Powered
-                  </Badge>
-                </div>
-                <div className="flex items-center gap-4 mt-1 text-sm text-neutral-500 dark:text-neutral-400 flex-wrap">
-                  <span className="flex items-center gap-1">
-                    <MapPin className="w-4 h-4" />
-                    {tripDetails.destination}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    {tripDetails.dates}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Users className="w-4 h-4" />
-                    {tripDetails.travelers} travelers
-                  </span>
-                  <span className="font-medium text-neutral-800 dark:text-neutral-100">
-                    Est. cost: RM {tripDetails.estimatedCost.toLocaleString()} / person
-                  </span>
-                </div>
+              <div className="space-y-1 text-sm text-white/90">
+                <p className="flex items-center gap-1">
+                  <MapPin className="w-3 h-3" />
+                  {tripDetails.destination}
+                </p>
+                <p className="flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  {tripDetails.dates}
+                </p>
+                <p className="flex items-center gap-1">
+                  <Users className="w-3 h-3" />
+                  {tripDetails.travelers} travelers • Est. RM {tripDetails.estimatedCost}/person
+                </p>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="text-neutral-600 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600">
-              <Share2 className="w-4 h-4 mr-2" />
-              Share
-            </Button>
           </div>
-        </UnifiedCard>
+        </motion.div>
 
         {/* Choose Your Plan */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-neutral-800 dark:text-neutral-100 mb-4">Choose Your Plan</h2>
-          <div className="grid md:grid-cols-3 gap-4">
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="space-y-3"
+        >
+          <h2 className="font-extrabold flex items-center gap-2">
+            <Star className="w-5 h-5 text-[var(--duo-yellow)]" />
+            Choose Your Plan
+          </h2>
+          <div className="space-y-3">
             {plans.map((plan) => (
-              <PlanCard
+              <DuoPlanCard
                 key={plan.id}
                 plan={plan}
                 selected={selectedPlan === plan.id}
@@ -445,85 +441,113 @@ export default function PlanPage() {
               />
             ))}
           </div>
-        </div>
+        </motion.section>
 
         {/* AI Travel Predictions & Alerts */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-              <h2 className="text-lg font-semibold text-neutral-800 dark:text-neutral-100">AI Travel Predictions & Alerts</h2>
-              <Badge className="bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 flex items-center gap-1">
-                <Zap className="w-3 h-3" />
-                Real-time
-              </Badge>
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="font-extrabold flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[var(--duo-purple)]" />
+              AI Alerts
+            </h2>
+
+            {/* Filter Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                className="px-3 py-1.5 rounded-xl border-2 border-border text-sm font-bold flex items-center gap-2 hover:border-[var(--duo-blue)] transition-colors"
+              >
+                {filterOptions.find((f) => f.value === alertFilter)?.label}
+                <ChevronDown className={cn("w-4 h-4 transition-transform", showFilterDropdown && "rotate-180")} />
+              </button>
+              {showFilterDropdown && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute top-full right-0 mt-1 bg-white border-2 border-border rounded-xl shadow-lg z-50 overflow-hidden min-w-[120px]"
+                >
+                  {filterOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setAlertFilter(option.value);
+                        setShowFilterDropdown(false);
+                      }}
+                      className={cn(
+                        "w-full px-4 py-2 text-left text-sm font-semibold hover:bg-muted transition-colors",
+                        alertFilter === option.value && "bg-[var(--duo-green)]/10 text-[var(--duo-green)]"
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
             </div>
-            <Select value={alertFilter} onValueChange={setAlertFilter}>
-              <SelectTrigger className="w-40 bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700">
-                <SelectValue placeholder="All Alerts" />
-              </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700">
-                <SelectItem value="all">All Alerts</SelectItem>
-                <SelectItem value="crowd">Crowd</SelectItem>
-                <SelectItem value="weather">Weather</SelectItem>
-                <SelectItem value="price">Price</SelectItem>
-                <SelectItem value="safety">Safety</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="space-y-2">
             {filteredAlerts.map((alert, index) => (
-              <AlertCard key={index} {...alert} />
+              <DuoAlertCard key={index} {...alert} />
             ))}
           </div>
-        </div>
+        </motion.section>
 
-        {/* AI Personalized Suggestions */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <Lightbulb className="w-5 h-5 text-rose-600 dark:text-rose-400" />
-            <h2 className="text-lg font-semibold text-neutral-800 dark:text-neutral-100">AI Personalized Suggestions</h2>
-            <Badge className="bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 flex items-center gap-1">
-              <Zap className="w-3 h-3" />
-              Smart Tips
-            </Badge>
+        {/* AI Personalized Tips */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="space-y-3"
+        >
+          <h2 className="font-extrabold flex items-center gap-2">
+            <Lightbulb className="w-5 h-5 text-[var(--duo-yellow)]" />
+            Smart Tips
+          </h2>
+
+          <div className="duo-card p-4 space-y-3" style={{ borderColor: "var(--duo-yellow)" }}>
+            {tips.map((tip, index) => (
+              <div key={index} className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-[var(--duo-green)] flex items-center justify-center shrink-0 shadow-[0_2px_0_var(--duo-green-dark)]">
+                  <span className="text-white text-sm font-bold">{index + 1}</span>
+                </div>
+                <p className="text-sm pt-1">{tip}</p>
+              </div>
+            ))}
           </div>
-
-          <UnifiedCard className="p-5 bg-rose-50/50 dark:bg-rose-900/10 border-rose-200 dark:border-rose-800/30">
-            <div className="space-y-4">
-              {tips.map((tip, index) => (
-                <TipCard key={index} tipNumber={index + 1} text={tip} />
-              ))}
-            </div>
-          </UnifiedCard>
-        </div>
+        </motion.section>
 
         {/* Action Button */}
-        <div className="text-center mb-12">
-          <Button
-            size="lg"
-            className={cn(
-              "h-14 px-12 text-lg font-semibold",
-              "bg-gradient-to-r from-rose-500 to-pink-500",
-              "hover:from-rose-600 hover:to-pink-600",
-              "text-white border-0",
-              "shadow-xl shadow-rose-500/30 hover:shadow-2xl hover:shadow-rose-500/40",
-              "transition-all duration-300"
-            )}
-          >
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="space-y-4 pt-4"
+        >
+          <DuoButton onClick={() => router.push("/dashboard")} fullWidth size="lg">
+            <Check className="w-5 h-5 mr-2" />
             Confirm & Save Plan
-          </Button>
-        </div>
+          </DuoButton>
 
-        {/* Flow Guide - What's Next */}
-        <FlowGuide
-          variant="banner"
-          title="What's Next?"
-          maxSuggestions={3}
-        />
-      </main>
-    </div>
+          <button className="w-full duo-btn duo-btn-outline flex items-center justify-center gap-2">
+            <Share2 className="w-5 h-5" />
+            Share Plan
+          </button>
+
+          {/* XP Hint */}
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+            <span>
+              Earn <strong className="text-[var(--duo-green)]">+50 XP</strong> for completing your plan!
+            </span>
+          </div>
+        </motion.div>
+      </div>
+    </DuoAppShell>
   );
 }
-

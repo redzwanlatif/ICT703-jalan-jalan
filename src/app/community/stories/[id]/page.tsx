@@ -3,26 +3,26 @@
 import { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Navigation } from "@/components/shared/navigation";
-import { GroupLabel } from "@/components/shared/group-label";
+import { motion } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
-  PlaneTakeoff,
   Send,
-  Flag,
   Facebook,
   Twitter,
   Link as LinkIcon,
   AlertCircle,
-  MapPin
+  MapPin,
+  Sparkles,
+  PlaneTakeoff,
+  MessageCircle,
 } from "lucide-react";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { StoryCard } from "@/components/community/story-card";
 import { ReportModal } from "@/components/community/report-modal";
+import { cn } from "@/lib/utils";
 
 // Mock data for the story detail
 const storyData = {
@@ -106,35 +106,51 @@ export default function StoryDetailPage({
   const { id } = use(params);
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navigation />
-      <GroupLabel group={4} />
-
-      {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-14 xl:px-[56px] py-8 pb-16">
-
-        {/* Header Section */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-neutral-800">
-            Community Stories
-          </h1>
-          <Link href="/community/stories/create">
-            <Button className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-white font-semibold px-6">
-              Create Community Story
-            </Button>
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <Link href="/community/stories">
+            <button className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors">
+              <ChevronLeft className="w-5 h-5" />
+            </button>
           </Link>
-        </div>
+          <div className="flex-1">
+            <h1 className="text-2xl font-extrabold">Community Stories</h1>
+            <p className="text-muted-foreground">Travel experiences shared by locals</p>
+          </div>
+          <Link href="/community/stories/create">
+            <DuoButton size="sm">Create Story</DuoButton>
+          </Link>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Column: Images */}
-          <div className="space-y-6">
-            <div className="space-y-1">
-              <h2 className="text-xl font-bold text-neutral-800">{storyData.location}</h2>
-              <p className="text-neutral-500">{storyData.address}</p>
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="space-y-4"
+          >
+            {/* Location Info */}
+            <div className="duo-card p-4">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-[var(--duo-blue)]/20 flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5 text-[var(--duo-blue)]" />
+                </div>
+                <div>
+                  <h2 className="font-extrabold text-lg">{storyData.location}</h2>
+                  <p className="text-sm text-muted-foreground">{storyData.address}</p>
+                </div>
+              </div>
             </div>
 
             {/* Main Image */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border-2 border-border">
               <Image
                 src={storyData.mainImage}
                 alt={storyData.location}
@@ -144,127 +160,192 @@ export default function StoryDetailPage({
             </div>
 
             {/* Image Carousel */}
-            <div className="flex items-center gap-4">
-              <Button variant="outline" size="icon" className="shrink-0 h-10 w-10 rounded-full border-neutral-200">
-                <ChevronLeft className="h-5 w-5 text-neutral-600" />
-              </Button>
+            <div className="flex items-center gap-3">
+              <button className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors shrink-0">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
 
-              <div className="grid grid-cols-3 gap-4 flex-1">
-                {storyData.images.map((img) => (
-                  <div key={img.id} className="relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity">
+              <div className="grid grid-cols-3 gap-3 flex-1">
+                {storyData.images.map((img, index) => (
+                  <motion.div
+                    key={img.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 + index * 0.05 }}
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer border-2 border-border hover:border-[var(--duo-blue)] transition-colors"
+                  >
                     <Image
                       src={img.src}
                       alt={`Gallery ${img.id}`}
                       fill
                       className="object-cover"
                     />
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
-              <Button variant="outline" size="icon" className="shrink-0 h-10 w-10 rounded-full border-neutral-200">
-                <ChevronRight className="h-5 w-5 text-neutral-600" />
-              </Button>
+              <button className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors shrink-0">
+                <ChevronRight className="w-5 h-5" />
+              </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Content */}
-          <div className="space-y-8">
+          <motion.div
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.15 }}
+            className="space-y-5"
+          >
             {/* Author Section */}
-            <div className="space-y-4">
+            <div className="duo-card p-4 space-y-3">
               <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={storyData.author.avatar} />
-                  <AvatarFallback>{storyData.author.name[0]}</AvatarFallback>
-                </Avatar>
-                <span className="font-semibold text-neutral-800">{storyData.author.name}</span>
+                <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[var(--duo-green)]">
+                  <Image
+                    src={storyData.author.avatar}
+                    alt={storyData.author.name}
+                    width={40}
+                    height={40}
+                    className="object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <span className="font-bold">{storyData.author.name}</span>
+                  <div className="flex items-center gap-2">
+                    <PlaneTakeoff className="w-4 h-4 text-[var(--duo-purple)]" />
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--duo-purple)]/10 text-[var(--duo-purple)] font-bold border border-[var(--duo-purple)]/30">
+                      {storyData.author.badge}
+                    </span>
+                  </div>
+                </div>
 
-                <div className="flex items-center gap-2 ml-2 text-neutral-400">
-                  <Facebook className="h-4 w-4 hover:text-blue-600 cursor-pointer transition-colors" />
-                  <Twitter className="h-4 w-4 hover:text-blue-400 cursor-pointer transition-colors" />
-                  <LinkIcon className="h-4 w-4 hover:text-neutral-600 cursor-pointer transition-colors" />
+                <div className="flex items-center gap-2">
+                  <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-[var(--duo-blue)]/10 transition-colors">
+                    <Facebook className="w-4 h-4 text-muted-foreground hover:text-[var(--duo-blue)]" />
+                  </button>
+                  <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-[var(--duo-blue)]/10 transition-colors">
+                    <Twitter className="w-4 h-4 text-muted-foreground hover:text-[var(--duo-blue)]" />
+                  </button>
+                  <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors">
+                    <LinkIcon className="w-4 h-4 text-muted-foreground" />
+                  </button>
                   <ReportModal>
-                    <button type="button" aria-label="Report this story" className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded">
-                      <AlertCircle className="h-4 w-4 hover:text-red-500 cursor-pointer transition-colors" />
+                    <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-[var(--duo-red)]/10 transition-colors">
+                      <AlertCircle className="w-4 h-4 text-muted-foreground hover:text-[var(--duo-red)]" />
                     </button>
                   </ReportModal>
                 </div>
               </div>
-
-              <div className="flex items-center gap-2">
-                <PlaneTakeoff className="h-5 w-5 text-neutral-600" />
-                <Badge variant="secondary" className="bg-white border text-xs font-normal border-neutral-200 text-neutral-600 hover:bg-neutral-50">
-                  {storyData.author.badge}
-                </Badge>
-              </div>
             </div>
 
             {/* Story Content */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-bold text-neutral-800">{storyData.title}</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed whitespace-pre-line text-justify">
+            <div className="duo-card p-5 space-y-3">
+              <h3 className="text-xl font-extrabold">{storyData.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {storyData.content}
               </p>
             </div>
 
             {/* Comment Input */}
-            <div className="flex gap-2 p-1 bg-neutral-100 rounded-lg border border-neutral-200">
-              <Input
-                className="border-0 bg-transparent focus-visible:ring-0 shadow-none placeholder:text-neutral-500"
-                placeholder="Add Comment"
-              />
-              <Button className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-white px-6">
-                Send
-              </Button>
+            <div className="duo-card p-3">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Add a comment..."
+                  className="duo-input flex-1"
+                />
+                <DuoButton size="sm">
+                  <Send className="w-4 h-4 mr-1" />
+                  Send
+                </DuoButton>
+              </div>
             </div>
 
             {/* Traveler Experiences */}
-            <div className="space-y-6">
-              <h4 className="font-bold text-neutral-800">Traveler Experiences</h4>
+            <div className="space-y-4">
+              <h4 className="font-extrabold flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 text-[var(--duo-purple)]" />
+                Traveler Experiences
+              </h4>
 
-              <div className="space-y-6">
-                {storyData.experiences.map((exp) => (
-                  <div key={exp.id} className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={exp.author.avatar} />
-                        <AvatarFallback>{exp.author.name[0]}</AvatarFallback>
-                      </Avatar>
-                      <span className="font-semibold text-neutral-800 text-sm">{exp.author.name}</span>
-                      <Badge variant="secondary" className="bg-white border text-[10px] font-normal border-neutral-200 text-neutral-500 h-5">
-                        {exp.author.badge}
-                      </Badge>
+              {storyData.experiences.map((exp, index) => (
+                <motion.div
+                  key={exp.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                  className="duo-card p-4 space-y-3"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[var(--duo-green)]">
+                      <Image
+                        src={exp.author.avatar}
+                        alt={exp.author.name}
+                        width={32}
+                        height={32}
+                        className="object-cover"
+                      />
                     </div>
-                    <p className="text-neutral-600 text-sm leading-relaxed pl-11 text-justify">
-                      {exp.content}
-                    </p>
+                    <span className="font-bold text-sm">{exp.author.name}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--duo-green)]/10 text-[var(--duo-green)] font-bold border border-[var(--duo-green)]/30">
+                      {exp.author.badge}
+                    </span>
                   </div>
-                ))}
-              </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {exp.content}
+                  </p>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* More Stories Section */}
-        <div className="mt-16 sm:mt-24 space-y-6">
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="pt-8 space-y-4"
+        >
           <div className="flex items-center justify-between">
-            <h3 className="text-xl md:text-2xl font-bold text-neutral-800">
+            <h3 className="text-xl font-extrabold">
               More Stories about {storyData.location}
             </h3>
-            <Link href="/community/stories" className="text-base font-semibold text-neutral-600 hover:text-[#1E3A8A] transition-colors">
-              View More
+            <Link
+              href="/community/stories"
+              className="text-sm font-bold text-[var(--duo-blue)] hover:underline"
+            >
+              View All
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {moreStories.map((story) => (
-              <StoryCard key={story.id} {...story} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {moreStories.map((story, index) => (
+              <motion.div
+                key={story.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5 + index * 0.05 }}
+              >
+                <StoryCard {...story} />
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.section>
 
-      </main>
-    </div>
+        {/* XP Hint */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-4"
+        >
+          <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+          <span>
+            Earn <strong className="text-[var(--duo-green)]">+5 XP</strong> for reading stories!
+          </span>
+        </motion.div>
+      </div>
+    </DuoAppShell>
   );
 }
-

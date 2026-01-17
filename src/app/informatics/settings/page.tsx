@@ -2,16 +2,19 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { RotateCcw, User, Bell, Shield, HelpCircle, ChevronRight, LogOut } from "lucide-react";
+import { RotateCcw, User, Bell, Shield, HelpCircle, ChevronRight, LogOut, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { useGamification } from "@/contexts/gamification-context";
 
 export default function SettingsPage() {
   const router = useRouter();
+  const { resetTravelDNA } = useGamification();
   const [notifications, setNotifications] = useState(true);
   const [priceAlerts, setPriceAlerts] = useState(true);
   const [weeklyReport, setWeeklyReport] = useState(false);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const settingsSections = [
     {
@@ -53,8 +56,10 @@ export default function SettingsPage() {
     },
   ];
 
-  const handleResetPlanning = () => {
-    router.push("/informatics");
+  const handleResetDNA = () => {
+    resetTravelDNA();
+    setShowResetConfirm(false);
+    router.push("/onboarding");
   };
 
   return (
@@ -137,22 +142,22 @@ export default function SettingsPage() {
         </div>
       ))}
 
-      {/* Reset Travel Planning */}
+      {/* Reset Travel DNA */}
       <div className="px-6 mb-6">
         <h2 className="font-semibold text-foreground mb-3">Data Management</h2>
         <Card className="overflow-hidden">
           <button
-            onClick={handleResetPlanning}
-            className="w-full flex items-center justify-between p-4 hover:bg-yellow-500/5 transition-colors"
+            onClick={() => setShowResetConfirm(true)}
+            className="w-full flex items-center justify-between p-4 hover:bg-red-500/5 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
-                <RotateCcw className="w-4 h-4 text-yellow-600" />
+              <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
+                <RotateCcw className="w-4 h-4 text-red-600" />
               </div>
               <div className="text-left">
-                <span className="text-foreground text-sm block">Reset Travel Planning</span>
+                <span className="text-foreground text-sm block">Reset Travel DNA</span>
                 <span className="text-muted-foreground text-xs">
-                  Clear all trips and start fresh
+                  Clear all preferences and start onboarding again
                 </span>
               </div>
             </div>
@@ -174,9 +179,47 @@ export default function SettingsPage() {
 
       {/* App Version */}
       <div className="px-6 text-center">
-        <p className="text-muted-foreground text-xs">Travel Pulse v1.0.0</p>
+        <p className="text-muted-foreground text-xs">Jalan-Jalan v1.0.0</p>
       </div>
 
+      {/* Reset Confirmation Modal */}
+      {showResetConfirm && (
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setShowResetConfirm(false)}
+        >
+          <div
+            className="bg-card rounded-2xl p-6 max-w-sm w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-red-500/10">
+              <AlertTriangle className="w-6 h-6 text-red-600" />
+            </div>
+
+            <h2 className="text-xl font-bold text-center mb-2">Reset Travel DNA?</h2>
+            <p className="text-muted-foreground text-center text-sm mb-6">
+              This will clear all your travel preferences and restart the onboarding process. This action cannot be undone.
+            </p>
+
+            <div className="space-y-3">
+              <Button
+                onClick={handleResetDNA}
+                className="w-full bg-red-600 hover:bg-red-700 text-white"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Yes, Reset Everything
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowResetConfirm(false)}
+                className="w-full"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

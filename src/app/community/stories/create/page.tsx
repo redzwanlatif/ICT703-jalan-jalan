@@ -1,21 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Navigation } from "@/components/shared/navigation";
-import { GroupLabel } from "@/components/shared/group-label";
-import { Image as ImageIcon, Search, X } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Image as ImageIcon, Search, X, MapPin, Check, Sparkles, ChevronLeft } from "lucide-react";
+import Link from "next/link";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DuoButton } from "@/components/shared/duo-wizard-layout";
+import { cn } from "@/lib/utils";
 
 export default function CreateStoryPage() {
-  const [tags, setTags] = useState([
-    "#Muslimfriendly",
-    "#staycation",
-    "#localfood",
-  ]);
+  const router = useRouter();
+  const [tags, setTags] = useState(["#Muslimfriendly", "#staycation", "#localfood"]);
   const [newTag, setNewTag] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
 
   const removeTag = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
@@ -23,139 +25,211 @@ export default function CreateStoryPage() {
 
   const addTag = () => {
     if (newTag && !tags.includes(newTag)) {
-      if (tags.length >= 3) return; // Constraint from design: max 3 tags
+      if (tags.length >= 3) return;
       const formattedTag = newTag.startsWith("#") ? newTag : `#${newTag}`;
       setTags([...tags, formattedTag]);
       setNewTag("");
     }
   };
 
+  const handleSubmit = () => {
+    router.push("/community/stories");
+  };
+
   return (
-    <div className="min-h-screen bg-white">
-      <Navigation />
-      <GroupLabel group={4} />
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <Link href="/community/stories">
+            <button className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors">
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          </Link>
+          <div className="flex-1">
+            <h1 className="text-2xl font-extrabold">Create Story</h1>
+            <p className="text-muted-foreground">Share your travel experience</p>
+          </div>
+          <DuoMascot mood="excited" size="sm" />
+        </motion.div>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-14 xl:px-[56px] py-12">
-        {/* Page Title */}
-        <h1 className="text-2xl md:text-3xl font-bold text-neutral-800 mb-10">
-          Create a Community Story
-        </h1>
+        {/* Share Image Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="space-y-3"
+        >
+          <h2 className="font-extrabold flex items-center gap-2">
+            <ImageIcon className="w-5 h-5 text-[var(--duo-purple)]" />
+            Share Image
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Upload your amazing travel photo (Maximum 4 images)
+          </p>
+          <div className="grid grid-cols-4 gap-3">
+            <button className="aspect-square rounded-2xl border-2 border-dashed border-border flex items-center justify-center bg-muted/50 hover:bg-muted hover:border-[var(--duo-blue)] transition-all">
+              <ImageIcon className="w-8 h-8 text-muted-foreground" />
+            </button>
+            <div className="aspect-square rounded-2xl border-2 border-border bg-muted/30" />
+            <div className="aspect-square rounded-2xl border-2 border-border bg-muted/30" />
+            <div className="aspect-square rounded-2xl border-2 border-border bg-muted/30" />
+          </div>
+        </motion.section>
 
-        <div className="space-y-8">
-          {/* Share Image Section */}
-          <section className="space-y-4">
-            <h2 className="text-lg font-bold text-neutral-800">Share Image</h2>
-            <p className="text-sm text-neutral-500">
-              Upload and share your amazing travel photo (Maximum only 4 images)
-            </p>
-            <div className="w-40 h-40 border border-dashed border-neutral-800 rounded-lg flex items-center justify-center bg-white cursor-pointer hover:bg-neutral-50 transition-colors">
-              <ImageIcon className="w-16 h-16 text-neutral-400 stroke-1" />
-            </div>
-          </section>
+        {/* Add Title */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="space-y-3"
+        >
+          <h2 className="font-extrabold">Add a title</h2>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Write your interesting title"
+            className="duo-input w-full"
+          />
+        </motion.section>
 
-          {/* Add a title */}
-          <section className="space-y-2">
-            <h2 className="text-lg font-bold text-neutral-800">Add a title</h2>
-            <Input
-              placeholder="Write your interesting title"
-              className="border-purple-900/50 focus-visible:ring-purple-900 rounded-lg h-12"
-            />
-          </section>
-
-          {/* Add Location */}
-          <section className="space-y-2">
-            <h2 className="text-lg font-bold text-neutral-800">Add Location</h2>
-            <div className="flex gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-500" />
-                <Input
-                  placeholder="Search location"
-                  className="pl-10 border-purple-900/50 focus-visible:ring-purple-900 rounded-lg h-12"
-                />
-              </div>
-              <Button className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-white font-semibold h-12 px-8 rounded-lg">
-                Search
-              </Button>
-            </div>
-          </section>
-
-          {/* Tell us about your trip */}
-          <section className="space-y-2">
-            <h2 className="text-lg font-bold text-neutral-800">Tell us about your trip</h2>
-            <div className="relative">
-              <Textarea
-                placeholder="Share about your trip with maximum 100 words"
-                className="min-h-[250px] border-purple-900/50 focus-visible:ring-purple-900 rounded-xl resize-none p-4 text-base"
-              />
-            </div>
-          </section>
-
-          {/* Create Tags */}
-          <section className="space-y-4">
-            <h2 className="text-lg font-bold text-neutral-800">Create Tags</h2>
-
-            <div className="flex gap-4">
-              <Input
-                placeholder="Create Tags"
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                className="max-w-md border-purple-900/50 focus-visible:ring-purple-900 rounded-lg h-12"
-              />
-              <Button
-                onClick={addTag}
-                className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-white font-semibold h-12 px-8 rounded-lg"
-              >
-                Create
-              </Button>
-            </div>
-
-            <p className="text-sm text-neutral-500">(You can only create 3 tags for each story)</p>
-
-            {/* Tag badges */}
-            <div className="flex flex-wrap gap-3">
-              {tags.map((tag) => (
-                <div
-                  key={tag}
-                  className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-neutral-700 border border-purple-900/50 rounded-full bg-transparent"
-                >
-                  <span>{tag}</span>
-                  <button
-                    onClick={() => removeTag(tag)}
-                    className="hover:text-red-500 transition-colors"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Confirmation & Submit */}
-          <section className="space-y-6 pt-4">
-            <div className="flex items-start gap-3">
+        {/* Add Location */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="space-y-3"
+        >
+          <h2 className="font-extrabold flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-[var(--duo-blue)]" />
+            Add Location
+          </h2>
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
-                type="checkbox"
-                id="confirm"
-                checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
-                className="mt-1 w-4 h-4 border border-neutral-400 rounded accent-[#1E3A8A] cursor-pointer"
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Search location"
+                className="duo-input !pl-12 w-full"
               />
-              <label htmlFor="confirm" className="text-sm text-neutral-500 cursor-pointer select-none">
-                I confirm that all photos and videos I have uploaded are my own, and I agree to be bound by Jalan-Jalan's Terms of Service and Community Guidelines.
-              </label>
             </div>
+            <button className="duo-btn px-4">
+              Search
+            </button>
+          </div>
+        </motion.section>
 
-            <Button
-              disabled={!agreed}
-              className="w-full sm:w-auto min-w-[200px] h-12 bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-white font-semibold rounded-lg text-base disabled:opacity-50 disabled:cursor-not-allowed"
+        {/* Tell us about your trip */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="space-y-3"
+        >
+          <h2 className="font-extrabold">Tell us about your trip</h2>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Share about your trip with maximum 100 words"
+            className="duo-input min-h-[150px] resize-none w-full"
+          />
+        </motion.section>
+
+        {/* Create Tags */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="space-y-3"
+        >
+          <h2 className="font-extrabold">Create Tags</h2>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && addTag()}
+              placeholder="Create Tags"
+              className="duo-input flex-1"
+            />
+            <button onClick={addTag} className="duo-btn px-4">
+              Add
+            </button>
+          </div>
+          <p className="text-xs text-muted-foreground">(Maximum 3 tags per story)</p>
+
+          {/* Tag badges */}
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <motion.span
+                key={tag}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-bold rounded-full border-2 border-[var(--duo-purple)] bg-[var(--duo-purple)]/10 text-[var(--duo-purple)]"
+              >
+                {tag}
+                <button
+                  onClick={() => removeTag(tag)}
+                  className="hover:text-[var(--duo-red)] transition-colors"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </motion.span>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Confirmation & Submit */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="space-y-4 pt-4"
+        >
+          <button
+            onClick={() => setAgreed(!agreed)}
+            className="flex items-start gap-3 w-full text-left"
+          >
+            <div
+              className={cn(
+                "w-6 h-6 rounded-lg border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all",
+                agreed
+                  ? "bg-[var(--duo-green)] border-[var(--duo-green-dark)]"
+                  : "border-border"
+              )}
             >
-              Submit
-            </Button>
-          </section>
-        </div>
-      </main>
-    </div>
+              {agreed && <Check className="w-4 h-4 text-white" />}
+            </div>
+            <span className="text-sm text-muted-foreground">
+              I confirm that all photos and videos I have uploaded are my own, and I agree to be bound by Jalan-Jalan's Terms of Service and Community Guidelines.
+            </span>
+          </button>
+
+          <DuoButton
+            onClick={handleSubmit}
+            disabled={!agreed}
+            fullWidth
+            size="lg"
+          >
+            Submit Story
+          </DuoButton>
+
+          {/* XP Hint */}
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+            <span>
+              Earn <strong className="text-[var(--duo-green)]">+25 XP</strong> for sharing your story!
+            </span>
+          </div>
+        </motion.section>
+      </div>
+    </DuoAppShell>
   );
 }
-

@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/ui/date-picker";
 
 const upcomingTrips = [
   {
@@ -350,20 +351,25 @@ export default function PlannerPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="startDate">Start Date</Label>
-                <Input
-                  id="startDate"
-                  type="date"
-                  value={tripData.startDate}
-                  onChange={(e) => handleInputChange("startDate", e.target.value)}
+                <DatePicker
+                  date={tripData.startDate ? new Date(tripData.startDate) : undefined}
+                  onSelect={(date) => {
+                    handleInputChange("startDate", date ? date.toISOString().split("T")[0] : "");
+                  }}
+                  placeholder="Select start date"
+                  minDate={new Date()}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="endDate">End Date</Label>
-                <Input
-                  id="endDate"
-                  type="date"
-                  value={tripData.endDate}
-                  onChange={(e) => handleInputChange("endDate", e.target.value)}
+                <DatePicker
+                  date={tripData.endDate ? new Date(tripData.endDate) : undefined}
+                  onSelect={(date) => {
+                    handleInputChange("endDate", date ? date.toISOString().split("T")[0] : "");
+                  }}
+                  placeholder="Select end date"
+                  minDate={tripData.startDate ? new Date(tripData.startDate) : new Date()}
+                  disabled={!tripData.startDate}
                 />
               </div>
             </div>

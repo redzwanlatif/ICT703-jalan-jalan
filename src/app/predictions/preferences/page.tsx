@@ -2,34 +2,25 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-} from "@/components/ui/dialog";
-import { Progress } from "@/components/ui/progress";
-import { Navigation } from "@/components/shared/navigation";
-import { GroupLabel } from "@/components/shared/group-label";
-import { FlowGuide } from "@/components/shared/flow-guide";
-import {
-  AnimatedBackground,
-  UnifiedCard,
-} from "@/components/shared/page-layout";
+import { motion } from "framer-motion";
 import {
   Sparkles,
-  ChevronLeft,
   DollarSign,
   Users,
   Shield,
   Bell,
   Check,
   ArrowRight,
+  ChevronLeft,
 } from "lucide-react";
+import Link from "next/link";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { cn } from "@/lib/utils";
 
-// Step Indicator Component
-function StepIndicator({ currentStep }: { currentStep: number }) {
+// Step Indicator Component - Duolingo Style
+function DuoStepIndicator({ currentStep }: { currentStep: number }) {
   const steps = [
     { num: 1, label: "Trip Details" },
     { num: 2, label: "Preferences" },
@@ -37,30 +28,24 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
   ];
 
   return (
-    <div className="flex items-center justify-center gap-4 mb-8">
+    <div className="flex items-center justify-center gap-2 mb-6">
       {steps.map((step, index) => (
         <div key={step.num} className="flex items-center">
           <div className="flex flex-col items-center">
             <div
               className={cn(
-                "w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all shadow-lg",
-                currentStep > step.num
-                  ? "bg-gradient-to-br from-rose-500 to-pink-500 text-white shadow-rose-500/25"
-                  : currentStep === step.num
-                  ? "bg-gradient-to-br from-rose-500 to-pink-500 text-white shadow-rose-500/25"
-                  : "bg-neutral-200 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 shadow-none"
+                "w-10 h-10 rounded-full flex items-center justify-center text-sm font-extrabold transition-all border-2",
+                currentStep >= step.num
+                  ? "bg-[var(--duo-green)] border-[var(--duo-green-dark)] text-white shadow-[0_4px_0_var(--duo-green-dark)]"
+                  : "bg-muted border-border text-muted-foreground"
               )}
             >
-              {currentStep > step.num ? (
-                <Check className="w-5 h-5" />
-              ) : (
-                step.num
-              )}
+              {currentStep > step.num ? <Check className="w-5 h-5" /> : step.num}
             </div>
             <span
               className={cn(
-                "text-xs mt-2 font-medium",
-                currentStep >= step.num ? "text-rose-600 dark:text-rose-400" : "text-neutral-400 dark:text-neutral-500"
+                "text-xs mt-2 font-bold",
+                currentStep >= step.num ? "text-[var(--duo-green)]" : "text-muted-foreground"
               )}
             >
               {step.label}
@@ -69,8 +54,8 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
           {index < steps.length - 1 && (
             <div
               className={cn(
-                "w-24 h-1 mx-2 rounded-full transition-all",
-                currentStep > step.num ? "bg-gradient-to-r from-rose-500 to-pink-500" : "bg-neutral-200 dark:bg-neutral-700"
+                "w-12 h-2 mx-2 rounded-full transition-all",
+                currentStep > step.num ? "bg-[var(--duo-green)]" : "bg-muted"
               )}
             />
           )}
@@ -80,8 +65,8 @@ function StepIndicator({ currentStep }: { currentStep: number }) {
   );
 }
 
-// Radio Option Component
-function RadioOption({
+// Radio Option Component - Duolingo Style
+function DuoRadioOption({
   selected,
   onSelect,
   title,
@@ -90,38 +75,39 @@ function RadioOption({
   selected: boolean;
   onSelect: () => void;
   title: string;
-  description: string;
+  description?: string;
 }) {
   return (
-    <button
+    <motion.button
       onClick={onSelect}
+      whileTap={{ scale: 0.98 }}
       className={cn(
-        "w-full p-4 rounded-xl border-2 text-left transition-all",
+        "w-full p-4 rounded-2xl border-2 text-left transition-all",
         selected
-          ? "border-rose-500 bg-rose-50 dark:bg-rose-900/20"
-          : "border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600 bg-white dark:bg-neutral-800"
+          ? "border-[var(--duo-green)] bg-[var(--duo-green)]/10 shadow-[0_4px_0_var(--duo-green)]"
+          : "border-border bg-white hover:border-[var(--duo-blue)] shadow-[0_4px_0_#E5E5E5]"
       )}
     >
       <div className="flex items-center gap-3">
         <div
           className={cn(
-            "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all",
-            selected ? "border-rose-500 bg-rose-500" : "border-neutral-300 dark:border-neutral-600"
+            "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
+            selected ? "border-[var(--duo-green)] bg-[var(--duo-green)]" : "border-border"
           )}
         >
-          {selected && <div className="w-2 h-2 rounded-full bg-white" />}
+          {selected && <Check className="w-4 h-4 text-white" />}
         </div>
         <div>
-          <p className="font-medium text-neutral-800 dark:text-neutral-100">{title}</p>
-          {description && <p className="text-sm text-neutral-500 dark:text-neutral-400">{description}</p>}
+          <p className="font-bold">{title}</p>
+          {description && <p className="text-sm text-muted-foreground">{description}</p>}
         </div>
       </div>
-    </button>
+    </motion.button>
   );
 }
 
-// Checkbox Option Component
-function CheckboxOption({
+// Checkbox Option Component - Duolingo Style
+function DuoCheckboxOption({
   checked,
   onChange,
   label,
@@ -131,25 +117,26 @@ function CheckboxOption({
   label: string;
 }) {
   return (
-    <button
+    <motion.button
       onClick={() => onChange(!checked)}
+      whileTap={{ scale: 0.98 }}
       className={cn(
-        "w-full p-4 rounded-xl text-left transition-all flex items-center gap-3",
+        "w-full p-4 rounded-2xl text-left transition-all flex items-center gap-3 border-2",
         checked
-          ? "bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-lg shadow-rose-500/25"
-          : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+          ? "bg-[var(--duo-green)] border-[var(--duo-green-dark)] text-white shadow-[0_4px_0_var(--duo-green-dark)]"
+          : "bg-white border-border hover:border-[var(--duo-blue)] shadow-[0_4px_0_#E5E5E5]"
       )}
     >
       <div
         className={cn(
-          "w-5 h-5 rounded flex items-center justify-center transition-all",
-          checked ? "bg-white" : "border-2 border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-900"
+          "w-6 h-6 rounded-lg flex items-center justify-center transition-all",
+          checked ? "bg-white" : "border-2 border-border bg-white"
         )}
       >
-        {checked && <Check className="w-3 h-3 text-rose-500" />}
+        {checked && <Check className="w-4 h-4 text-[var(--duo-green)]" />}
       </div>
-      <span className="font-medium">{label}</span>
-    </button>
+      <span className="font-bold">{label}</span>
+    </motion.button>
   );
 }
 
@@ -177,8 +164,8 @@ export default function PreferencesPage() {
   const [safetyWarnings, setSafetyWarnings] = useState(true);
 
   const loadingSteps = [
-    "Analyzing your travel preferences...",
-    "Finding the best routes and attractions...",
+    "Analyzing your preferences...",
+    "Finding the best routes...",
     "Optimizing your itinerary...",
   ];
 
@@ -188,7 +175,6 @@ export default function PreferencesPage() {
         setLoadingProgress((prev) => {
           if (prev >= 100) {
             clearInterval(interval);
-            // Navigate to plan page after completion
             setTimeout(() => {
               router.push("/predictions/plan");
             }, 500);
@@ -213,7 +199,6 @@ export default function PreferencesPage() {
   }, [isLoading, router, loadingSteps.length]);
 
   const handleGeneratePlan = () => {
-    // Store preferences
     sessionStorage.setItem(
       "travelPreferences",
       JSON.stringify({
@@ -228,278 +213,287 @@ export default function PreferencesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950 relative">
-      <Navigation />
-      <GroupLabel group={5} />
-      <AnimatedBackground variant="subtle" />
-
-      {/* Main Content */}
-      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Step Indicator */}
-        <StepIndicator currentStep={2} />
+        <DuoStepIndicator currentStep={2} />
 
-        {/* Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100 mb-2">
-            Your Travel Preferences
-          </h1>
-          <p className="text-neutral-500 dark:text-neutral-400">Customize your travel experience</p>
-        </div>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          <motion.div
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
+            <DuoMascot mood="thinking" size="md" />
+          </motion.div>
+          <h1 className="text-2xl font-extrabold mt-4 mb-2">Your Preferences</h1>
+          <p className="text-muted-foreground">Customize your travel experience</p>
+        </motion.div>
 
-        {/* Preferences Form */}
-        <UnifiedCard gradient className="p-6 md:p-8 mb-6">
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Left Column */}
-            <div className="space-y-6">
-              {/* Travel Style */}
-              <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="size-8 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center">
-                    <DollarSign className="size-4 text-rose-600 dark:text-rose-400" />
-                  </div>
-                  <span className="font-semibold text-neutral-800 dark:text-neutral-100">Travel Style</span>
-                </div>
-                  <div className="space-y-3">
-                    <RadioOption
-                      selected={travelStyle === "low-budget"}
-                      onSelect={() => setTravelStyle("low-budget")}
-                      title="Low Budget"
-                      description="Save money, maximize experiences"
-                    />
-                    <RadioOption
-                      selected={travelStyle === "balanced"}
-                      onSelect={() => setTravelStyle("balanced")}
-                      title="Balanced"
-                      description="Mix of comfort and value"
-                    />
-                    <RadioOption
-                      selected={travelStyle === "comfortable"}
-                      onSelect={() => setTravelStyle("comfortable")}
-                      title="Comfortable"
-                      description="Prioritize comfort and convenience"
-                    />
-                  </div>
-                </div>
-
-                {/* Crowd Preference */}
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="size-8 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center">
-                      <Users className="size-4 text-rose-600 dark:text-rose-400" />
-                    </div>
-                    <span className="font-semibold text-neutral-800 dark:text-neutral-100">Crowd Preference</span>
-                  </div>
-                  <div className="space-y-3">
-                    <RadioOption
-                      selected={crowdPreference === "avoid"}
-                      onSelect={() => setCrowdPreference("avoid")}
-                      title="Avoid crowds as much as possible"
-                      description=""
-                    />
-                    <RadioOption
-                      selected={crowdPreference === "some"}
-                      onSelect={() => setCrowdPreference("some")}
-                      title="Okay with some crowd"
-                      description=""
-                    />
-                    <RadioOption
-                      selected={crowdPreference === "no-preference"}
-                      onSelect={() => setCrowdPreference("no-preference")}
-                      title="No preference"
-                      description=""
-                    />
-                  </div>
-                </div>
-
-                {/* Budget */}
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="size-8 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center">
-                      <DollarSign className="size-4 text-rose-600 dark:text-rose-400" />
-                    </div>
-                    <span className="font-semibold text-neutral-800 dark:text-neutral-100">Budget (per person)</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-neutral-500 dark:text-neutral-400">RM</span>
-                      <Input
-                        type="text"
-                        placeholder="Min"
-                        value={minBudget}
-                        onChange={(e) => setMinBudget(e.target.value)}
-                        className="w-24 h-10 bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700"
-                      />
-                    </div>
-                    <span className="text-neutral-400">to</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-neutral-500 dark:text-neutral-400">RM</span>
-                      <Input
-                        type="text"
-                        placeholder="Max"
-                        value={maxBudget}
-                        onChange={(e) => setMaxBudget(e.target.value)}
-                        className="w-24 h-10 bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column */}
-              <div className="space-y-6">
-                {/* Safety Options */}
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="size-8 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center">
-                      <Shield className="size-4 text-rose-600 dark:text-rose-400" />
-                    </div>
-                    <span className="font-semibold text-neutral-800 dark:text-neutral-100">Safety Options</span>
-                  </div>
-                  <div className="space-y-3">
-                    <CheckboxOption
-                      checked={avoidLateNight}
-                      onChange={setAvoidLateNight}
-                      label="Avoid late-night activities"
-                    />
-                    <CheckboxOption
-                      checked={preferWellLit}
-                      onChange={setPreferWellLit}
-                      label="Prefer well-lit / busy areas at night"
-                    />
-                    <CheckboxOption
-                      checked={verifiedTransport}
-                      onChange={setVerifiedTransport}
-                      label="Only show verified transport providers"
-                    />
-                  </div>
-                </div>
-
-                {/* Alert Preferences */}
-                <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="size-8 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center">
-                      <Bell className="size-4 text-rose-600 dark:text-rose-400" />
-                    </div>
-                    <span className="font-semibold text-neutral-800 dark:text-neutral-100">Alert Preferences</span>
-                  </div>
-                  <div className="space-y-3">
-                    <CheckboxOption
-                      checked={highCrowd}
-                      onChange={setHighCrowd}
-                      label="High crowd predictions"
-                    />
-                    <CheckboxOption
-                      checked={weatherDisruptions}
-                      onChange={setWeatherDisruptions}
-                      label="Weather disruptions"
-                    />
-                    <CheckboxOption
-                      checked={priceDrops}
-                      onChange={setPriceDrops}
-                      label="Price drops"
-                    />
-                    <CheckboxOption
-                      checked={safetyWarnings}
-                      onChange={setSafetyWarnings}
-                      label="Safety warnings"
-                    />
-                  </div>
-                </div>
-              </div>
+        {/* Travel Style */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-[var(--duo-green)]/20 flex items-center justify-center">
+              <DollarSign className="w-4 h-4 text-[var(--duo-green)]" />
             </div>
-        </UnifiedCard>
+            <h2 className="font-extrabold">Travel Style</h2>
+          </div>
+          <div className="space-y-2">
+            <DuoRadioOption
+              selected={travelStyle === "low-budget"}
+              onSelect={() => setTravelStyle("low-budget")}
+              title="Low Budget"
+              description="Save money, maximize experiences"
+            />
+            <DuoRadioOption
+              selected={travelStyle === "balanced"}
+              onSelect={() => setTravelStyle("balanced")}
+              title="Balanced"
+              description="Mix of comfort and value"
+            />
+            <DuoRadioOption
+              selected={travelStyle === "comfortable"}
+              onSelect={() => setTravelStyle("comfortable")}
+              title="Comfortable"
+              description="Prioritize comfort and convenience"
+            />
+          </div>
+        </motion.section>
+
+        {/* Crowd Preference */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-[var(--duo-purple)]/20 flex items-center justify-center">
+              <Users className="w-4 h-4 text-[var(--duo-purple)]" />
+            </div>
+            <h2 className="font-extrabold">Crowd Preference</h2>
+          </div>
+          <div className="space-y-2">
+            <DuoRadioOption
+              selected={crowdPreference === "avoid"}
+              onSelect={() => setCrowdPreference("avoid")}
+              title="Avoid crowds"
+            />
+            <DuoRadioOption
+              selected={crowdPreference === "some"}
+              onSelect={() => setCrowdPreference("some")}
+              title="Okay with some crowd"
+            />
+            <DuoRadioOption
+              selected={crowdPreference === "no-preference"}
+              onSelect={() => setCrowdPreference("no-preference")}
+              title="No preference"
+            />
+          </div>
+        </motion.section>
+
+        {/* Budget */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-[var(--duo-yellow)]/20 flex items-center justify-center">
+              <DollarSign className="w-4 h-4 text-[var(--duo-orange)]" />
+            </div>
+            <h2 className="font-extrabold">Budget (per person)</h2>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex-1 relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">RM</span>
+              <input
+                type="text"
+                placeholder="Min"
+                value={minBudget}
+                onChange={(e) => setMinBudget(e.target.value)}
+                className="duo-input !pl-12 w-full"
+              />
+            </div>
+            <span className="text-muted-foreground font-bold">to</span>
+            <div className="flex-1 relative">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">RM</span>
+              <input
+                type="text"
+                placeholder="Max"
+                value={maxBudget}
+                onChange={(e) => setMaxBudget(e.target.value)}
+                className="duo-input !pl-12 w-full"
+              />
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Safety Options */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-[var(--duo-blue)]/20 flex items-center justify-center">
+              <Shield className="w-4 h-4 text-[var(--duo-blue)]" />
+            </div>
+            <h2 className="font-extrabold">Safety Options</h2>
+          </div>
+          <div className="space-y-2">
+            <DuoCheckboxOption
+              checked={avoidLateNight}
+              onChange={setAvoidLateNight}
+              label="Avoid late-night activities"
+            />
+            <DuoCheckboxOption
+              checked={preferWellLit}
+              onChange={setPreferWellLit}
+              label="Prefer well-lit areas at night"
+            />
+            <DuoCheckboxOption
+              checked={verifiedTransport}
+              onChange={setVerifiedTransport}
+              label="Verified transport only"
+            />
+          </div>
+        </motion.section>
+
+        {/* Alert Preferences */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="space-y-3"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-[var(--duo-orange)]/20 flex items-center justify-center">
+              <Bell className="w-4 h-4 text-[var(--duo-orange)]" />
+            </div>
+            <h2 className="font-extrabold">Alert Preferences</h2>
+          </div>
+          <div className="space-y-2">
+            <DuoCheckboxOption
+              checked={highCrowd}
+              onChange={setHighCrowd}
+              label="High crowd predictions"
+            />
+            <DuoCheckboxOption
+              checked={weatherDisruptions}
+              onChange={setWeatherDisruptions}
+              label="Weather disruptions"
+            />
+            <DuoCheckboxOption
+              checked={priceDrops}
+              onChange={setPriceDrops}
+              label="Price drops"
+            />
+            <DuoCheckboxOption
+              checked={safetyWarnings}
+              onChange={setSafetyWarnings}
+              label="Safety warnings"
+            />
+          </div>
+        </motion.section>
 
         {/* Action Buttons */}
-        <div className="flex gap-4 mb-8">
-          <Button
-            variant="outline"
-            onClick={() => router.back()}
-            className="flex-1 h-12 text-neutral-600 dark:text-neutral-300 border-neutral-300 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-          >
-            Back
-          </Button>
-          <Button
-            onClick={handleGeneratePlan}
-            className={cn(
-              "group flex-1 h-12 font-semibold",
-              "bg-gradient-to-r from-rose-500 to-pink-500",
-              "hover:from-rose-600 hover:to-pink-600",
-              "text-white border-0",
-              "shadow-lg shadow-rose-500/25 hover:shadow-xl hover:shadow-rose-500/40",
-              "transition-all duration-300"
-            )}
-          >
-            Generate Travel Plan
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="space-y-3 pt-4"
+        >
+          <div className="grid grid-cols-2 gap-3">
+            <button onClick={() => router.back()} className="duo-btn duo-btn-outline">
+              <ChevronLeft className="w-5 h-5 mr-1" />
+              Back
+            </button>
+            <DuoButton onClick={handleGeneratePlan} fullWidth>
+              Generate Plan
+              <ArrowRight className="w-5 h-5 ml-1" />
+            </DuoButton>
+          </div>
 
-        {/* Flow Guide */}
-        <FlowGuide
-          variant="inline"
-          title="Need assistance?"
-          maxSuggestions={2}
-        />
-      </main>
+          {/* XP Hint */}
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+            <span>
+              Earn <strong className="text-[var(--duo-green)]">+25 XP</strong> for setting preferences!
+            </span>
+          </div>
+        </motion.div>
+      </div>
 
-      {/* Loading Dialog */}
-      <Dialog open={isLoading} onOpenChange={() => {}}>
-        <DialogContent showCloseButton={false} className="sm:max-w-md bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-700">
-          <div className="flex flex-col items-center text-center py-4">
-            {/* Icon */}
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-500 to-pink-500 flex items-center justify-center mb-6 shadow-xl shadow-rose-500/30 animate-pulse-glow">
+      {/* Loading Modal */}
+      {isLoading && (
+        <div className="duo-reward-overlay">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="duo-reward-modal"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              className="w-16 h-16 mx-auto mb-6 rounded-full bg-[var(--duo-green)] flex items-center justify-center shadow-[0_6px_0_var(--duo-green-dark)]"
+            >
               <Sparkles className="w-8 h-8 text-white" />
-            </div>
+            </motion.div>
 
-            {/* Title */}
-            <h3 className="text-xl font-bold text-neutral-800 dark:text-neutral-100 mb-2">
-              Generating Your Travel Plan
-            </h3>
-            <p className="text-neutral-500 dark:text-neutral-400 mb-6">
-              Our AI is analyzing your preferences and creating a personalized itinerary...
-            </p>
+            <h2 className="text-xl font-extrabold mb-2">Generating Your Plan</h2>
+            <p className="text-muted-foreground mb-6">Our AI is creating your perfect itinerary...</p>
 
-            {/* Loading Steps */}
-            <div className="w-full space-y-3 mb-6">
+            <div className="space-y-2 mb-6">
               {loadingSteps.map((step, index) => (
                 <div
                   key={index}
                   className={cn(
-                    "flex items-center gap-3 p-3 rounded-lg transition-all",
+                    "flex items-center gap-3 p-3 rounded-xl transition-all",
                     index <= loadingStep
-                      ? "bg-rose-50 dark:bg-rose-900/20"
+                      ? "bg-[var(--duo-green)]/10"
                       : "opacity-50"
                   )}
                 >
                   <div
                     className={cn(
-                      "w-2 h-2 rounded-full transition-all",
-                      index <= loadingStep ? "bg-rose-500" : "bg-neutral-300 dark:bg-neutral-600"
+                      "w-3 h-3 rounded-full transition-all",
+                      index <= loadingStep ? "bg-[var(--duo-green)]" : "bg-muted"
                     )}
                   />
-                  <span className="text-sm text-neutral-600 dark:text-neutral-300">{step}</span>
+                  <span className="text-sm font-semibold">{step}</span>
                 </div>
               ))}
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full space-y-2">
+            <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-neutral-500 dark:text-neutral-400">Progress</span>
-                <span className="text-rose-600 dark:text-rose-400 font-medium">{loadingProgress}%</span>
+                <span className="text-muted-foreground">Progress</span>
+                <span className="text-[var(--duo-green)] font-bold">{loadingProgress}%</span>
               </div>
-              <Progress value={loadingProgress} className="h-2 bg-neutral-200 dark:bg-neutral-700 [&>div]:bg-gradient-to-r [&>div]:from-rose-500 [&>div]:to-pink-500" />
+              <div className="duo-progress-bar h-3">
+                <div
+                  className="duo-progress-fill transition-all"
+                  style={{ width: `${loadingProgress}%` }}
+                />
+              </div>
             </div>
-
-            {/* Powered by AI */}
-            <div className="flex items-center gap-2 mt-6 text-sm text-neutral-400 dark:text-neutral-500">
-              <Sparkles className="w-4 h-4" />
-              Powered by AI
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
+          </motion.div>
+        </div>
+      )}
+    </DuoAppShell>
   );
 }
-

@@ -1,18 +1,26 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calendar, TrendingDown, TrendingUp, Lightbulb, RefreshCw, ChevronLeft, ChevronRight, PieChart } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { DonutChart, MetricCard, WatchlistCard } from "@/components/informatics";
-import { FlowGuide } from "@/components/shared/flow-guide";
-import { Navigation } from "@/components/shared/navigation";
-import { GroupLabel } from "@/components/shared/group-label";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import {
-  AnimatedBackground,
-  UnifiedCard,
-  PageHeader,
-} from "@/components/shared/page-layout";
+  TrendingDown,
+  TrendingUp,
+  Lightbulb,
+  RefreshCw,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Plane,
+  Settings,
+  Target,
+  Pencil,
+} from "lucide-react";
+import Link from "next/link";
+import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DonutChart, WatchlistCard } from "@/components/informatics";
+import { useGamification } from "@/contexts/gamification-context";
 import { cn } from "@/lib/utils";
 
 const insights = [
@@ -40,6 +48,8 @@ const currencyRates = [
 ];
 
 export default function InformaticsDashboardPage() {
+  const router = useRouter();
+  const { annualBudget } = useGamification();
   const [currentInsight, setCurrentInsight] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -94,66 +104,81 @@ export default function InformaticsDashboardPage() {
   }, [isPaused]);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-neutral-950 relative">
-      <Navigation />
-      <GroupLabel group={3} />
-      <AnimatedBackground variant="subtle" />
-
-      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-8">
+    <DuoAppShell showTopBar showBottomNav>
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="size-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center shadow-xl shadow-violet-500/30 animate-float-bounce">
-            <PieChart className="size-7 text-white" />
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-4"
+        >
+          <DuoMascot mood="happy" size="sm" />
+          <div className="flex-1">
+            <p className="text-sm text-muted-foreground">Welcome back, Traveler</p>
+            <h1 className="text-2xl font-extrabold">My Travel Pulse</h1>
           </div>
-          <div>
-            <p className="text-neutral-500 dark:text-neutral-400 text-sm">Welcome back, Traveler</p>
-            <h1 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
-              My Travel Pulse
-            </h1>
-          </div>
-        </div>
+          <Link href="/informatics/settings">
+            <button className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors">
+              <Settings className="w-5 h-5 text-muted-foreground" />
+            </button>
+          </Link>
+        </motion.div>
 
         {/* Donut Chart Section */}
-        <UnifiedCard gradient className="p-6 mb-6">
-          <DonutChart percentage={65} label="Yearly Budget Used" total="RM 15,000" />
-        </UnifiedCard>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="duo-card p-6"
+          style={{
+            background: "linear-gradient(135deg, var(--duo-green) 0%, var(--duo-green-dark) 100%)",
+            borderColor: "var(--duo-green-dark)",
+          }}
+        >
+          <DonutChart percentage={65} label="Yearly Budget Used" total={`RM ${annualBudget.toLocaleString()}`} variant="on-colored-bg" />
+        </motion.div>
 
         {/* Metric Cards */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          <UnifiedCard className="p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="size-8 rounded-lg bg-violet-100 dark:bg-violet-900/30 flex items-center justify-center">
-                <Calendar className="size-4 text-violet-600 dark:text-violet-400" />
-              </div>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="grid grid-cols-3 gap-3"
+        >
+          <div className="duo-card p-4 text-center">
+            <div className="w-10 h-10 mx-auto rounded-xl bg-[var(--duo-purple)]/20 flex items-center justify-center mb-2">
+              <Plane className="w-5 h-5 text-[var(--duo-purple)]" />
             </div>
-            <p className="text-2xl font-bold text-neutral-800 dark:text-neutral-100">4</p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">Trips Taken</p>
-          </UnifiedCard>
+            <p className="text-2xl font-extrabold">4</p>
+            <p className="text-xs text-muted-foreground">Trips Taken</p>
+          </div>
 
-          <UnifiedCard className="p-4 border-amber-500/30">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="size-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-                <TrendingUp className="size-4 text-amber-600 dark:text-amber-400" />
-              </div>
+          <div className="duo-card p-4 text-center" style={{ borderColor: "var(--duo-orange)" }}>
+            <div className="w-10 h-10 mx-auto rounded-xl bg-[var(--duo-orange)]/20 flex items-center justify-center mb-2">
+              <TrendingUp className="w-5 h-5 text-[var(--duo-orange)]" />
             </div>
-            <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">12%</p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">Avg. Overspend</p>
-          </UnifiedCard>
+            <p className="text-2xl font-extrabold text-[var(--duo-orange)]">12%</p>
+            <p className="text-xs text-muted-foreground">Avg. Overspend</p>
+          </div>
 
-          <UnifiedCard className="p-4 border-emerald-500/30">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="size-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                <TrendingDown className="size-4 text-emerald-600 dark:text-emerald-400" />
-              </div>
+          <div className="duo-card p-4 text-center" style={{ borderColor: "var(--duo-green)" }}>
+            <div className="w-10 h-10 mx-auto rounded-xl bg-[var(--duo-green)]/20 flex items-center justify-center mb-2">
+              <Target className="w-5 h-5 text-[var(--duo-green)]" />
             </div>
-            <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">88%</p>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">Savings Goal</p>
-          </UnifiedCard>
-        </div>
+            <p className="text-2xl font-extrabold text-[var(--duo-green)]">88%</p>
+            <p className="text-xs text-muted-foreground">Savings Goal</p>
+          </div>
+        </motion.div>
 
         {/* Watchlist */}
-        <div className="mb-6">
-          <h2 className="font-bold text-lg text-neutral-800 dark:text-neutral-100 mb-4">
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="space-y-3"
+        >
+          <h2 className="font-extrabold flex items-center gap-2">
+            <TrendingDown className="w-5 h-5 text-[var(--duo-blue)]" />
             Active Trip Watchlist
           </h2>
           <div className="space-y-3">
@@ -172,116 +197,151 @@ export default function InformaticsDashboardPage() {
               avgPrice="RM 4,500"
             />
           </div>
-        </div>
+        </motion.section>
 
-        {/* Insight Box with Currency Exchange */}
-        <div className="flex gap-4 mb-8">
-          {/* Insight Section */}
-          <UnifiedCard gradient className="flex-1 p-5">
-            <div className="flex items-start gap-4">
-              <div className="size-12 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-violet-500/25">
-                <Lightbulb className="size-6 text-white" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-neutral-800 dark:text-neutral-100">Insight</p>
-                    <Badge variant="secondary" className="bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 border-0 text-xs">
-                      AI
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="size-7 hover:bg-violet-100 dark:hover:bg-violet-900/30"
-                      onClick={goToPrevious}
-                      disabled={insights.length <= 1}
-                    >
-                      <ChevronLeft className="size-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="size-7 hover:bg-violet-100 dark:hover:bg-violet-900/30"
-                      onClick={goToNext}
-                      disabled={insights.length <= 1}
-                    >
-                      <ChevronRight className="size-4" />
-                    </Button>
-                  </div>
+        {/* Insight Box */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25 }}
+          className="duo-card p-5"
+          style={{ borderColor: "var(--duo-yellow)" }}
+        >
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-[var(--duo-yellow)] flex items-center justify-center flex-shrink-0 shadow-[0_4px_0_#E5A800]">
+              <Lightbulb className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <p className="font-bold">AI Insight</p>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[var(--duo-purple)]/20 text-[var(--duo-purple)]">
+                    AI
+                  </span>
                 </div>
-                <div
-                  className={cn(
-                    "transition-all duration-300",
-                    isAnimating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
-                  )}
-                >
-                  <p className="text-neutral-600 dark:text-neutral-300 text-sm leading-relaxed">
-                    {insights[currentInsight].text}
-                  </p>
-                </div>
-                {/* Progress dots */}
-                <div className="flex gap-1.5 mt-4">
-                  {insights.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToInsight(index)}
-                      className={cn(
-                        "h-1.5 rounded-full transition-all duration-300",
-                        index === currentInsight
-                          ? "w-6 bg-violet-500"
-                          : "w-1.5 bg-violet-200 dark:bg-violet-800 hover:bg-violet-300 dark:hover:bg-violet-700"
-                      )}
-                      aria-label={`Go to insight ${index + 1}`}
-                    />
-                  ))}
+                <div className="flex items-center gap-1">
+                  <button
+                    className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-muted transition-colors"
+                    onClick={goToPrevious}
+                    disabled={insights.length <= 1}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <button
+                    className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-muted transition-colors"
+                    onClick={goToNext}
+                    disabled={insights.length <= 1}
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
+              <div
+                className={cn(
+                  "transition-all duration-300",
+                  isAnimating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
+                )}
+              >
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {insights[currentInsight].text}
+                </p>
+              </div>
+              {/* Progress dots */}
+              <div className="flex gap-1.5 mt-4">
+                {insights.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToInsight(index)}
+                    className={cn(
+                      "h-1.5 rounded-full transition-all duration-300",
+                      index === currentInsight
+                        ? "w-6 bg-[var(--duo-yellow)]"
+                        : "w-1.5 bg-[var(--duo-yellow)]/30 hover:bg-[var(--duo-yellow)]/50"
+                    )}
+                    aria-label={`Go to insight ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
-          </UnifiedCard>
+          </div>
+        </motion.div>
 
-          {/* Currency Exchange Section */}
-          <UnifiedCard className="w-36 p-4">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold text-neutral-800 dark:text-neutral-100">EUR/MYR</span>
-              <RefreshCw className="size-3.5 text-neutral-400 hover:text-neutral-600 cursor-pointer transition-colors" />
-            </div>
-            <div className="space-y-2.5">
-              {currencyRates.map((rate) => (
-                <div key={rate.currency} className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-sm">{rate.flag}</span>
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">{rate.currency}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-bold text-neutral-800 dark:text-neutral-100">
-                      {rate.rate.toFixed(2)}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-[10px] ml-1 font-medium",
-                        rate.change >= 0 ? "text-emerald-600" : "text-red-500"
-                      )}
-                    >
-                      {rate.change >= 0 ? "+" : ""}
-                      {rate.change.toFixed(2)}
-                    </span>
-                  </div>
+        {/* Currency Exchange Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="duo-card p-4"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-bold flex items-center gap-2">
+              💱 Currency Watch
+            </h3>
+            <RefreshCw className="w-4 h-4 text-muted-foreground hover:text-foreground cursor-pointer transition-colors" />
+          </div>
+          <div className="space-y-2.5">
+            {currencyRates.map((rate) => (
+              <div key={rate.currency} className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{rate.flag}</span>
+                  <span className="text-sm font-semibold">{rate.currency}/MYR</span>
                 </div>
-              ))}
-            </div>
-            <p className="text-[10px] text-neutral-400 mt-3 text-center">Live rates</p>
-          </UnifiedCard>
-        </div>
+                <div className="text-right flex items-center gap-2">
+                  <span className="text-sm font-bold">
+                    {rate.rate.toFixed(2)}
+                  </span>
+                  <span
+                    className={cn(
+                      "text-xs font-bold px-2 py-0.5 rounded-full",
+                      rate.change >= 0
+                        ? "bg-[var(--duo-green)]/20 text-[var(--duo-green)]"
+                        : "bg-[var(--duo-red)]/20 text-[var(--duo-red)]"
+                    )}
+                  >
+                    {rate.change >= 0 ? "+" : ""}
+                    {rate.change.toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-[10px] text-muted-foreground mt-3 text-center">Live rates • Updated just now</p>
+        </motion.div>
 
-        {/* Flow Guide */}
-        <FlowGuide
-          variant="card"
-          title="Explore More"
-          maxSuggestions={2}
-        />
-      </main>
-    </div>
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.35 }}
+          className="grid grid-cols-2 gap-3"
+        >
+          <Link href="/informatics/edit-dna">
+            <button className="w-full duo-btn duo-btn-outline py-3">
+              <Pencil className="w-5 h-5 mr-2" />
+              Edit Travel DNA
+            </button>
+          </Link>
+          <Link href="/predictions">
+            <button className="w-full duo-btn py-3">
+              <Sparkles className="w-5 h-5 mr-2" />
+              Plan Trip
+            </button>
+          </Link>
+        </motion.div>
+
+        {/* XP Hint */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="flex items-center justify-center gap-2 text-sm text-muted-foreground pt-2"
+        >
+          <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+          <span>
+            Complete a trip to earn <strong className="text-[var(--duo-green)]">+100 XP</strong>!
+          </span>
+        </motion.div>
+      </div>
+    </DuoAppShell>
   );
 }

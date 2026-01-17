@@ -1,71 +1,80 @@
-"use client";  // To mark this as a Client Component
+"use client";
 
-import { useState } from "react";
-import { usePathname } from "next/navigation";  // Hook to get the current pathname
+import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { LayoutDashboard, Users, Map, Wallet } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type TabBarProps = {
   totalCost?: number;
   memberCount?: number;
 };
 
-const TabBar = ({ totalCost, memberCount }: TabBarProps) => {
-  const pathname = usePathname(); // Get the current path from the URL
+const tabs = [
+  { id: "dashboard", label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { id: "member", label: "Members", href: "/dashboard/member", icon: Users },
+  { id: "itenary", label: "Itinerary", href: "/dashboard/itenary", icon: Map },
+];
 
-  // Function to determine if the current tab is active
-  const isActive = (tab: string) => {
-    // Compare pathname with exact tab route
-    if (tab === "dashboard") {
-      return pathname === "/dashboard";
-    }
-    if (tab === "itenary") {
-      return pathname === "/dashboard/itenary";
-    }
-    if (tab === "member") {
-      return pathname === "/dashboard/member";
-    }
-    return false;
+const TabBar = ({ totalCost, memberCount }: TabBarProps) => {
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    return pathname === href;
   };
 
-  const costPerPerson = totalCost && memberCount ? totalCost / memberCount : 0;
+  const costPerPerson = totalCost && memberCount ? totalCost / memberCount : 350;
 
   return (
-    <div className="sticky top-0 z-10 bg-white shadow-md py-4 px-6 flex justify-between items-center border-b border-gray-200">
-      <div className="flex items-center space-x-6">
-        {/* Dashboard Tab */}
-        <Link href="/dashboard" passHref>
-          <span
-            className={`cursor-pointer text-lg font-semibold ${isActive("dashboard") ? "text-blue-700" : "text-gray-600"
-              }`}
-          >
-            Dashboard
-          </span>
-        </Link>
+    <div className="bg-card border-b-2 border-border">
+      <div className="max-w-lg mx-auto px-4">
+        <div className="flex items-center justify-between py-2">
+          {/* Tabs */}
+          <div className="flex items-center gap-1">
+            {tabs.map((tab) => {
+              const active = isActive(tab.href);
+              const Icon = tab.icon;
+              return (
+                <Link key={tab.id} href={tab.href}>
+                  <motion.div
+                    className={cn(
+                      "relative px-3 py-2 rounded-xl font-bold text-sm flex items-center gap-2 transition-colors",
+                      active
+                        ? "text-[var(--duo-green)]"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span className="hidden sm:inline">{tab.label}</span>
+                    {active && (
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute inset-0 bg-[var(--duo-green)]/10 rounded-xl border-2 border-[var(--duo-green)]/30"
+                        initial={false}
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </motion.div>
+                </Link>
+              );
+            })}
+          </div>
 
-        {/* Members Tab */}
-        <Link href="/dashboard/member" passHref>
-          <span
-            className={`cursor-pointer text-lg font-semibold ${isActive("member") ? "text-blue-700" : "text-gray-600"
-              }`}
-          >
-            Members
-          </span>
-        </Link>
-
-        {/* Itinerary Tab */}
-        <Link href="/dashboard/itenary" passHref>
-          <span
-            className={`cursor-pointer text-lg font-semibold ${isActive("itenary") ? "text-blue-700" : "text-gray-600"
-              }`}
-          >
-            Itinerary
-          </span>
-        </Link>
-      </div>
-      <div className="text-right">
-        <div className="text-xl text-blue-800">Total Trip Cost: RM{totalCost ?? 1400}</div>
-        <div className="text-sm text-gray-500">
-          {costPerPerson > 0 ? `RM${costPerPerson.toFixed(0)} per person` : 'RM350 per person'}
+          {/* Cost Display */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--duo-green)]/10 border-2 border-[var(--duo-green)]/30">
+            <Wallet className="w-4 h-4 text-[var(--duo-green)]" />
+            <div className="text-right">
+              <p className="text-xs font-extrabold text-[var(--duo-green)]">
+                RM{totalCost ?? 1400}
+              </p>
+              <p className="text-[10px] text-muted-foreground">
+                RM{costPerPerson.toFixed(0)}/person
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
