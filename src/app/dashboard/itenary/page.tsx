@@ -80,37 +80,87 @@ const calculateGroupMatch = (destination: Destination, members: typeof initialMe
   return Math.round((totalScore / maxScore) * 100)
 }
 
+// Function to calculate individual match percentage
+const calculateIndividualMatch = (destination: Destination, member: typeof initialMembers[0]): number => {
+  let score = 0;
+  const maxScore = 3; // budget, season, interests
+
+  // Budget match
+  if (destination.cost <= member.budgetMax) {
+    score += 1;
+  }
+
+  // Season match
+  if (member.seasons.includes(destination.season)) {
+    score += 1;
+  }
+
+  // Interest match
+  const commonInterests = destination.interests.filter(interest =>
+    member.interests.includes(interest)
+  );
+  if (commonInterests.length > 0) {
+    score += 1;
+  }
+
+  return Math.round((score / maxScore) * 100);
+};
+
 
 export default function ItineraryPage() {
   const [selectedDay, setSelectedDay] = React.useState("1")
 
   const [currentSelectedDestinations, setCurrentSelectedDestinations] = React.useState<Destination[]>(() => {
-    const selected = initialDestinations.slice(0, 2).map(dest => ({
-      ...dest,
-      cost: dest.cost,
-      duration: `${dest.duration} days`,
-      interests: dest.category,
-      groupMatch: calculateGroupMatch({ ...dest, cost: dest.cost, interests: dest.category, groupMatch: 0, individualMatches: [], note: '', duration: '', season: dest.season, id: dest.id, name: dest.name, description: dest.description }, initialMembers),
-      individualMatches: [
-        { name: "Nurul", percentage: 79 },
-        { name: "Wong", percentage: 21 },
-        { name: "Priya", percentage: 100 },
-        { name: "Ahmad", percentage: 36 },
-      ],
-      note: "Wong, Ahmad may not enjoy this destination",
-    }));
+    const selected = initialDestinations.slice(0, 2).map(dest => {
+      const destinationForCalc = {
+        ...dest,
+        cost: dest.cost,
+        interests: dest.category,
+        groupMatch: 0,
+        individualMatches: [],
+        note: '',
+        duration: `${dest.duration} days`,
+        season: dest.season,
+        id: dest.id,
+        name: dest.name,
+        description: dest.description
+      };
+      return {
+        ...destinationForCalc,
+        groupMatch: calculateGroupMatch(destinationForCalc, initialMembers),
+        individualMatches: initialMembers.map(member => ({
+          name: member.name.split(' ')[0],
+          percentage: calculateIndividualMatch(destinationForCalc, member)
+        })),
+      }
+    });
     return selected;
   });
 
   const [currentAvailableDestinations, setCurrentAvailableDestinations] = React.useState<Destination[]>(() => {
-    const available = initialDestinations.slice(2, 4).map(dest => ({
-      ...dest,
-      cost: dest.cost,
-      duration: `${dest.duration} days`,
-      interests: dest.category,
-      groupMatch: calculateGroupMatch({ ...dest, cost: dest.cost, interests: dest.category, groupMatch: 0, individualMatches: [], note: '', duration: '', season: dest.season, id: dest.id, name: dest.name, description: dest.description }, initialMembers),
-      individualMatches: [],
-    }));
+    const available = initialDestinations.slice(2, 4).map(dest => {
+      const destinationForCalc = {
+        ...dest,
+        cost: dest.cost,
+        interests: dest.category,
+        groupMatch: 0,
+        individualMatches: [],
+        note: '',
+        duration: `${dest.duration} days`,
+        season: dest.season,
+        id: dest.id,
+        name: dest.name,
+        description: dest.description
+      };
+      return {
+        ...destinationForCalc,
+        groupMatch: calculateGroupMatch(destinationForCalc, initialMembers),
+        individualMatches: initialMembers.map(member => ({
+          name: member.name.split(' ')[0],
+          percentage: calculateIndividualMatch(destinationForCalc, member)
+        })),
+      }
+    });
     return available;
   });
 
@@ -150,8 +200,8 @@ export default function ItineraryPage() {
   }
 
   const getMatchColor = (percentage: number) => {
-    if (percentage >= 70) return "bg-green-100 text-green-800"
-    if (percentage >= 40) return "bg-yellow-100 text-yellow-800"
+    if (percentage > 60) return "bg-green-100 text-green-800"
+    if (percentage >= 50) return "bg-yellow-100 text-yellow-800"
     return "bg-red-100 text-red-800"
   }
 
@@ -610,6 +660,22 @@ export default function ItineraryPage() {
                             value={destination.groupMatch}
                             className="h-2 mt-2 bg-slate-200 **:data-[slot=progress-indicator]:bg-violet-500"
                           />
+                        </div>
+
+                        <div className="space-y-2">
+                          <p className="text-xs text-slate-600">
+                            Individual Matches:
+                          </p>
+                          <div className="flex flex-wrap gap-2">
+                            {destination.individualMatches.map((match) => (
+                              <Badge
+                                key={match.name}
+                                className={`${getMatchColor(match.percentage)} border-0 px-2 py-1 text-xs`}
+                              >
+                                {match.name}: {match.percentage}%
+                              </Badge>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </CardContent>

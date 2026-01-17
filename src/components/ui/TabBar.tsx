@@ -30,7 +30,7 @@ const TabBar = ({ totalCost, memberCount }: TabBarProps) => {
   const costPerPerson = totalCost && memberCount ? totalCost / memberCount : 0;
 
   return (
-    <div className="bg-white shadow-md py-4 px-6 flex justify-between items-center border-b border-gray-200">
+    <div className="sticky top-0 z-10 bg-white shadow-md py-4 px-6 flex justify-between items-center border-b border-gray-200">
       <div className="flex items-center space-x-6">
         {/* Dashboard Tab */}
         <Link href="/dashboard" passHref>
