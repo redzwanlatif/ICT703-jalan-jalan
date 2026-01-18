@@ -54,6 +54,7 @@ export interface TripPlan {
   startDate: string;
   endDate: string;
   status: "planning" | "preferences" | "conflicts" | "ready" | "confirmed";
+  selectedPlan?: string;
   organizer: TripMember;
   members: TripMember[];
   conflicts: ConflictItem[];
@@ -71,7 +72,7 @@ export interface TripPlan {
 export interface TripWizardState {
   currentTrip: TripPlan | null;
   currentMemberId: string | null;
-  step: "create" | "members" | "preferences" | "conflicts" | "plan";
+  step: "create" | "members" | "preferences" | "conflicts" | "recommendations" | "plan";
 }
 
 export interface TripContextType extends TripWizardState {
@@ -468,6 +469,7 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
         members: "planning",
         preferences: "preferences",
         conflicts: "conflicts",
+        recommendations: "conflicts",
         plan: "ready",
       };
       updateTrip({ status: statusMap[step] || state.currentTrip.status });
@@ -487,6 +489,8 @@ export function TripProvider({ children }: { children: React.ReactNode }) {
       case "conflicts":
         return state.currentTrip.conflicts.every(c => c.resolved) ||
                state.currentTrip.conflicts.length === 0;
+      case "recommendations":
+        return true;
       case "plan":
         return true;
       default:
