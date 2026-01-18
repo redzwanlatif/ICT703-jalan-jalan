@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Ticket, Calendar, Sparkles } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { EventCard } from "@/components/community/event-card";
 
@@ -16,7 +16,7 @@ export default function UpcomingEventsPage() {
       type: "Promotion Event",
       badges: ["Family-friendly", "School Holiday"],
       imageGradient: "bg-gradient-to-br from-yellow-200 to-orange-300",
-      image: "event-01.png"
+      image: "event-01.webp"
     },
     {
       title: "Cuti Cuti Muslim-Friendly Fair",
@@ -26,7 +26,7 @@ export default function UpcomingEventsPage() {
       type: "Travel Fair",
       badges: ["Muslim-friendly", "Travel Deals"],
       imageGradient: "bg-gradient-to-br from-green-200 to-teal-300",
-      image: "event-02.png"
+      image: "event-02.webp"
     },
     {
       title: "Play Your Way to Joy Festival",
@@ -36,7 +36,7 @@ export default function UpcomingEventsPage() {
       type: "Festival",
       badges: ["Family-friendly", "Popular Event"],
       imageGradient: "bg-gradient-to-br from-purple-200 to-pink-300",
-      image: "event-03.png"
+      image: "event-03.webp"
     },
     {
       title: "Jom Cuti Sekolah 2025",
@@ -46,7 +46,7 @@ export default function UpcomingEventsPage() {
       type: "Promotion Event",
       badges: ["Family-friendly", "School Holiday"],
       imageGradient: "bg-gradient-to-br from-yellow-200 to-orange-300",
-      image: "event-01.png"
+      image: "event-01.webp"
     },
     {
       title: "Cuti Cuti Muslim-Friendly Fair",
@@ -56,7 +56,7 @@ export default function UpcomingEventsPage() {
       type: "Travel Fair",
       badges: ["Muslim-friendly", "Travel Deals"],
       imageGradient: "bg-gradient-to-br from-green-200 to-teal-300",
-      image: "event-02.png"
+      image: "event-02.webp"
     },
     {
       title: "Play Your Way to Joy Festival",
@@ -66,7 +66,7 @@ export default function UpcomingEventsPage() {
       type: "Festival",
       badges: ["Family-friendly", "Popular Event"],
       imageGradient: "bg-gradient-to-br from-purple-200 to-pink-300",
-      image: "event-03.png"
+      image: "event-03.webp"
     },
     {
       title: "Jom Cuti Sekolah 2025",
@@ -76,7 +76,7 @@ export default function UpcomingEventsPage() {
       type: "Promotion Event",
       badges: ["Family-friendly", "School Holiday"],
       imageGradient: "bg-gradient-to-br from-yellow-200 to-orange-300",
-      image: "event-01.png"
+      image: "event-01.webp"
     },
     {
       title: "Cuti Cuti Muslim-Friendly Fair",
@@ -86,7 +86,7 @@ export default function UpcomingEventsPage() {
       type: "Travel Fair",
       badges: ["Muslim-friendly", "Travel Deals"],
       imageGradient: "bg-gradient-to-br from-green-200 to-teal-300",
-      image: "event-02.png"
+      image: "event-02.webp"
     },
     {
       title: "Play Your Way to Joy Festival",
@@ -96,7 +96,7 @@ export default function UpcomingEventsPage() {
       type: "Festival",
       badges: ["Family-friendly", "Popular Event"],
       imageGradient: "bg-gradient-to-br from-purple-200 to-pink-300",
-      image: "event-03.png"
+      image: "event-03.webp"
     },
     {
       title: "Jom Cuti Sekolah 2025",
@@ -106,7 +106,7 @@ export default function UpcomingEventsPage() {
       type: "Promotion Event",
       badges: ["Family-friendly", "School Holiday"],
       imageGradient: "bg-gradient-to-br from-yellow-200 to-orange-300",
-      image: "event-01.png"
+      image: "event-01.webp"
     },
     {
       title: "Cuti Cuti Muslim-Friendly Fair",
@@ -116,7 +116,7 @@ export default function UpcomingEventsPage() {
       type: "Travel Fair",
       badges: ["Muslim-friendly", "Travel Deals"],
       imageGradient: "bg-gradient-to-br from-green-200 to-teal-300",
-      image: "event-02.png"
+      image: "event-02.webp"
     },
     {
       title: "Play Your Way to Joy Festival",
@@ -126,12 +126,12 @@ export default function UpcomingEventsPage() {
       type: "Festival",
       badges: ["Family-friendly", "Popular Event"],
       imageGradient: "bg-gradient-to-br from-purple-200 to-pink-300",
-      image: "event-03.png"
+      image: "event-03.webp"
     }
   ];
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -204,6 +204,6 @@ export default function UpcomingEventsPage() {
           </span>
         </motion.div>
       </div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

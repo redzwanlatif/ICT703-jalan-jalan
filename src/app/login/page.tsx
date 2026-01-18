@@ -34,7 +34,15 @@ export default function LoginPage() {
     setTimeout(() => {
       completeOnboarding();
       addXp(100, "Welcome back!");
-      router.push("/");
+
+      // Check for redirect URL (from protected pages)
+      const redirectUrl = sessionStorage.getItem("auth-redirect");
+      if (redirectUrl) {
+        sessionStorage.removeItem("auth-redirect");
+        router.push(redirectUrl);
+      } else {
+        router.push("/");
+      }
     }, 1000);
   };
 
@@ -52,7 +60,7 @@ export default function LoginPage() {
           />
         </Link>
         <Link
-          href="/register"
+          href="/onboarding"
           className="text-sm font-bold text-jj-sky-dark hover:underline"
         >
           Sign up
@@ -245,7 +253,7 @@ export default function LoginPage() {
           >
             New to Jalan-Jalan?{" "}
             <Link
-              href="/register"
+              href="/onboarding"
               className="font-bold text-jj-terracotta hover:underline"
             >
               Create an account

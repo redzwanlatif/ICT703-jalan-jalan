@@ -45,3 +45,18 @@ export {
   DuoMascotWithSpeech,
   mascotMessages,
 } from "./duo-mascot";
+
+// Web Layout Components
+export {
+  DuoWebNav,
+  DuoWebFooter,
+  DuoWebLayout,
+  DuoResponsiveLayout,
+  WebGrid,
+  WebSection,
+  WebSidebar,
+  WebSidebarCard,
+} from "./duo-web-layout";
+
+// Utilities
+export { ScrollToTop } from "./scroll-to-top";

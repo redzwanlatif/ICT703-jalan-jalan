@@ -17,7 +17,7 @@ import {
   PlaneTakeoff,
   MessageCircle,
 } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { StoryCard } from "@/components/community/story-card";
@@ -57,7 +57,7 @@ const storyData = {
       author: {
         name: "Aqilah",
         badge: "Verified Local",
-        avatar: "/community/story-user-3.png",
+        avatar: "/community/story-user-3.webp",
       },
       content:
         "The location of the resort is excellent, with a private beach and beautiful greenery all around. However, some facilities and room interiors feel a bit dated and could benefit from upgrades. Despite this, the rooms were clean, and the staff provided good service throughout our stay.",
@@ -106,7 +106,7 @@ export default function StoryDetailPage({
   const { id } = use(params);
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -346,6 +346,6 @@ export default function StoryDetailPage({
           </span>
         </motion.div>
       </div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

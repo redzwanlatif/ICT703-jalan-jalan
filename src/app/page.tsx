@@ -1,455 +1,332 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Map,
-  Users,
-  BarChart3,
-  MessageCircle,
+  Plus,
+  BookOpen,
   Sparkles,
-  ChevronRight,
-  Flame,
-  Trophy,
-  Target,
-  Compass,
-  Calendar,
-  TrendingUp,
+  LogIn,
+  UserPlus,
+  X,
 } from "lucide-react";
-import { useGamification, getXpProgress } from "@/contexts/gamification-context";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
-import { DuoMascot, DuoMascotWithSpeech } from "@/components/shared/duo-mascot";
-import { DuoButton, DuoProgressRing } from "@/components/shared/duo-wizard-layout";
-import { cn } from "@/lib/utils";
+import { useGamification } from "@/contexts/gamification-context";
+import { DuoResponsiveLayout } from "@/components/shared";
+import { DuoMascot } from "@/components/shared/duo-mascot";
+import { DuoButton } from "@/components/shared/duo-wizard-layout";
+import { StoryCard } from "@/components/community/story-card";
 
-// ============================================================================
-// Feature Cards
-// ============================================================================
-
-const features = [
+// Stories data
+const stories = [
   {
-    title: "Plan a Trip",
-    description: "Create your perfect itinerary",
-    icon: Map,
-    href: "/predictions",
-    color: "var(--duo-green)",
-    colorDark: "var(--duo-green-dark)",
-    xp: 25,
+    id: 1,
+    location: "Melaka",
+    place: "Malacca Sultanate Palace Museum",
+    author: "Imran Rosli",
+    authorBadge: "Verified Local",
+    tags: ["#LocalTourist", "#Melaka"],
+    bgGradient: "bg-gradient-to-br from-blue-400 to-purple-500",
+    image: "story-01.webp"
   },
   {
-    title: "AI Chat",
-    description: "Get instant travel advice",
-    icon: MessageCircle,
-    href: "/chat",
-    color: "var(--duo-blue)",
-    colorDark: "var(--duo-blue-dark)",
-    xp: 15,
+    id: 2,
+    location: "Melaka",
+    place: "Museum Samudera",
+    author: "Farah Shazwanie",
+    authorBadge: "Frequent Traveller",
+    tags: ["#Melaka"],
+    bgGradient: "bg-gradient-to-br from-cyan-400 to-blue-500",
+    image: "story-02.webp"
   },
   {
-    title: "Dashboard",
-    description: "Live travel data & insights",
-    icon: BarChart3,
-    href: "/dashboard",
-    color: "var(--duo-orange)",
-    colorDark: "var(--duo-orange-dark)",
-    xp: 10,
+    id: 3,
+    location: "Melaka",
+    place: "Kampung Morten",
+    author: "Hafiz Suhaimi",
+    authorBadge: "Verified Local",
+    tags: ["#Melaka", "#Local", "#Tourist"],
+    bgGradient: "bg-gradient-to-br from-orange-400 to-red-500",
+    image: "story-03.webp"
   },
   {
-    title: "Community",
-    description: "Connect with travelers",
-    icon: Users,
-    href: "/community",
-    color: "var(--duo-purple)",
-    colorDark: "var(--duo-purple-dark)",
-    xp: 20,
+    id: 4,
+    location: "Melaka",
+    place: "Jonker Street Night Market",
+    author: "Imran Rosli",
+    authorBadge: "Verified Local",
+    tags: ["#Melaka", "#Local", "#Tourist"],
+    bgGradient: "bg-gradient-to-br from-blue-400 to-purple-500",
+    image: "story-02.webp"
+  },
+  {
+    id: 5,
+    location: "Melaka",
+    place: "St. Paul's Church",
+    author: "Farah Shazwanie",
+    authorBadge: "Frequent Traveller",
+    tags: ["#Melaka"],
+    bgGradient: "bg-gradient-to-br from-cyan-400 to-blue-500",
+    image: "story-03.webp"
+  },
+  {
+    id: 6,
+    location: "Melaka",
+    place: "A Famosa",
+    author: "Saranya Mohabatten",
+    authorBadge: "Verified Local",
+    tags: ["#Melaka", "#Local", "#Tourist"],
+    bgGradient: "bg-gradient-to-br from-orange-400 to-red-500",
+    image: "story-01.webp"
+  },
+  {
+    id: 7,
+    location: "Melaka",
+    place: "Dataran Pahlawan",
+    author: "Imran Rosli",
+    authorBadge: "Verified Local",
+    tags: ["#Melaka", "#Local", "#Tourist"],
+    bgGradient: "bg-gradient-to-br from-blue-400 to-purple-500",
+    image: "story-02.webp"
+  },
+  {
+    id: 8,
+    location: "Melaka",
+    place: "Melaka River Cruise",
+    author: "Farah Shazwanie",
+    authorBadge: "Frequent Traveller",
+    tags: ["#Melaka"],
+    bgGradient: "bg-gradient-to-br from-cyan-400 to-blue-500",
+    image: "story-03.webp"
+  },
+  {
+    id: 9,
+    location: "Melaka",
+    place: "St. John's Fort",
+    author: "Saranya Mohabatten",
+    authorBadge: "Verified Local",
+    tags: ["#Melaka", "#Local", "#Tourist"],
+    bgGradient: "bg-gradient-to-br from-orange-400 to-red-500",
+    image: "story-03.webp"
+  },
+  {
+    id: 10,
+    location: "Melaka",
+    place: "Jonker Street Night Market",
+    author: "Imran Rosli",
+    authorBadge: "Verified Local",
+    tags: ["#Melaka", "#Local", "#Tourist"],
+    bgGradient: "bg-gradient-to-br from-blue-400 to-purple-500",
+    image: "story-01.webp"
+  },
+  {
+    id: 11,
+    location: "Melaka",
+    place: "St. John's Fort",
+    author: "Farah Shazwanie",
+    authorBadge: "Frequent Traveller",
+    tags: ["#Melaka"],
+    bgGradient: "bg-gradient-to-br from-cyan-400 to-blue-500",
+    image: "story-02.webp"
+  },
+  {
+    id: 12,
+    location: "Melaka",
+    place: "St. John's Fort",
+    author: "Saranya Mohabatten",
+    authorBadge: "Verified Local",
+    tags: ["#Melaka", "#Local", "#Tourist"],
+    bgGradient: "bg-gradient-to-br from-orange-400 to-red-500",
+    image: "story-03.webp"
   },
 ];
 
-// ============================================================================
-// Daily Quests
-// ============================================================================
-
-const dailyQuests = [
-  {
-    id: "plan-trip",
-    title: "Plan a trip",
-    description: "Start planning your next adventure",
-    xp: 25,
-    progress: 0,
-    target: 1,
-    icon: Compass,
-  },
-  {
-    id: "chat-ai",
-    title: "Chat with AI",
-    description: "Ask a travel question",
-    xp: 15,
-    progress: 0,
-    target: 1,
-    icon: MessageCircle,
-  },
-  {
-    id: "explore-dashboard",
-    title: "Check dashboard",
-    description: "View travel insights",
-    xp: 10,
-    progress: 0,
-    target: 1,
-    icon: BarChart3,
-  },
-];
-
-// ============================================================================
-// Feature Card Component
-// ============================================================================
-
-interface FeatureCardProps {
-  title: string;
-  description: string;
-  icon: React.ElementType;
-  href: string;
-  color: string;
-  colorDark: string;
-  xp: number;
-  index: number;
-}
-
-function FeatureCard({ title, description, icon: Icon, href, color, colorDark, xp, index }: FeatureCardProps) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-    >
-      <Link href={href} className="block">
-        <div
-          className="duo-card duo-card-interactive p-5 group"
-          style={{
-            borderColor: color,
-            boxShadow: `0 4px 0 ${colorDark}`,
-          }}
-        >
-          <div className="flex items-center gap-4">
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform"
-              style={{ background: color }}
-            >
-              <Icon className="w-7 h-7 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-lg truncate">{title}</h3>
-              <p className="text-sm text-muted-foreground truncate">{description}</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="duo-xp-badge text-xs">+{xp} XP</span>
-              <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-        </div>
-      </Link>
-    </motion.div>
-  );
-}
-
-// ============================================================================
-// Quest Card Component
-// ============================================================================
-
-interface QuestCardProps {
-  quest: typeof dailyQuests[0];
-  index: number;
-}
-
-function QuestCard({ quest, index }: QuestCardProps) {
-  const Icon = quest.icon;
-  const progress = (quest.progress / quest.target) * 100;
-  const completed = quest.progress >= quest.target;
+// Auth Prompt Modal Component
+function AuthPromptModal({
+  isOpen,
+  onClose,
+  action
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  action: string;
+}) {
+  if (!isOpen) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.3 + index * 0.1 }}
-      className={cn(
-        "flex items-center gap-4 p-4 rounded-2xl border-2",
-        completed
-          ? "bg-[var(--duo-green)]/10 border-[var(--duo-green)]"
-          : "bg-card border-border"
-      )}
-      style={{
-        boxShadow: completed
-          ? "0 4px 0 var(--duo-green-dark)"
-          : "0 4px 0 var(--border)",
-      }}
-    >
-      <div
-        className={cn(
-          "w-12 h-12 rounded-xl flex items-center justify-center shrink-0",
-          completed ? "bg-[var(--duo-green)]" : "bg-muted"
-        )}
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+        onClick={onClose}
       >
-        <Icon className={cn("w-6 h-6", completed ? "text-white" : "text-muted-foreground")} />
-      </div>
-      <div className="flex-1 min-w-0">
-        <h4 className={cn("font-bold", completed && "line-through text-muted-foreground")}>
-          {quest.title}
-        </h4>
-        <p className="text-sm text-muted-foreground">{quest.description}</p>
-      </div>
-      <div className="text-right shrink-0">
-        <span className={cn(
-          "font-bold text-sm",
-          completed ? "text-[var(--duo-green)]" : "text-muted-foreground"
-        )}>
-          +{quest.xp} XP
-        </span>
-        <div className="w-16 h-2 bg-muted rounded-full overflow-hidden mt-1">
-          <div
-            className="h-full rounded-full transition-all"
-            style={{
-              width: `${progress}%`,
-              background: completed ? "var(--duo-green)" : "var(--duo-blue)",
-            }}
-          />
-        </div>
-      </div>
-    </motion.div>
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          className="relative bg-white rounded-3xl p-6 max-w-sm w-full shadow-xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors"
+          >
+            <X className="w-5 h-5 text-gray-500" />
+          </button>
+
+          {/* Mascot */}
+          <div className="flex justify-center mb-4">
+            <DuoMascot mood="waving" size="md" />
+          </div>
+
+          {/* Content */}
+          <h2 className="text-xl font-extrabold text-center mb-2">
+            Join Jalan-Jalan!
+          </h2>
+          <p className="text-muted-foreground text-center text-sm mb-6">
+            Sign up or log in to {action}
+          </p>
+
+          {/* Actions */}
+          <div className="space-y-3">
+            <Link href="/onboarding" className="block">
+              <DuoButton fullWidth>
+                <UserPlus className="w-5 h-5 mr-2" />
+                Sign Up
+              </DuoButton>
+            </Link>
+
+            <Link href="/login" className="block">
+              <button className="w-full py-3 px-6 border-2 border-[var(--duo-blue)] text-[var(--duo-blue)] font-bold rounded-2xl hover:bg-[var(--duo-blue)]/10 transition-all flex items-center justify-center gap-2">
+                <LogIn className="w-5 h-5" />
+                Log In
+              </button>
+            </Link>
+          </div>
+
+          {/* XP Hint */}
+          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mt-4">
+            <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+            <span>
+              Earn <strong className="text-[var(--duo-green)]">+50 XP</strong> welcome bonus!
+            </span>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }
 
-// ============================================================================
-// Stats Card
-// ============================================================================
-
-function StatsCard() {
-  const { xp, level, streak } = useGamification();
-  const xpProgress = getXpProgress(xp, level);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.2 }}
-      className="duo-card p-5"
-    >
-      <div className="flex items-center gap-4">
-        {/* Progress Ring */}
-        <DuoProgressRing progress={xpProgress} size={70} strokeWidth={6}>
-          <div className="text-center">
-            <span className="font-extrabold text-lg">{level.level}</span>
-          </div>
-        </DuoProgressRing>
-
-        {/* Stats */}
-        <div className="flex-1 min-w-0">
-          <h3 className="font-extrabold text-lg">{level.title}</h3>
-          <div className="flex items-center gap-4 mt-1">
-            <div className="flex items-center gap-1">
-              <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
-              <span className="font-bold text-sm">{xp} XP</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Flame className="w-4 h-4 text-[var(--duo-orange)]" />
-              <span className="font-bold text-sm">{streak} day streak</span>
-            </div>
-          </div>
-          {/* XP to next level */}
-          <div className="mt-2">
-            <div className="duo-xp-bar">
-              <div
-                className="duo-xp-fill"
-                style={{ width: `${xpProgress}%` }}
-              />
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {level.maxXp === Infinity
-                ? "Max level reached!"
-                : `${level.maxXp - xp} XP to next level`}
-            </p>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// ============================================================================
-// Main Page Component
-// ============================================================================
-
-export default function HomePage() {
+export default function WelcomePage() {
   const router = useRouter();
-  const { isFirstTime, onboardingStep, level, travelStyle } = useGamification();
+  const { isFirstTime, onboardingStep } = useGamification();
+  const [showAuthPrompt, setShowAuthPrompt] = useState(false);
+  const [authAction, setAuthAction] = useState("");
 
-  // Redirect first-time users to onboarding
-  useEffect(() => {
-    if (isFirstTime && onboardingStep !== "complete") {
-      router.replace("/onboarding");
-    }
-  }, [isFirstTime, onboardingStep, router]);
+  // Check if user is authenticated
+  const isAuthenticated = !isFirstTime && onboardingStep === "complete";
 
-  // Show loading state while checking
-  if (isFirstTime && onboardingStep !== "complete") {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <DuoMascot mood="happy" size="lg" animate />
-      </div>
-    );
-  }
-
-  // Get greeting based on time
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 17) return "Good afternoon";
-    return "Good evening";
-  };
-
-  // Get mascot message
-  const getMascotMessage = () => {
-    if (!travelStyle) return "Ready for your next adventure?";
-    switch (travelStyle) {
-      case "budget":
-        return "Let's find some great deals!";
-      case "comfort":
-        return "Time to plan something nice!";
-      case "luxury":
-        return "Premium experiences await!";
-      default:
-        return "Where to next?";
+  // Handle actions that require authentication
+  const handleAuthAction = (action: string, href: string) => {
+    if (isAuthenticated) {
+      router.push(href);
+    } else {
+      setAuthAction(action);
+      setShowAuthPrompt(true);
     }
   };
 
   return (
-    <DuoAppShell>
-      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
-        {/* Greeting with Mascot */}
+    <DuoResponsiveLayout showTopBar showBottomNav>
+      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-start gap-4"
+          className="flex items-center gap-4"
         >
-          <DuoMascot mood="happy" size="md" />
-          <div className="flex-1 pt-2">
-            <h1 className="text-2xl font-extrabold">
-              {getGreeting()}, Explorer!
-            </h1>
-            <p className="text-muted-foreground">{getMascotMessage()}</p>
+          <DuoMascot mood="happy" size="sm" />
+          <div className="flex-1">
+            <h1 className="text-2xl font-extrabold">Community Stories</h1>
+            <p className="text-muted-foreground">Discover travel experiences</p>
           </div>
         </motion.div>
 
-        {/* Stats Card */}
-        <StatsCard />
-
-        {/* Quick Actions */}
+        {/* Create Story CTA */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <h2 className="font-extrabold text-lg mb-3 flex items-center gap-2">
-            <Target className="w-5 h-5 text-[var(--duo-green)]" />
-            Quick Actions
-          </h2>
-          <div className="space-y-3">
-            {features.map((feature, index) => (
-              <FeatureCard key={feature.title} {...feature} index={index} />
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Daily Quests */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <h2 className="font-extrabold text-lg mb-3 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-[var(--duo-orange)]" />
-            Daily Quests
-          </h2>
-          <div className="space-y-3">
-            {dailyQuests.map((quest, index) => (
-              <QuestCard key={quest.id} quest={quest} index={index} />
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Trending Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-        >
-          <h2 className="font-extrabold text-lg mb-3 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-[var(--duo-purple)]" />
-            Trending Destinations
-          </h2>
-          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
-            {[
-              { name: "Langkawi", emoji: "🏝️", travelers: "2.1k" },
-              { name: "Penang", emoji: "🍜", travelers: "1.8k" },
-              { name: "Cameron", emoji: "🍓", travelers: "1.2k" },
-              { name: "Tioman", emoji: "🐠", travelers: "890" },
-            ].map((dest, index) => (
-              <Link key={dest.name} href={`/predictions?destination=${dest.name}`}>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.8 + index * 0.1 }}
-                  className="duo-card duo-card-interactive p-4 min-w-[140px] text-center"
-                >
-                  <span className="text-3xl">{dest.emoji}</span>
-                  <h4 className="font-bold mt-2">{dest.name}</h4>
-                  <p className="text-xs text-muted-foreground">{dest.travelers} travelers</p>
-                </motion.div>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Start Planning CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="duo-card p-6 text-center"
+          transition={{ delay: 0.1 }}
+          className="duo-card p-5"
           style={{
-            background: "linear-gradient(135deg, var(--duo-green) 0%, var(--duo-green-dark) 100%)",
-            borderColor: "var(--duo-green-dark)",
-            boxShadow: "0 4px 0 var(--duo-green-dark)",
+            background: "linear-gradient(135deg, var(--duo-purple) 0%, #A855F7 100%)",
+            borderColor: "#7C3AED",
           }}
         >
-          <h3 className="font-extrabold text-xl text-white mb-2">
-            Ready to explore?
-          </h3>
-          <p className="text-white/80 text-sm mb-4">
-            Plan your next adventure and earn XP!
-          </p>
-          <Link href="/predictions">
-            <button className="w-full py-3 px-6 bg-white text-[var(--duo-green)] font-bold rounded-2xl hover:bg-white/90 transition-all">
-              Start Planning <ChevronRight className="w-5 h-5 inline ml-1" />
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 text-white">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                <BookOpen className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="font-extrabold">Share Your Story</h2>
+                <p className="text-sm text-white/80">Inspire fellow travelers</p>
+              </div>
+            </div>
+            <button
+              onClick={() => handleAuthAction("share your story", "/community/stories/create")}
+              className="px-4 py-2 rounded-xl bg-white text-[var(--duo-purple)] font-bold shadow-[0_4px_0_rgba(0,0,0,0.2)] hover:translate-y-[2px] hover:shadow-[0_2px_0_rgba(0,0,0,0.2)] transition-all flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
+              Create
             </button>
-          </Link>
+          </div>
         </motion.div>
 
-        {/* User Flow Link */}
+        {/* Stories Grid */}
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {stories.map((story, index) => (
+              <motion.div
+                key={story.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2 + index * 0.03 }}
+              >
+                <StoryCard {...story} />
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* XP Hint */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="text-center"
+          transition={{ delay: 0.4 }}
+          className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-4"
         >
-          <Link
-            href="/user-flow"
-            className="text-sm text-muted-foreground hover:text-[var(--duo-blue)] transition-colors"
-          >
-            View User Journey Map →
-          </Link>
+          <Sparkles className="w-4 h-4 text-[var(--duo-yellow)]" />
+          <span>
+            Earn <strong className="text-[var(--duo-green)]">+25 XP</strong> for sharing stories!
+          </span>
         </motion.div>
+
+        {/* Auth Prompt Modal */}
+        <AuthPromptModal
+          isOpen={showAuthPrompt}
+          onClose={() => setShowAuthPrompt(false)}
+          action={authAction}
+        />
       </div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

@@ -17,10 +17,11 @@ import {
   Pencil,
 } from "lucide-react";
 import Link from "next/link";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DonutChart, WatchlistCard } from "@/components/informatics";
 import { useGamification } from "@/contexts/gamification-context";
+import { AuthGuard } from "@/components/shared/auth-guard";
 import { cn } from "@/lib/utils";
 
 const insights = [
@@ -104,7 +105,8 @@ export default function InformaticsDashboardPage() {
   }, [isPaused]);
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <AuthGuard>
+      <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -342,6 +344,7 @@ export default function InformaticsDashboardPage() {
           </span>
         </motion.div>
       </div>
-    </DuoAppShell>
+      </DuoResponsiveLayout>
+    </AuthGuard>
   );
 }

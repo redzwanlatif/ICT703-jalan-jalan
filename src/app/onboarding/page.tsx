@@ -50,6 +50,7 @@ function WelcomeStep({ onNext }: { onNext: () => void }) {
       showProgress={false}
       showBack={false}
       showSkip={false}
+      showHome
     >
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
         <motion.div
@@ -673,7 +674,15 @@ function CompleteStep() {
     setShowConfetti(true);
     const timer = setTimeout(() => {
       completeOnboarding();
-      router.push("/");
+
+      // Check for redirect URL (from protected pages)
+      const redirectUrl = sessionStorage.getItem("auth-redirect");
+      if (redirectUrl) {
+        sessionStorage.removeItem("auth-redirect");
+        router.push(redirectUrl);
+      } else {
+        router.push("/");
+      }
     }, 3000);
     return () => clearTimeout(timer);
   }, [completeOnboarding, router]);

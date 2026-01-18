@@ -59,15 +59,7 @@ export function DuoMascot({
           </div>
         );
       case "thinking":
-        return (
-          <div className="absolute -top-4 -right-2 flex gap-1">
-            <div className="w-2 h-2 rounded-full bg-jj-cream-dark" />
-            <div className="w-3 h-3 rounded-full bg-jj-cream-dark" />
-            <div className="w-4 h-4 rounded-full bg-jj-cream-dark flex items-center justify-center">
-              <span className="text-jj-brown text-xs font-bold">?</span>
-            </div>
-          </div>
-        );
+        return null;
       default:
         return null;
     }

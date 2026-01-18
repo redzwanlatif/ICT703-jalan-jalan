@@ -19,7 +19,7 @@ import {
   ChevronDown,
   Sparkles,
 } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { cn } from "@/lib/utils";
@@ -65,7 +65,7 @@ export default function AdminReportDetailPage() {
   const selectedReason = deleteReasons.find((r) => r.id === deleteReason);
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -343,6 +343,6 @@ export default function AdminReportDetailPage() {
           </>
         )}
       </AnimatePresence>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

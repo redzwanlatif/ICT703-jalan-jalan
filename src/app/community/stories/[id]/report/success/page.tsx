@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Check, Sparkles, ArrowRight } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 
 export default function ReportSuccessPage() {
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       {/* Modal Overlay */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -96,6 +96,6 @@ export default function ReportSuccessPage() {
           </motion.p>
         </div>
       </motion.div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

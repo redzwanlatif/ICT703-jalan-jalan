@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { useTrip, type TripMember } from "@/contexts/trip-context";
 import { useGamification } from "@/contexts/gamification-context";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { cn } from "@/lib/utils";
@@ -163,7 +163,7 @@ export default function PlanPage() {
   );
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -449,6 +449,6 @@ export default function PlanPage() {
           </motion.div>
         </motion.div>
       )}
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

@@ -17,7 +17,7 @@ import {
   Map,
   AlertTriangle,
 } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import TabBar from "@/components/ui/TabBar";
@@ -282,7 +282,7 @@ export default function ItineraryPage() {
   ];
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="sticky top-0 z-20 bg-background">
         <TabBar totalCost={totalCost} memberCount={memberCount} />
       </div>
@@ -724,6 +724,6 @@ export default function ItineraryPage() {
           </div>
         </motion.div>
       </div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

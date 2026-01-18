@@ -19,9 +19,10 @@ import {
   MessageSquare,
   ChevronLeft,
 } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { useGamification } from "@/contexts/gamification-context";
+import { AuthGuard } from "@/components/shared/auth-guard";
 import { cn } from "@/lib/utils";
 
 // ============================================================================
@@ -210,8 +211,9 @@ export default function ChatPage() {
   };
 
   return (
-    <DuoAppShell>
-      <div className="flex flex-col h-[calc(100vh-8rem)] max-w-lg mx-auto">
+    <AuthGuard>
+      <DuoResponsiveLayout>
+        <div className="flex flex-col h-[calc(100vh-8rem)] max-w-lg mx-auto">
         {/* Header */}
         <div className="px-4 py-3 border-b-2 border-border bg-background/95 backdrop-blur-sm sticky top-0 z-10">
           <div className="flex items-center gap-3">
@@ -376,8 +378,9 @@ export default function ChatPage() {
               ))}
             </div>
           )}
+          </div>
         </div>
-      </div>
-    </DuoAppShell>
+      </DuoResponsiveLayout>
+    </AuthGuard>
   );
 }

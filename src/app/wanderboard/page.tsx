@@ -13,7 +13,7 @@ import {
   TrendingUp,
   Star,
 } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { cn } from "@/lib/utils";
@@ -48,7 +48,7 @@ export default function WanderboardLandingPage() {
   const canSearch = destination.length > 0;
 
   return (
-    <DuoAppShell>
+    <DuoResponsiveLayout>
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Hero Section */}
         <motion.div
@@ -264,6 +264,6 @@ export default function WanderboardLandingPage() {
           </span>
         </motion.div>
       </div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

@@ -12,7 +12,7 @@ import {
   BarChart3,
   Sparkles,
 } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { cn } from "@/lib/utils";
 
@@ -66,7 +66,7 @@ export default function AdminDashboardPage() {
   const resolvedReports = reports.filter((r) => r.status === "Resolved").length;
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -263,6 +263,6 @@ export default function AdminDashboardPage() {
           </span>
         </motion.div>
       </div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

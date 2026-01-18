@@ -3,6 +3,7 @@ import { Nunito } from "next/font/google";
 import { GamificationProvider } from "@/contexts/gamification-context";
 import { TripProvider } from "@/contexts/trip-context";
 import { DuoRewardModal } from "@/components/shared/duo-bottom-nav";
+import { ScrollToTop } from "@/components/shared/scroll-to-top";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -50,6 +51,7 @@ export default function RootLayout({
       <body className={`${nunito.variable} antialiased`}>
         <GamificationProvider>
           <TripProvider>
+            <ScrollToTop />
             {children}
             <DuoRewardModal />
           </TripProvider>

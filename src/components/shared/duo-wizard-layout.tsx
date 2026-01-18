@@ -2,7 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { X, ChevronLeft } from "lucide-react";
+import Link from "next/link";
+import { X, ChevronLeft, Home } from "lucide-react";
 import { useGamification } from "@/contexts/gamification-context";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +18,7 @@ interface WizardLayoutProps {
   showProgress?: boolean;
   showBack?: boolean;
   showSkip?: boolean;
+  showHome?: boolean;
   onBack?: () => void;
   onSkip?: () => void;
   footer?: React.ReactNode;
@@ -48,6 +50,7 @@ export function DuoWizardLayout({
   showProgress = true,
   showBack = false,
   showSkip = false,
+  showHome = false,
   onBack,
   onSkip,
   footer,
@@ -96,23 +99,33 @@ export function DuoWizardLayout({
             <Image
               src="/logo.png"
               alt="Jalan-Jalan"
-              width={36}
-              height={36}
-              className="size-9 object-contain"
+              width={120}
+              height={0}
+              className="w-32 h-auto object-contain"
             />
-            <span className="font-extrabold text-xl text-jj-terracotta">
-              Jalan-Jalan
-            </span>
           </div>
 
-          {showSkip ? (
-            <button
-              onClick={handleSkip}
-              className="p-2 -mr-2 rounded-xl hover:bg-muted transition-colors"
-              aria-label="Skip"
-            >
-              <X className="w-6 h-6 text-muted-foreground" />
-            </button>
+          {(showSkip || showHome) ? (
+            <div className="flex items-center gap-1">
+              {showHome && (
+                <Link
+                  href="/"
+                  className="p-2 rounded-xl hover:bg-muted transition-colors"
+                  aria-label="Go to home"
+                >
+                  <Home className="w-6 h-6 text-muted-foreground" />
+                </Link>
+              )}
+              {showSkip && (
+                <button
+                  onClick={handleSkip}
+                  className="p-2 -mr-2 rounded-xl hover:bg-muted transition-colors"
+                  aria-label="Skip"
+                >
+                  <X className="w-6 h-6 text-muted-foreground" />
+                </button>
+              )}
+            </div>
           ) : (
             <div className="w-10" />
           )}

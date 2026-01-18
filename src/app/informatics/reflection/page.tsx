@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Check, BookOpen, Calendar, Sparkles, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { cn } from "@/lib/utils";
@@ -108,7 +108,7 @@ export default function ReflectionPage() {
   };
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -337,6 +337,6 @@ export default function ReflectionPage() {
           </div>
         </motion.div>
       </div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

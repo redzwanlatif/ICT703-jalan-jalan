@@ -4,7 +4,7 @@ import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronDown, Check, AlertTriangle, Sparkles } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { cn } from "@/lib/utils";
@@ -41,7 +41,7 @@ export default function ReportPage({
   const selectedCategory = reportCategories.find((c) => c.id === category);
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       {/* Modal Overlay */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -185,6 +185,6 @@ export default function ReportPage({
           </div>
         </div>
       </motion.div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

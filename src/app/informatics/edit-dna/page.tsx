@@ -14,7 +14,7 @@ import {
   Zap,
   Leaf,
 } from "lucide-react";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton, DuoSlider } from "@/components/shared/duo-wizard-layout";
 import { useGamification } from "@/contexts/gamification-context";
@@ -50,7 +50,7 @@ export default function EditDNAPage() {
   };
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -260,6 +260,6 @@ export default function EditDNAPage() {
           </div>
         </motion.div>
       </div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }

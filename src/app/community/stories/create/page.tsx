@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Image as ImageIcon, Search, X, MapPin, Check, Sparkles, ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
+import { AuthGuard } from "@/components/shared/auth-guard";
 import { cn } from "@/lib/utils";
 
 export default function CreateStoryPage() {
@@ -37,8 +38,9 @@ export default function CreateStoryPage() {
   };
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
-      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
+    <AuthGuard>
+      <DuoResponsiveLayout showTopBar showBottomNav>
+        <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -229,7 +231,8 @@ export default function CreateStoryPage() {
             </span>
           </div>
         </motion.section>
-      </div>
-    </DuoAppShell>
+        </div>
+      </DuoResponsiveLayout>
+    </AuthGuard>
   );
 }

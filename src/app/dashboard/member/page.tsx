@@ -13,7 +13,7 @@ import {
 import { initialMembers } from "@/data/seed";
 import { Member } from "@/types";
 import { MemberCard } from "@/components/members/MemberCard";
-import { DuoAppShell } from "@/components/shared/duo-bottom-nav";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import TabBar from "@/components/ui/TabBar";
 import { GroupAggregate } from "@/components/members/GroupAggregate";
@@ -34,7 +34,7 @@ export default function MembersPage() {
   };
 
   return (
-    <DuoAppShell showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="sticky top-0 z-20 bg-background">
         <TabBar />
       </div>
@@ -194,6 +194,6 @@ export default function MembersPage() {
           </span>
         </motion.div>
       </div>
-    </DuoAppShell>
+    </DuoResponsiveLayout>
   );
 }
