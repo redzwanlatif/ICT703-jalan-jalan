@@ -128,16 +128,15 @@ export default function StoryDetailPage({
           </Link>
         </motion.div>
 
+        {/* Top Section: Location & Author - Aligned Heights */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column: Images */}
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
-            className="space-y-4"
           >
             {/* Location Info */}
-            <div className="duo-card p-4">
+            <div className="duo-card p-4 h-full">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-[var(--duo-blue)]/20 flex items-center justify-center shrink-0">
                   <MapPin className="w-5 h-5 text-[var(--duo-blue)]" />
@@ -148,7 +147,69 @@ export default function StoryDetailPage({
                 </div>
               </div>
             </div>
+          </motion.div>
 
+          <motion.div
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            {/* Author Section */}
+            <div className="duo-card p-4 space-y-3 h-full">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[var(--duo-green)]">
+                  <Image
+                    src={storyData.author.avatar}
+                    alt={storyData.author.name}
+                    width={40}
+                    height={40}
+                    className="object-cover"
+                  />
+                </div>
+                <div className="flex-1">
+                  <span className="font-bold">{storyData.author.name}</span>
+                  <div className="flex items-center gap-2">
+                    <PlaneTakeoff className="w-4 h-4 text-[var(--duo-purple)]" />
+                    <span className={cn(
+                      "text-xs px-2 py-0.5 rounded-full font-bold border",
+                      storyData.author.badge === "Verified Local"
+                        ? "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border-green-500/30"
+                        : "bg-[var(--duo-purple)]/10 text-[var(--duo-purple)] border-[var(--duo-purple)]/30"
+                    )}>
+                      {storyData.author.badge}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-[var(--duo-blue)]/10 transition-colors">
+                    <Facebook className="w-4 h-4 text-muted-foreground hover:text-[var(--duo-blue)]" />
+                  </button>
+                  <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-[var(--duo-blue)]/10 transition-colors">
+                    <Twitter className="w-4 h-4 text-muted-foreground hover:text-[var(--duo-blue)]" />
+                  </button>
+                  <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors">
+                    <LinkIcon className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                  <ReportModal>
+                    <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-[var(--duo-red)]/10 transition-colors">
+                      <AlertCircle className="w-4 h-4 text-muted-foreground hover:text-[var(--duo-red)]" />
+                    </button>
+                  </ReportModal>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Column: Images */}
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="space-y-4"
+          >
             {/* Main Image */}
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border-2 border-border">
               <Image
@@ -197,52 +258,6 @@ export default function StoryDetailPage({
             transition={{ delay: 0.15 }}
             className="space-y-5"
           >
-            {/* Author Section */}
-            <div className="duo-card p-4 space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[var(--duo-green)]">
-                  <Image
-                    src={storyData.author.avatar}
-                    alt={storyData.author.name}
-                    width={40}
-                    height={40}
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex-1">
-                  <span className="font-bold">{storyData.author.name}</span>
-                  <div className="flex items-center gap-2">
-                    <PlaneTakeoff className="w-4 h-4 text-[var(--duo-purple)]" />
-                    <span className={cn(
-                      "text-xs px-2 py-0.5 rounded-full font-bold border",
-                      storyData.author.badge === "Verified Local"
-                        ? "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border-green-500/30"
-                        : "bg-[var(--duo-purple)]/10 text-[var(--duo-purple)] border-[var(--duo-purple)]/30"
-                    )}>
-                      {storyData.author.badge}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-[var(--duo-blue)]/10 transition-colors">
-                    <Facebook className="w-4 h-4 text-muted-foreground hover:text-[var(--duo-blue)]" />
-                  </button>
-                  <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-[var(--duo-blue)]/10 transition-colors">
-                    <Twitter className="w-4 h-4 text-muted-foreground hover:text-[var(--duo-blue)]" />
-                  </button>
-                  <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors">
-                    <LinkIcon className="w-4 h-4 text-muted-foreground" />
-                  </button>
-                  <ReportModal>
-                    <button className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center hover:bg-[var(--duo-red)]/10 transition-colors">
-                      <AlertCircle className="w-4 h-4 text-muted-foreground hover:text-[var(--duo-red)]" />
-                    </button>
-                  </ReportModal>
-                </div>
-              </div>
-            </div>
-
             {/* Story Content */}
             <div className="duo-card p-5 space-y-3">
               <h3 className="text-xl font-extrabold">{storyData.title}</h3>

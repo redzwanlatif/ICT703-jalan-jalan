@@ -14,8 +14,8 @@ import { cn } from "@/lib/utils";
 export default function LoginPage() {
   const router = useRouter();
   const { completeOnboarding, addXp } = useGamification();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("demo@jalan-jalan.com");
+  const [password, setPassword] = useState("demo123");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
