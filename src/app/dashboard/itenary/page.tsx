@@ -17,7 +17,9 @@ import {
   Sparkles,
   Map,
   AlertTriangle,
+  Share2,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
@@ -119,10 +121,25 @@ function severityStyles(severity: ConflictIssue["severity"]) {
 }
 
 function ItineraryContent() {
+  const router = useRouter();
   const { selectedTrip } = useSelectedTrip();
   const [selectedDay, setSelectedDay] = React.useState("1");
   const [conflictFilter, setConflictFilter] = React.useState<string>("all");
   const [showFilterDropdown, setShowFilterDropdown] = React.useState(false);
+
+  // Share trip as community story
+  const handleShareAsStory = () => {
+    const storyData = {
+      title: selectedTrip ? `My ${selectedTrip.destination} Adventure` : "My Travel Adventure",
+      location: selectedTrip?.destination || "Malaysia",
+      description: selectedTrip
+        ? `Just came back from an amazing trip to ${selectedTrip.destination}! The experience was incredible - from the beautiful scenery to the delicious local food. Here are some highlights from my journey that I wanted to share with the community.`
+        : "An amazing travel experience that I wanted to share with the community.",
+      tags: ["#travel", "#adventure", selectedTrip ? `#${selectedTrip.destination.toLowerCase().replace(/\s+/g, "")}` : "#malaysia"],
+    };
+    sessionStorage.setItem("storyPrefill", JSON.stringify(storyData));
+    router.push("/community/stories/create");
+  };
 
   // Get mockup data based on selected trip destination
   const destination = selectedTrip?.destination || "Malaysia";
@@ -755,13 +772,22 @@ function ItineraryContent() {
           </div>
         </motion.div>
 
-        {/* Navigation */}
+        {/* Actions */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
           className="space-y-3 pt-4"
         >
+          {/* Share as Story Button */}
+          <button
+            onClick={handleShareAsStory}
+            className="w-full duo-btn"
+          >
+            <Share2 className="w-5 h-5 mr-2" />
+            Share as Community Story
+          </button>
+
           <Link href="/dashboard">
             <button className="w-full duo-btn duo-btn-outline">
               <ChevronRight className="w-5 h-5 mr-2 rotate-180" />

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Map, MessageSquare, TrendingUp, ArrowRight, BookOpen, Dna, Users, User, Plus } from "lucide-react";
+import { Sparkles, Map, MessageSquare, TrendingUp, ArrowRight, BookOpen, Dna, Users, User, Plus, Bot, Wand2 } from "lucide-react";
 import { DuoMascot } from "./duo-mascot";
 import { DuoButton } from "./duo-wizard-layout";
 import Link from "next/link";
@@ -89,26 +89,36 @@ export function LandingHero() {
             className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2"
           >
             {isAuthenticated ? (
-              <Link href="/predictions">
-                <DuoButton size="lg" className="px-8">
-                  Plan New Trip
-                  <Plus className="w-5 h-5 ml-2" />
-                </DuoButton>
-              </Link>
+              <>
+                <Link href="/chat">
+                  <DuoButton size="lg" className="px-6" variant="blue">
+                    <Sparkles className="w-5 h-5 mr-2 text-[var(--duo-yellow)]" />
+                    Plan with AI
+                  </DuoButton>
+                </Link>
+                <Link href="/predictions">
+                  <DuoButton size="lg" className="px-6">
+                    <Wand2 className="w-5 h-5 mr-2" />
+                    Use Wizard
+                  </DuoButton>
+                </Link>
+              </>
             ) : (
-              <Link href="/onboarding">
-                <DuoButton size="lg" className="px-8">
-                  Get Started
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </DuoButton>
-              </Link>
+              <>
+                <Link href="/onboarding">
+                  <DuoButton size="lg" className="px-8">
+                    Get Started
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </DuoButton>
+                </Link>
+                <Link href="/chat">
+                  <button className="px-8 py-4 rounded-3xl border-2 border-[var(--jj-sky)] text-[var(--jj-sky-dark)] font-bold text-xl hover:bg-[var(--jj-sky)]/10 transition-all flex items-center gap-2 shadow-[0_6px_0_var(--jj-sky-light)] active:translate-y-[6px] active:shadow-none bg-white">
+                    <Sparkles className="w-5 h-5 text-[var(--duo-yellow)]" />
+                    Ask AI Assistant
+                  </button>
+                </Link>
+              </>
             )}
-            <Link href="/chat">
-              <button className="px-8 py-4 rounded-3xl border-2 border-[var(--jj-sky)] text-[var(--jj-sky-dark)] font-bold text-xl hover:bg-[var(--jj-sky)]/10 transition-all flex items-center gap-2 shadow-[0_6px_0_var(--jj-sky-light)] active:translate-y-[6px] active:shadow-none bg-white">
-                <Sparkles className="w-5 h-5 text-[var(--duo-yellow)]" />
-                Ask AI Assistant
-              </button>
-            </Link>
           </motion.div>
         </div>
       </div>

@@ -490,7 +490,8 @@
   @apply relative inline-flex items-center justify-center gap-2 font-bold text-lg rounded-2xl px-6 py-3;
   @apply transition-all duration-150 ease-out;
   @apply active:translate-y-1 active:shadow-none;
-  box-shadow: 0 4px 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+  --btn-shadow-color: var(--jj-terracotta-dark, var(--duo-orange-dark));
+  box-shadow: 0 4px 0 var(--btn-shadow-color);
   background: var(--jj-terracotta, var(--duo-orange));
   color: white;
 }
@@ -501,44 +502,50 @@
 
 .duo-btn:active {
   transform: translateY(4px);
-  box-shadow: 0 0 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+  box-shadow: 0 0 0 var(--btn-shadow-color);
 }
 
 /* Sky blue secondary button */
 .duo-btn-blue {
+  --btn-shadow-color: var(--jj-sky-dark, var(--duo-blue-dark));
   background: var(--jj-sky, var(--duo-blue));
-  box-shadow: 0 4px 0 var(--jj-sky-dark, var(--duo-blue-dark));
+  box-shadow: 0 4px 0 var(--btn-shadow-color);
 }
 
 /* Green success button */
 .duo-btn-green {
+  --btn-shadow-color: var(--jj-green-dark, var(--duo-green-dark));
   background: var(--jj-green, var(--duo-green));
-  box-shadow: 0 4px 0 var(--jj-green-dark, var(--duo-green-dark));
+  box-shadow: 0 4px 0 var(--btn-shadow-color);
 }
 
 /* Coral/Orange accent button */
 .duo-btn-orange {
+  --btn-shadow-color: var(--jj-coral-dark, var(--duo-red-dark));
   background: var(--jj-coral, var(--duo-red));
-  box-shadow: 0 4px 0 var(--jj-coral-dark, var(--duo-red-dark));
+  box-shadow: 0 4px 0 var(--btn-shadow-color);
 }
 
 /* Navy button for premium/special actions */
 .duo-btn-purple {
+  --btn-shadow-color: var(--jj-navy-light, var(--duo-purple-dark));
   background: var(--jj-navy, var(--duo-purple));
-  box-shadow: 0 4px 0 var(--jj-navy-light, var(--duo-purple-dark));
+  box-shadow: 0 4px 0 var(--btn-shadow-color);
 }
 
 /* Coral alert button */
 .duo-btn-red {
+  --btn-shadow-color: var(--jj-coral-dark, var(--duo-red-dark));
   background: var(--jj-coral, var(--duo-red));
-  box-shadow: 0 4px 0 var(--jj-coral-dark, var(--duo-red-dark));
+  box-shadow: 0 4px 0 var(--btn-shadow-color);
 }
 
 .duo-btn-outline {
   background: transparent;
   border: 2px solid var(--duo-gray-light);
   color: var(--duo-blue);
-  box-shadow: 0 4px 0 var(--duo-gray-light);
+  --btn-shadow-color: var(--duo-gray-light);
+  box-shadow: 0 4px 0 var(--btn-shadow-color);
 }
 
 .duo-btn-outline:hover {
@@ -548,30 +555,31 @@
 .duo-btn-disabled {
   background: var(--duo-gray-light);
   color: var(--duo-gray);
-  box-shadow: 0 4px 0 #CCCCCC;
+  --btn-shadow-color: #CCCCCC;
+  box-shadow: 0 4px 0 var(--btn-shadow-color);
   cursor: not-allowed;
 }
 
 /* Large button variant */
 .duo-btn-lg {
   @apply text-xl px-8 py-4 rounded-3xl;
-  box-shadow: 0 6px 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+  box-shadow: 0 6px 0 var(--btn-shadow-color);
 }
 
 .duo-btn-lg:active {
   transform: translateY(6px);
-  box-shadow: 0 0 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+  box-shadow: 0 0 0 var(--btn-shadow-color);
 }
 
 /* Small button variant */
 .duo-btn-sm {
   @apply text-base px-4 py-2 rounded-xl;
-  box-shadow: 0 3px 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+  box-shadow: 0 3px 0 var(--btn-shadow-color);
 }
 
 .duo-btn-sm:active {
   transform: translateY(3px);
-  box-shadow: 0 0 0 var(--jj-terracotta-dark, var(--duo-orange-dark));
+  box-shadow: 0 0 0 var(--btn-shadow-color);
 }
 
 /* ============================================================================

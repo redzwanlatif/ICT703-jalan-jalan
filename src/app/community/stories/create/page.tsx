@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Image as ImageIcon, Search, X, MapPin, Check, Sparkles, ChevronLeft } from "lucide-react";
@@ -18,6 +18,24 @@ export default function CreateStoryPage() {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
+
+  // Load prefilled data from sessionStorage (from trip conversion)
+  useEffect(() => {
+    const prefillData = sessionStorage.getItem("storyPrefill");
+    if (prefillData) {
+      try {
+        const data = JSON.parse(prefillData);
+        if (data.title) setTitle(data.title);
+        if (data.location) setLocation(data.location);
+        if (data.description) setDescription(data.description);
+        if (data.tags && Array.isArray(data.tags)) setTags(data.tags);
+        // Clear the prefill data after loading
+        sessionStorage.removeItem("storyPrefill");
+      } catch (e) {
+        console.error("Failed to parse story prefill data", e);
+      }
+    }
+  }, []);
 
   const removeTag = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
