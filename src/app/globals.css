@@ -318,6 +318,152 @@
   --sidebar-ring: #E07050;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   HIGH CONTRAST MODE
+   Maximizes readability for users with visual impairments
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.high-contrast {
+  --background: #FFFFFF;
+  --foreground: #000000;
+  --card: #FFFFFF;
+  --card-foreground: #000000;
+  --popover: #FFFFFF;
+  --popover-foreground: #000000;
+
+  /* Primary Action: Classic link blue for maximum visibility */
+  --primary: #0000EE;
+  --primary-foreground: #FFFFFF;
+
+  /* Secondary: Black on white */
+  --secondary: #F0F0F0;
+  --secondary-foreground: #000000;
+
+  /* Muted: High contrast gray */
+  --muted: #F0F0F0;
+  --muted-foreground: #000000;
+
+  /* Accent: Classic link blue */
+  --accent: #0000EE;
+  --accent-foreground: #FFFFFF;
+  --destructive: #CC0000;
+
+  /* Borders & Inputs - Strong black borders */
+  --border: #000000;
+  --input: #FFFFFF;
+  --ring: #0000EE;
+
+  /* Override Jalan-Jalan colors for maximum contrast */
+  --jj-terracotta: #CC0000;
+  --jj-terracotta-dark: #990000;
+  --jj-terracotta-light: #FF0000;
+  --jj-sky: #0066CC;
+  --jj-sky-dark: #004499;
+  --jj-sky-light: #0088FF;
+  --jj-cyan: #007799;
+  --jj-green: #006600;
+  --jj-green-dark: #004400;
+  --jj-green-light: #008800;
+  --jj-cream: #F0F0F0;
+  --jj-cream-dark: #CCCCCC;
+  --jj-cream-light: #FFFFFF;
+  --jj-brown: #000000;
+  --jj-brown-light: #333333;
+  --jj-navy: #000066;
+  --jj-navy-light: #000099;
+  --jj-coral: #CC0000;
+  --jj-coral-dark: #990000;
+
+  /* Legacy duo-* aliases */
+  --duo-green: #006600;
+  --duo-green-dark: #004400;
+  --duo-blue: #0066CC;
+  --duo-orange: #CC0000;
+  --duo-red: #CC0000;
+  --duo-gray: #333333;
+  --duo-gray-light: #CCCCCC;
+
+  /* Charts - high contrast colors */
+  --chart-1: #006600;
+  --chart-2: #0066CC;
+  --chart-3: #CC0000;
+  --chart-4: #000066;
+  --chart-5: #990099;
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #000000;
+  --sidebar-primary: #0000EE;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F0F0F0;
+  --sidebar-accent-foreground: #000000;
+  --sidebar-border: #000000;
+  --sidebar-ring: #0000EE;
+}
+
+/* High contrast + dark mode combination */
+.dark.high-contrast {
+  --background: #000000;
+  --foreground: #FFFFFF;
+  --card: #000000;
+  --card-foreground: #FFFFFF;
+  --popover: #000000;
+  --popover-foreground: #FFFFFF;
+
+  /* Primary: Yellow for maximum visibility on dark */
+  --primary: #FFFF00;
+  --primary-foreground: #000000;
+
+  /* Secondary */
+  --secondary: #333333;
+  --secondary-foreground: #FFFFFF;
+
+  /* Muted */
+  --muted: #333333;
+  --muted-foreground: #FFFFFF;
+
+  /* Accent: Cyan for visibility */
+  --accent: #00FFFF;
+  --accent-foreground: #000000;
+  --destructive: #FF0000;
+
+  /* Borders - Strong white borders */
+  --border: #FFFFFF;
+  --input: #333333;
+  --ring: #FFFF00;
+
+  /* Override Jalan-Jalan colors for dark high contrast */
+  --jj-terracotta: #FF6644;
+  --jj-terracotta-dark: #FF4422;
+  --jj-sky: #66CCFF;
+  --jj-cyan: #00FFFF;
+  --jj-green: #00FF00;
+  --jj-green-dark: #00CC00;
+  --jj-cream: #333333;
+  --jj-cream-dark: #222222;
+  --jj-brown: #FFFFFF;
+  --jj-brown-light: #CCCCCC;
+  --jj-navy: #6666FF;
+  --jj-coral: #FF4444;
+
+  /* Charts - high contrast dark colors */
+  --chart-1: #00FF00;
+  --chart-2: #66CCFF;
+  --chart-3: #FF6644;
+  --chart-4: #6666FF;
+  --chart-5: #FF00FF;
+
+  /* Sidebar dark high contrast */
+  --sidebar: #000000;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #FFFF00;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #333333;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #FFFFFF;
+  --sidebar-ring: #FFFF00;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

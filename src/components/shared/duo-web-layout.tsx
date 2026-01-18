@@ -18,7 +18,9 @@ import {
   Menu,
   X,
   Bell,
+  Eye,
 } from "lucide-react";
+import { AccessibilityDialog } from "./accessibility-dialog";
 import { useGamification, getXpProgress } from "@/contexts/gamification-context";
 import { DuoTopStatsBar, DuoBottomNav } from "./duo-bottom-nav";
 import { cn } from "@/lib/utils";
@@ -196,6 +198,20 @@ export function DuoWebNav() {
               </TooltipContent>
             </Tooltip>
 
+            {/* Accessibility */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <AccessibilityDialog>
+                  <Button variant="ghost" size="icon" aria-label="Accessibility settings">
+                    <Eye className="w-5 h-5" />
+                  </Button>
+                </AccessibilityDialog>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Accessibility</p>
+              </TooltipContent>
+            </Tooltip>
+
             {/* Profile Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -290,6 +306,16 @@ export function DuoWebNav() {
                   </Link>
                 );
               })}
+            </div>
+
+            {/* Accessibility */}
+            <div className="mt-4 pt-4 border-t">
+              <AccessibilityDialog>
+                <Button variant="ghost" className="w-full justify-start gap-3 font-semibold">
+                  <Eye className="w-5 h-5" />
+                  Accessibility
+                </Button>
+              </AccessibilityDialog>
             </div>
 
             {/* Mobile Auth */}

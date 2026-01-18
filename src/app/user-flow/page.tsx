@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { Navigation } from "@/components/shared/navigation";
 import {
@@ -16,28 +15,40 @@ import {
   Wallet,
   Users,
   Sparkles,
-  ArrowRight,
   ExternalLink,
-  CheckCircle2,
-  Circle,
-  MapPin,
   Compass,
-  Bot,
-  BarChart3,
-  Calendar,
-  DollarSign,
-  BookOpen,
-  Settings,
-  TrendingUp,
-  Shield,
-  Bell,
-  Map,
   ChevronRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Group configuration
 const groups = [
+  {
+    number: 0,
+    name: "Onboarding & Auth",
+    fullName: "User Onboarding & Authentication",
+    description: "A Duolingo-inspired onboarding experience that collects travel preferences, creates accounts, and personalizes the platform experience.",
+    icon: Sparkles,
+    gradient: "from-amber-500 to-orange-500",
+    bgClass: "bg-amber-500/10",
+    borderClass: "border-amber-500/30",
+    textClass: "text-amber-600 dark:text-amber-400",
+    pages: [
+      { path: "/", name: "Home / Stories", description: "Community stories feed with mascot" },
+      { path: "/onboarding", name: "Onboarding Wizard", description: "8-step personalization flow" },
+      { path: "/login", name: "Login", description: "User authentication" },
+      { path: "/register", name: "Register", description: "New user registration" },
+    ],
+    features: [
+      "Welcome dialog with accessibility",
+      "Travel style selection",
+      "Travel DNA setup",
+      "Trip frequency preference",
+      "Interest selection",
+      "Goal setting",
+      "XP rewards system",
+    ],
+  },
   {
     number: 1,
     name: "AI Chat Assistant",
@@ -69,10 +80,10 @@ const groups = [
     borderClass: "border-blue-500/30",
     textClass: "text-blue-600 dark:text-blue-400",
     pages: [
-      { path: "/dashboard", name: "Dashboard", description: "Main travel dashboard" },
-      { path: "/dashboard/schedule", name: "Schedule", description: "Trip schedule & updates" },
-      { path: "/dashboard/budget", name: "Budget", description: "Budget tracking" },
-      { path: "/wanderboard", name: "Wanderboard", description: "Destination explorer" },
+      { path: "/wanderboard", name: "Wanderboard", description: "Search & destination entry" },
+      { path: "/dashboard", name: "Live Dashboard", description: "8 real-time data cards" },
+      { path: "/dashboard/itenary", name: "Itinerary", description: "Day-by-day itinerary view" },
+      { path: "/dashboard/member", name: "Members", description: "Trip member management" },
     ],
     features: [
       "Real-time weather data",
@@ -94,12 +105,15 @@ const groups = [
     borderClass: "border-violet-500/30",
     textClass: "text-violet-600 dark:text-violet-400",
     pages: [
-      { path: "/informatics", name: "Onboarding", description: "Set up travel preferences" },
+      { path: "/informatics", name: "Informatics Onboarding", description: "Travel DNA setup" },
       { path: "/informatics/dashboard", name: "My Travel Pulse", description: "Personal travel dashboard" },
       { path: "/informatics/planner", name: "Trip Planner", description: "Plan upcoming trips" },
+      { path: "/informatics/planner/1/expenses", name: "Expenses", description: "Trip expense tracking" },
       { path: "/informatics/insights", name: "Insights", description: "Spending analytics" },
       { path: "/informatics/reflection", name: "Reflection", description: "Trip reflections" },
-      { path: "/informatics/settings", name: "Settings", description: "Account settings" },
+      { path: "/informatics/settings", name: "Settings Hub", description: "Account settings" },
+      { path: "/informatics/settings/profile", name: "Edit Profile", description: "Profile management" },
+      { path: "/informatics/settings/privacy", name: "Privacy", description: "Privacy controls" },
     ],
     features: [
       "Budget tracking & goals",
@@ -125,6 +139,9 @@ const groups = [
       { path: "/community/events", name: "Events", description: "Upcoming travel events" },
       { path: "/community/stories", name: "Stories", description: "Community travel stories" },
       { path: "/community/stories/create", name: "Create Story", description: "Share your story" },
+      { path: "/community/stories/1", name: "Story Detail", description: "Full story view" },
+      { path: "/community/stories/1/report", name: "Report Story", description: "Flag content" },
+      { path: "/admin", name: "Admin Dashboard", description: "Content moderation" },
     ],
     features: [
       "Community stories",
@@ -159,23 +176,50 @@ const groups = [
       "Personalized suggestions",
     ],
   },
+  {
+    number: 6,
+    name: "Group Trip Planning",
+    fullName: "Collaborative Group Trip Flow",
+    description: "A Duolingo-inspired group trip planning wizard that collects preferences from all members, identifies conflicts, and generates a consensus-based itinerary.",
+    icon: Users,
+    gradient: "from-cyan-500 to-blue-500",
+    bgClass: "bg-cyan-500/10",
+    borderClass: "border-cyan-500/30",
+    textClass: "text-cyan-600 dark:text-cyan-400",
+    pages: [
+      { path: "/trip/new", name: "Create Trip", description: "Name, destination, dates wizard" },
+      { path: "/trip/1/members", name: "Add Members", description: "Invite travel buddies" },
+      { path: "/trip/1/preferences", name: "Set Preferences", description: "Each member sets preferences" },
+      { path: "/trip/1/conflicts", name: "View Conflicts", description: "Preference conflicts summary" },
+      { path: "/trip/1/plan", name: "Trip Plan", description: "Generated group itinerary" },
+    ],
+    features: [
+      "Multi-step trip wizard",
+      "Invite link sharing",
+      "Per-member preferences",
+      "Conflict detection",
+      "Consensus building",
+      "Group itinerary generation",
+    ],
+  },
 ];
 
 // User journeys
 const userJourneys = [
   {
     name: "First-Time User",
-    description: "New users discovering the platform",
+    description: "New users discovering and onboarding to the platform",
     steps: [
-      { group: 1, action: "Chat with AI", page: "/chat" },
+      { group: 0, action: "View community stories", page: "/" },
+      { group: 0, action: "Start onboarding wizard", page: "/onboarding" },
+      { group: 0, action: "Set travel preferences", page: "/onboarding" },
       { group: 5, action: "Plan first trip", page: "/predictions" },
       { group: 2, action: "Explore dashboard", page: "/dashboard" },
-      { group: 4, action: "Join community", page: "/community" },
     ],
   },
   {
-    name: "Planning a Trip",
-    description: "Users actively planning their next adventure",
+    name: "Solo Trip Planning",
+    description: "Individual users planning their next adventure",
     steps: [
       { group: 5, action: "Enter trip details", page: "/predictions" },
       { group: 5, action: "Set preferences", page: "/predictions/preferences" },
@@ -185,13 +229,24 @@ const userJourneys = [
     ],
   },
   {
+    name: "Group Trip Planning",
+    description: "Planning trips with friends and family",
+    steps: [
+      { group: 6, action: "Create group trip", page: "/trip/new" },
+      { group: 6, action: "Add travel buddies", page: "/trip/1/members" },
+      { group: 6, action: "Set member preferences", page: "/trip/1/preferences" },
+      { group: 6, action: "Review conflicts", page: "/trip/1/conflicts" },
+      { group: 6, action: "View group plan", page: "/trip/1/plan" },
+    ],
+  },
+  {
     name: "During Travel",
     description: "Users currently on their trip",
     steps: [
-      { group: 2, action: "Check weather", page: "/dashboard" },
-      { group: 2, action: "View schedule", page: "/dashboard/schedule" },
+      { group: 2, action: "Check weather & crowd", page: "/dashboard" },
+      { group: 2, action: "View itinerary", page: "/dashboard/itenary" },
       { group: 1, action: "Ask AI for tips", page: "/chat" },
-      { group: 3, action: "Log expenses", page: "/informatics/planner" },
+      { group: 3, action: "Log expenses", page: "/informatics/planner/1/expenses" },
     ],
   },
   {
@@ -221,7 +276,7 @@ function GroupCard({ group }: { group: typeof groups[0] }) {
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <Badge className={cn(group.bgClass, group.textClass, "border-0")}>
-              Group {group.number}
+              {group.number === 0 ? "Shared" : `Group ${group.number}`}
             </Badge>
           </div>
           <h3 className="text-xl font-bold text-neutral-800 dark:text-neutral-100">
@@ -323,7 +378,7 @@ function JourneyFlow({ journey }: { journey: typeof userJourneys[0] }) {
                         {step.action}
                       </span>
                       <Badge variant="outline" className={cn("text-xs", group.textClass, group.borderClass)}>
-                        Group {step.group}
+                        {step.group === 0 ? "Shared" : `G${step.group}`}
                       </Badge>
                     </div>
                     <span className="text-xs text-neutral-500 dark:text-neutral-400">
@@ -358,7 +413,7 @@ export default function UserFlowPage() {
             User Journey & System Map
           </h1>
           <p className="text-lg text-neutral-500 dark:text-neutral-400 max-w-3xl mx-auto">
-            Explore how the Jalan-Jalan platform is organized into 5 feature groups,
+            Explore how the Jalan-Jalan platform is organized into 7 feature modules,
             each designed to support different aspects of your travel planning experience.
           </p>
         </div>
@@ -382,19 +437,19 @@ export default function UserFlowPage() {
             <UnifiedCard gradient className="mt-8 p-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div>
-                  <p className="text-3xl font-bold text-neutral-800 dark:text-neutral-100">5</p>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400">Feature Groups</p>
+                  <p className="text-3xl font-bold text-neutral-800 dark:text-neutral-100">7</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">Feature Modules</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-neutral-800 dark:text-neutral-100">18+</p>
+                  <p className="text-3xl font-bold text-neutral-800 dark:text-neutral-100">35+</p>
                   <p className="text-sm text-neutral-500 dark:text-neutral-400">Total Pages</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-neutral-800 dark:text-neutral-100">30+</p>
+                  <p className="text-3xl font-bold text-neutral-800 dark:text-neutral-100">45+</p>
                   <p className="text-sm text-neutral-500 dark:text-neutral-400">Features</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-neutral-800 dark:text-neutral-100">4</p>
+                  <p className="text-3xl font-bold text-neutral-800 dark:text-neutral-100">5</p>
                   <p className="text-sm text-neutral-500 dark:text-neutral-400">User Journeys</p>
                 </div>
               </div>
@@ -427,7 +482,7 @@ export default function UserFlowPage() {
                       </div>
                       <div>
                         <span className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
-                          Group {group.number}
+                          {group.number === 0 ? "Shared" : `Group ${group.number}`}
                         </span>
                         <p className="text-xs text-neutral-500 dark:text-neutral-400">
                           {group.name}
@@ -450,16 +505,28 @@ export default function UserFlowPage() {
             Begin planning your perfect trip with our AI-powered platform.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/predictions">
+            <Link href="/onboarding">
               <Button className={cn(
                 "h-12 px-6 font-semibold",
-                "bg-gradient-to-r from-rose-500 to-pink-500",
-                "hover:from-rose-600 hover:to-pink-600",
+                "bg-gradient-to-r from-amber-500 to-orange-500",
+                "hover:from-amber-600 hover:to-orange-600",
                 "text-white border-0",
-                "shadow-lg shadow-rose-500/25"
+                "shadow-lg shadow-amber-500/25"
               )}>
                 <Sparkles className="size-5 mr-2" />
-                Start Planning
+                Get Started
+              </Button>
+            </Link>
+            <Link href="/trip/new">
+              <Button className={cn(
+                "h-12 px-6 font-semibold",
+                "bg-gradient-to-r from-cyan-500 to-blue-500",
+                "hover:from-cyan-600 hover:to-blue-600",
+                "text-white border-0",
+                "shadow-lg shadow-cyan-500/25"
+              )}>
+                <Users className="size-5 mr-2" />
+                Plan Group Trip
               </Button>
             </Link>
             <Link href="/chat">

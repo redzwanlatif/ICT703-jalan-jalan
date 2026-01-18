@@ -35,9 +35,7 @@ export default function MembersPage() {
 
   return (
     <DuoResponsiveLayout showTopBar showBottomNav>
-      <div className="sticky top-0 z-20 bg-background">
-        <TabBar />
-      </div>
+      <TabBar />
 
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}

@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
+import { AccessibilityProvider } from "@/contexts/accessibility-context";
 import { GamificationProvider } from "@/contexts/gamification-context";
 import { TripProvider } from "@/contexts/trip-context";
 import { DuoRewardModal } from "@/components/shared/duo-bottom-nav";
 import { ScrollToTop } from "@/components/shared/scroll-to-top";
+import { WelcomeDialog } from "@/components/shared/welcome-dialog";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -49,13 +51,16 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className={`${nunito.variable} antialiased`}>
-        <GamificationProvider>
-          <TripProvider>
-            <ScrollToTop />
-            {children}
-            <DuoRewardModal />
-          </TripProvider>
-        </GamificationProvider>
+        <AccessibilityProvider>
+          <GamificationProvider>
+            <TripProvider>
+              <WelcomeDialog />
+              <ScrollToTop />
+              {children}
+              <DuoRewardModal />
+            </TripProvider>
+          </GamificationProvider>
+        </AccessibilityProvider>
       </body>
     </html>
   );

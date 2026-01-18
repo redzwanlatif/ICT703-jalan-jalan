@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { RotateCcw, User, Bell, Shield, HelpCircle, ChevronRight, LogOut, AlertTriangle } from "lucide-react";
+import { RotateCcw, User, Bell, Shield, HelpCircle, ChevronRight, LogOut, AlertTriangle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { DuoResponsiveLayout } from "@/components/shared";
 import { useGamification } from "@/contexts/gamification-context";
 
 export default function SettingsPage() {
@@ -63,123 +64,131 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <div className="px-6 pt-8 pb-4">
-        <div className="mb-2">
-          <p className="text-muted-foreground text-sm">Preferences</p>
-          <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+    <DuoResponsiveLayout showTopBar showBottomNav>
+      <div className="max-w-2xl mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-6">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => router.push("/informatics/dashboard")}
+            className="h-8 w-8"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <div>
+            <p className="text-muted-foreground text-sm">Preferences</p>
+            <h1 className="text-2xl font-extrabold text-foreground">Settings</h1>
+          </div>
         </div>
-      </div>
 
-      {/* User Profile Card */}
-      <div className="px-6 mb-6">
-        <Card className="p-4">
+        {/* User Profile Card */}
+        <Card className="p-6 mb-6 hover:shadow-md transition-shadow">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
               <span className="text-2xl">👤</span>
             </div>
-            <div>
+            <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-foreground">Travel Explorer</h3>
               <p className="text-muted-foreground text-sm">explorer@email.com</p>
               <p className="text-primary text-xs mt-1">Premium Member</p>
             </div>
           </div>
         </Card>
-      </div>
 
-      {/* Settings Sections */}
-      {settingsSections.map((section) => (
-        <div key={section.title} className="px-6 mb-6">
-          <h2 className="font-semibold text-foreground mb-3">{section.title}</h2>
-          <Card className="overflow-hidden">
-            {section.items.map((item, index) => {
-              const hasAction = "action" in item;
-              const handleClick = () => {
-                if (hasAction && item.action === "profile") router.push("/informatics/settings/profile");
-                else if (hasAction && item.action === "privacy") router.push("/informatics/settings/privacy");
-              };
+        {/* Settings Sections */}
+        {settingsSections.map((section) => (
+          <div key={section.title} className="mb-6">
+            <h2 className="font-semibold text-foreground mb-3 px-1">{section.title}</h2>
+            <Card className="overflow-hidden gap-0">
+              {section.items.map((item, index) => {
+                const hasAction = "action" in item;
+                const handleClick = () => {
+                  if (hasAction && item.action === "profile") router.push("/informatics/settings/profile");
+                  else if (hasAction && item.action === "privacy") router.push("/informatics/settings/privacy");
+                };
 
-              const hasToggle = "toggle" in item && item.toggle;
-              const content = (
-                <>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <item.icon className="w-4 h-4 text-primary" />
+                const hasToggle = "toggle" in item && item.toggle;
+                const content = (
+                  <>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <item.icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <span className="text-foreground text-sm font-medium">{item.label}</span>
                     </div>
-                    <span className="text-foreground text-sm">{item.label}</span>
-                  </div>
-                  {hasToggle && "value" in item && "onChange" in item ? (
-                    <Switch checked={item.value} onCheckedChange={item.onChange} />
-                  ) : (
-                    <ChevronRight className="w-5 h-5 text-muted-foreground" />
-                  )}
-                </>
-              );
+                    {hasToggle && "value" in item && "onChange" in item ? (
+                      <Switch checked={item.value} onCheckedChange={item.onChange} />
+                    ) : (
+                      <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                    )}
+                  </>
+                );
 
-              return hasAction ? (
-                <button
-                  key={item.label}
-                  onClick={handleClick}
-                  className={`w-full flex items-center justify-between p-4 hover:bg-secondary/50 transition-colors ${
-                    index < section.items.length - 1 ? "border-b border-border" : ""
-                  }`}
-                >
-                  {content}
-                </button>
-              ) : (
-                <div
-                  key={item.label}
-                  className={`flex items-center justify-between p-4 ${
-                    index < section.items.length - 1 ? "border-b border-border" : ""
-                  }`}
-                >
-                  {content}
+                return hasAction ? (
+                  <button
+                    key={item.label}
+                    onClick={handleClick}
+                    className={`w-full flex items-center justify-between p-6 hover:bg-muted/50 active:bg-muted transition-all duration-200 ${
+                      index < section.items.length - 1 ? "border-b border-border" : ""
+                    }`}
+                  >
+                    {content}
+                  </button>
+                ) : (
+                  <div
+                    key={item.label}
+                    className={`flex items-center justify-between p-6 hover:bg-muted/30 transition-colors ${
+                      index < section.items.length - 1 ? "border-b border-border" : ""
+                    }`}
+                  >
+                    {content}
+                  </div>
+                );
+              })}
+            </Card>
+          </div>
+        ))}
+
+        {/* Reset Travel DNA */}
+        <div className="mb-6">
+          <h2 className="font-semibold text-foreground mb-3 px-1">Data Management</h2>
+          <Card className="overflow-hidden gap-0">
+            <button
+              onClick={() => setShowResetConfirm(true)}
+              className="w-full flex items-center justify-between p-6 hover:bg-red-500/10 active:bg-red-500/15 transition-all duration-200"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                  <RotateCcw className="w-5 h-5 text-red-600" />
                 </div>
-              );
-            })}
+                <div className="text-left">
+                  <span className="text-foreground text-sm font-medium block">Reset Travel DNA</span>
+                  <span className="text-muted-foreground text-xs">
+                    Clear all preferences and start onboarding again
+                  </span>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+            </button>
           </Card>
         </div>
-      ))}
 
-      {/* Reset Travel DNA */}
-      <div className="px-6 mb-6">
-        <h2 className="font-semibold text-foreground mb-3">Data Management</h2>
-        <Card className="overflow-hidden">
-          <button
-            onClick={() => setShowResetConfirm(true)}
-            className="w-full flex items-center justify-between p-4 hover:bg-red-500/5 transition-colors"
+        {/* Sign Out */}
+        <div className="mb-6">
+          <Button
+            variant="outline"
+            className="w-full rounded-xl border-red-500/30 text-red-600 hover:bg-red-500/10"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
-                <RotateCcw className="w-4 h-4 text-red-600" />
-              </div>
-              <div className="text-left">
-                <span className="text-foreground text-sm block">Reset Travel DNA</span>
-                <span className="text-muted-foreground text-xs">
-                  Clear all preferences and start onboarding again
-                </span>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-muted-foreground" />
-          </button>
-        </Card>
-      </div>
+            <LogOut className="w-4 h-4 mr-2" />
+            Sign Out
+          </Button>
+        </div>
 
-      {/* Sign Out */}
-      <div className="px-6 mb-6">
-        <Button
-          variant="outline"
-          className="w-full rounded-xl border-red-500/30 text-red-600 hover:bg-red-500/10"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Sign Out
-        </Button>
-      </div>
-
-      {/* App Version */}
-      <div className="px-6 text-center">
-        <p className="text-muted-foreground text-xs">Jalan-Jalan v1.0.0</p>
+        {/* App Version */}
+        <div className="text-center pb-4">
+          <p className="text-muted-foreground text-xs">Jalan-Jalan v1.0.0</p>
+        </div>
       </div>
 
       {/* Reset Confirmation Modal */}
@@ -220,7 +229,7 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
-    </div>
+    </DuoResponsiveLayout>
   );
 }
 

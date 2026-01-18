@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
+import { DuoResponsiveLayout } from "@/components/shared";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -18,10 +19,10 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col pb-8">
-      {/* Header */}
-      <div className="px-6 pt-8 pb-4">
-        <div className="flex items-center gap-3 mb-2">
+    <DuoResponsiveLayout showTopBar showBottomNav>
+      <div className="max-w-2xl mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-6">
           <Button
             variant="ghost"
             size="icon"
@@ -32,14 +33,12 @@ export default function ProfilePage() {
           </Button>
           <div>
             <p className="text-muted-foreground text-sm">Account</p>
-            <h1 className="text-2xl font-bold text-foreground">Edit Profile</h1>
+            <h1 className="text-2xl font-extrabold text-foreground">Edit Profile</h1>
           </div>
         </div>
-      </div>
 
-      {/* Avatar Section */}
-      <div className="px-6 mb-6">
-        <Card className="p-6 flex flex-col items-center">
+        {/* Avatar Section */}
+        <Card className="p-6 flex flex-col items-center mb-6">
           <div className="relative mb-4">
             <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
               <span className="text-4xl">👤</span>
@@ -50,14 +49,12 @@ export default function ProfilePage() {
           </div>
           <p className="text-xs text-muted-foreground">Tap to change photo</p>
         </Card>
-      </div>
 
-      {/* Form Fields */}
-      <div className="px-6 space-y-4">
-        <Card className="p-4">
-          <div className="space-y-4">
+        {/* Form Fields */}
+        <Card className="p-6 mb-6 gap-0">
+          <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="name" className="flex items-center gap-2 text-sm">
+              <Label htmlFor="name" className="flex items-center gap-2 text-sm font-medium">
                 <User className="w-4 h-4 text-muted-foreground" />
                 Display Name
               </Label>
@@ -65,11 +62,12 @@ export default function ProfilePage() {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className="h-11 rounded-xl"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="flex items-center gap-2 text-sm">
+              <Label htmlFor="email" className="flex items-center gap-2 text-sm font-medium">
                 <Mail className="w-4 h-4 text-muted-foreground" />
                 Email Address
               </Label>
@@ -78,35 +76,31 @@ export default function ProfilePage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="h-11 rounded-xl"
               />
             </div>
           </div>
         </Card>
-      </div>
 
-      {/* Membership Info */}
-      <div className="px-6 mt-6">
-        <Card className="p-4">
+        {/* Membership Info */}
+        <Card className="p-6 mb-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-foreground">Membership</p>
+              <p className="text-sm font-semibold text-foreground">Membership</p>
               <p className="text-xs text-muted-foreground">Premium Member</p>
             </div>
-            <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
+            <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20">
               Active
             </span>
           </div>
         </Card>
-      </div>
 
-      {/* Save Button */}
-      <div className="px-6 mt-6">
+        {/* Save Button */}
         <Button onClick={handleSave} className="w-full" size="lg">
           <Save className="w-4 h-4 mr-2" />
           Save Changes
         </Button>
       </div>
-    </div>
+    </DuoResponsiveLayout>
   );
 }
-

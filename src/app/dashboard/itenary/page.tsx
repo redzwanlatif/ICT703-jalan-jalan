@@ -283,9 +283,7 @@ export default function ItineraryPage() {
 
   return (
     <DuoResponsiveLayout showTopBar showBottomNav>
-      <div className="sticky top-0 z-20 bg-background">
-        <TabBar totalCost={totalCost} memberCount={memberCount} />
-      </div>
+      <TabBar totalCost={totalCost} memberCount={memberCount} />
 
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}

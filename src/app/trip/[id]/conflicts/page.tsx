@@ -109,8 +109,8 @@ export default function ConflictsPage() {
   };
 
   const handleContinue = () => {
-    setTripStep("plan");
-    router.push(`/trip/${tripId}/plan`);
+    setTripStep("recommendations");
+    router.push(`/trip/${tripId}/recommendations`);
   };
 
   if (!currentTrip) {

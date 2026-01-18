@@ -47,7 +47,7 @@ export function StoryCard({
                         {authorBadge && (
                             <Badge
                                 variant="outline"
-                                className="rounded-lg border-orange-500/30 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 text-xs"
+                                className="rounded-lg border-green-500/30 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs"
                             >
                                 {authorBadge}
                             </Badge>

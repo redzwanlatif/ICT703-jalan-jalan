@@ -24,12 +24,13 @@ const TabBar = ({ totalCost, memberCount }: TabBarProps) => {
     return pathname === href;
   };
 
-  const costPerPerson = totalCost && memberCount ? totalCost / memberCount : 350;
+  const displayCost = totalCost ?? 1400;
+  const costPerPerson = displayCost && memberCount ? displayCost / memberCount : 350;
 
   return (
-    <div className="bg-card border-b-2 border-border">
-      <div className="max-w-lg mx-auto px-4">
-        <div className="flex items-center justify-between py-2">
+    <div className="sticky top-14 lg:top-16 z-40 bg-card border-b border-border shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8">
+        <div className="flex items-center justify-between gap-4 py-3">
           {/* Tabs */}
           <div className="flex items-center gap-1">
             {tabs.map((tab) => {
@@ -39,20 +40,23 @@ const TabBar = ({ totalCost, memberCount }: TabBarProps) => {
                 <Link key={tab.id} href={tab.href}>
                   <motion.div
                     className={cn(
-                      "relative px-3 py-2 rounded-xl font-bold text-sm flex items-center gap-2 transition-colors",
+                      "relative px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 transition-all",
                       active
                         ? "text-[var(--duo-green)]"
-                        : "text-muted-foreground hover:text-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                     )}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span className="hidden sm:inline">{tab.label}</span>
+                    <Icon className={cn(
+                      "w-4 h-4 transition-colors",
+                      active ? "text-[var(--duo-green)]" : ""
+                    )} />
+                    <span className="hidden sm:inline whitespace-nowrap">{tab.label}</span>
                     {active && (
                       <motion.div
                         layoutId="activeTab"
-                        className="absolute inset-0 bg-[var(--duo-green)]/10 rounded-xl border-2 border-[var(--duo-green)]/30"
+                        className="absolute inset-0 bg-[var(--duo-green)]/10 rounded-lg border border-[var(--duo-green)]/30 -z-10"
                         initial={false}
                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
                       />
@@ -64,13 +68,15 @@ const TabBar = ({ totalCost, memberCount }: TabBarProps) => {
           </div>
 
           {/* Cost Display */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[var(--duo-green)]/10 border-2 border-[var(--duo-green)]/30">
-            <Wallet className="w-4 h-4 text-[var(--duo-green)]" />
+          <div className="flex items-center gap-2.5 px-4 py-2 rounded-lg bg-gradient-to-r from-[var(--duo-green)]/10 to-[var(--duo-green)]/5 border border-[var(--duo-green)]/30 shadow-sm">
+            <div className="p-1.5 rounded-md bg-[var(--duo-green)]/20">
+              <Wallet className="w-4 h-4 text-[var(--duo-green)]" />
+            </div>
             <div className="text-right">
-              <p className="text-xs font-extrabold text-[var(--duo-green)]">
-                RM{totalCost ?? 1400}
+              <p className="text-sm font-bold text-[var(--duo-green)] leading-tight">
+                RM{displayCost.toLocaleString()}
               </p>
-              <p className="text-[10px] text-muted-foreground">
+              <p className="text-xs text-muted-foreground leading-tight">
                 RM{costPerPerson.toFixed(0)}/person
               </p>
             </div>

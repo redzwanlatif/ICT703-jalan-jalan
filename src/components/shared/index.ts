@@ -2,6 +2,10 @@
 export { Navigation } from "./navigation";
 export { GroupLabel } from "./group-label";
 
+// Accessibility
+export { AccessibilityDialog } from "./accessibility-dialog";
+export { WelcomeDialog } from "./welcome-dialog";
+
 // Flow System
 export { FlowGuide, FlowGuideMini } from "./flow-guide";
 export { FlowCTA, FlowCTAInline, FlowCTAMini } from "./flow-cta";

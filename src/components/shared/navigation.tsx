@@ -18,7 +18,9 @@ import {
   ChevronDown,
   Bot,
   Compass,
+  Eye,
 } from "lucide-react";
+import { AccessibilityDialog } from "./accessibility-dialog";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
@@ -167,6 +169,17 @@ export function Navigation() {
 
           {/* Right side actions */}
           <div className="flex items-center gap-2">
+            {/* Accessibility Toggle */}
+            <AccessibilityDialog>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Accessibility settings"
+              >
+                <Eye className="size-5" />
+              </Button>
+            </AccessibilityDialog>
+
             <Link href="/login" className="hidden md:block">
               <Button variant="ghost" size="sm">
                 Login
@@ -255,8 +268,14 @@ export function Navigation() {
                 );
               })}
 
-              {/* Mobile auth links */}
+              {/* Mobile accessibility and auth links */}
               <div className="border-t mt-2 pt-2 flex flex-col gap-1">
+                <AccessibilityDialog>
+                  <Button variant="ghost" className="w-full justify-start gap-3">
+                    <Eye className="size-4" />
+                    Accessibility
+                  </Button>
+                </AccessibilityDialog>
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">Login</Button>
                 </Link>

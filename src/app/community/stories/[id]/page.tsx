@@ -213,7 +213,12 @@ export default function StoryDetailPage({
                   <span className="font-bold">{storyData.author.name}</span>
                   <div className="flex items-center gap-2">
                     <PlaneTakeoff className="w-4 h-4 text-[var(--duo-purple)]" />
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--duo-purple)]/10 text-[var(--duo-purple)] font-bold border border-[var(--duo-purple)]/30">
+                    <span className={cn(
+                      "text-xs px-2 py-0.5 rounded-full font-bold border",
+                      storyData.author.badge === "Verified Local"
+                        ? "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border-green-500/30"
+                        : "bg-[var(--duo-purple)]/10 text-[var(--duo-purple)] border-[var(--duo-purple)]/30"
+                    )}>
                       {storyData.author.badge}
                     </span>
                   </div>
@@ -287,7 +292,12 @@ export default function StoryDetailPage({
                       />
                     </div>
                     <span className="font-bold text-sm">{exp.author.name}</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--duo-green)]/10 text-[var(--duo-green)] font-bold border border-[var(--duo-green)]/30">
+                    <span className={cn(
+                      "text-xs px-2 py-0.5 rounded-full font-bold border",
+                      exp.author.badge === "Verified Local"
+                        ? "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 border-green-500/30"
+                        : "bg-[var(--duo-green)]/10 text-[var(--duo-green)] border-[var(--duo-green)]/30"
+                    )}>
                       {exp.author.badge}
                     </span>
                   </div>
