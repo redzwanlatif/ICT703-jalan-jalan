@@ -29,9 +29,9 @@ export default function RegisterPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
+    name: "John Traveler",
+    email: "traveler@example.com",
+    password: "password123",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,21 +74,16 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="px-4 py-4 flex items-center justify-between">
+      <header className="px-4 py-2 md:py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 h-full">
           <Image
             src="/logo.png"
             alt="Jalan-Jalan"
-            width={130}
-            height={130}
-            className="w-12 h-12 sm:w-16 sm:h-16 md:w-[130px] md:h-[130px] object-contain"
+            width={160}
+            height={50}
+            className="w-32 sm:w-40 md:w-[160px] h-auto object-contain"
+            priority
           />
-        </Link>
-        <Link
-          href="/login"
-          className="text-sm font-bold text-jj-sky-dark hover:underline"
-        >
-          Log in
         </Link>
       </header>
 

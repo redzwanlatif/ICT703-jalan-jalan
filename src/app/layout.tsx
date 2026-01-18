@@ -5,7 +5,6 @@ import { GamificationProvider } from "@/contexts/gamification-context";
 import { TripProvider } from "@/contexts/trip-context";
 import { DuoRewardModal } from "@/components/shared/duo-bottom-nav";
 import { ScrollToTop } from "@/components/shared/scroll-to-top";
-import { WelcomeDialog } from "@/components/shared/welcome-dialog";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -54,7 +53,6 @@ export default function RootLayout({
         <AccessibilityProvider>
           <GamificationProvider>
             <TripProvider>
-              <WelcomeDialog />
               <ScrollToTop />
               {children}
               <DuoRewardModal />

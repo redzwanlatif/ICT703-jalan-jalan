@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { RotateCcw, User, Bell, Shield, HelpCircle, ChevronRight, LogOut, AlertTriangle, ArrowLeft } from "lucide-react";
+import { RotateCcw, User, Bell, Shield, HelpCircle, ChevronRight, LogOut, AlertTriangle, ArrowLeft, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { DuoResponsiveLayout } from "@/components/shared";
+import { AccessibilityDialog } from "@/components/shared/accessibility-dialog";
 import { useGamification } from "@/contexts/gamification-context";
 
 export default function SettingsPage() {
@@ -57,6 +58,8 @@ export default function SettingsPage() {
     },
   ];
 
+  // Accessibility section is rendered separately with the dialog
+
   const handleResetDNA = () => {
     resetTravelDNA();
     setShowResetConfirm(false);
@@ -95,6 +98,29 @@ export default function SettingsPage() {
             </div>
           </div>
         </Card>
+
+        {/* Accessibility Section */}
+        <div className="mb-6">
+          <h2 className="font-semibold text-foreground mb-3 px-1">Accessibility</h2>
+          <Card className="overflow-hidden gap-0">
+            <AccessibilityDialog>
+              <button className="w-full flex items-center justify-between p-6 hover:bg-muted/50 active:bg-muted transition-all duration-200">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Eye className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <span className="text-foreground text-sm font-medium block">Accessibility Settings</span>
+                    <span className="text-muted-foreground text-xs">
+                      High contrast, text size, and more
+                    </span>
+                  </div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+              </button>
+            </AccessibilityDialog>
+          </Card>
+        </div>
 
         {/* Settings Sections */}
         {settingsSections.map((section) => (
@@ -150,7 +176,7 @@ export default function SettingsPage() {
           </div>
         ))}
 
-        {/* Reset Travel DNA */}
+        {/* Reset Profile */}
         <div className="mb-6">
           <h2 className="font-semibold text-foreground mb-3 px-1">Data Management</h2>
           <Card className="overflow-hidden gap-0">
@@ -163,7 +189,7 @@ export default function SettingsPage() {
                   <RotateCcw className="w-5 h-5 text-red-600" />
                 </div>
                 <div className="text-left">
-                  <span className="text-foreground text-sm font-medium block">Reset Travel DNA</span>
+                  <span className="text-foreground text-sm font-medium block">Reset Profile Data</span>
                   <span className="text-muted-foreground text-xs">
                     Clear all preferences and start onboarding again
                   </span>
@@ -205,7 +231,7 @@ export default function SettingsPage() {
               <AlertTriangle className="w-6 h-6 text-red-600" />
             </div>
 
-            <h2 className="text-xl font-bold text-center mb-2">Reset Travel DNA?</h2>
+            <h2 className="text-xl font-bold text-center mb-2">Reset Profile Data?</h2>
             <p className="text-muted-foreground text-center text-sm mb-6">
               This will clear all your travel preferences and restart the onboarding process. This action cannot be undone.
             </p>

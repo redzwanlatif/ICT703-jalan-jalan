@@ -35,7 +35,7 @@ type FlowStep = {
 const flowSteps: FlowStep[] = [
   {
     id: "onboarding",
-    title: "Travel DNA",
+    title: "My Profile",
     subtitle: "Define Your Style",
     description: "Set your travel preferences, budget goals, and pacing style",
     icon: <Sparkles className="w-6 h-6" />,
@@ -356,7 +356,7 @@ export default function UserFlowPage() {
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-xl font-bold mb-1">Ready to Start?</h3>
                 <p className="text-white/80 text-sm">
-                  Begin your journey by setting up your Travel DNA
+                  Begin your journey by setting up your Profile
                 </p>
               </div>
               <Link href="/informatics">
@@ -499,7 +499,7 @@ export default function UserFlowPage() {
                       textAnchor="middle"
                       className="fill-white text-xs font-medium"
                     >
-                      Travel DNA
+                      My Profile
                     </text>
                   </g>
 
@@ -689,7 +689,7 @@ export default function UserFlowPage() {
                   <div>
                     <h4 className="font-semibold">First-Time User</h4>
                     <p className="text-sm text-muted-foreground mt-1">
-                      Travel DNA → Dashboard → Explore features
+                      My Profile → Dashboard → Explore features
                     </p>
                     <div className="flex flex-wrap gap-1 mt-2">
                       <span className="text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-0.5 rounded">

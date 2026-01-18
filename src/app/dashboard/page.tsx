@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -21,6 +20,7 @@ import {
 import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
+import TabBar from "@/components/ui/TabBar";
 import { cn } from "@/lib/utils";
 import { ConflictItem, SummaryStat, DashboardDestination } from "@/types";
 import {
@@ -29,6 +29,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DashboardTripSelector,
+  useSelectedTrip,
+  getMockupDataForDestination,
+} from "@/components/dashboard/trip-selector";
+import { Suspense } from "react";
 
 function severityStyles(severity: ConflictItem["severity"]) {
   switch (severity) {
@@ -40,9 +46,9 @@ function severityStyles(severity: ConflictItem["severity"]) {
       };
     case "medium":
       return {
-        container: "border-[var(--duo-orange)] bg-[var(--duo-orange)]/10",
-        icon: "text-[var(--duo-orange)]",
-        badge: "bg-[var(--duo-orange)] text-white",
+        container: "border-[var(--duo-yellow)] bg-[var(--duo-yellow)]/10",
+        icon: "text-[var(--duo-yellow)]",
+        badge: "bg-[var(--duo-yellow)] text-white",
       };
     case "low":
     default:
@@ -54,85 +60,72 @@ function severityStyles(severity: ConflictItem["severity"]) {
   }
 }
 
-export default function DashboardPage() {
-  const searchParams = useSearchParams();
-  const destination = searchParams.get("destination") || "Malaysia";
+function DashboardContent() {
   const [conflictFilter, setConflictFilter] = React.useState<string>("all");
   const [showFilterDropdown, setShowFilterDropdown] = React.useState(false);
   const [expandedCard, setExpandedCard] = React.useState<string | null>(null);
 
+  // Use shared trip selector hook
+  const { selectedTrip } = useSelectedTrip();
+
+  // Use selected trip data or fallback
+  const destination = selectedTrip?.destination || "Malaysia";
+  const memberCount = selectedTrip?.members.length || 4;
+
+  // Generate mockup data based on selected trip
+  const mockupData = React.useMemo(() => {
+    return getMockupDataForDestination(destination);
+  }, [destination]);
+
   const summary: SummaryStat[] = [
     {
       label: "Group Size",
-      value: "4",
-      sub: "travelers",
+      value: String(memberCount),
+      sub: memberCount === 1 ? "traveler" : "travelers",
       icon: <Users className="w-5 h-5 text-[var(--duo-purple)]" />,
     },
     {
       label: "Avg. Budget",
-      value: "RM1,325 - RM2,625",
+      value: mockupData.budgetRange,
       sub: "per person",
       icon: <Wallet className="w-5 h-5 text-[var(--duo-green)]" />,
     },
     {
       label: "Preferred Seasons",
-      value: "Raya, CNY, Merdeka",
-      sub: "4 options",
+      value: mockupData.seasons,
+      sub: `${mockupData.seasonCount} options`,
       icon: <CalendarDays className="w-5 h-5 text-[var(--duo-blue)]" />,
     },
     {
       label: "Common Interests",
-      value: "Beach, Culture, Food",
-      sub: "8 total interests",
+      value: mockupData.interests,
+      sub: `${mockupData.interestCount} total interests`,
       icon: <Heart className="w-5 h-5 text-[var(--duo-red)]" />,
     },
   ];
 
-  const conflicts: ConflictItem[] = [
-    {
-      severity: "high",
-      title: "Nurul Aisyah",
-      description: "Prefers higher-budget trips (min RM1000)",
-    },
-    {
-      severity: "high",
-      title: "Wong Wei Ming",
-      description: "Prefers higher-budget trips (min RM1500)",
-    },
-    {
-      severity: "medium",
-      title: "Wong Wei Ming",
-      description: "May not enjoy the selected destinations",
-    },
-    {
-      severity: "low",
-      title: "Ahmad Zaki",
-      description: "Prefers different seasons for travel",
-    },
-  ];
+  // Generate conflicts based on trip members
+  const conflicts: ConflictItem[] = React.useMemo(() => {
+    const names = selectedTrip?.members.map(m => m.name) || mockupData.memberNames;
+    const conflictTemplates = [
+      { severity: "high" as const, template: "Prefers higher-budget trips (min RM1000)" },
+      { severity: "high" as const, template: "Has dietary restrictions not fully covered" },
+      { severity: "medium" as const, template: "May not enjoy all selected activities" },
+      { severity: "medium" as const, template: "Prefers different accommodation type" },
+      { severity: "low" as const, template: "Prefers different travel pace" },
+      { severity: "low" as const, template: "Has minor schedule conflicts" },
+    ];
 
-  const destinations: DashboardDestination[] = [
-    {
-      title: "Melaka Historic City",
-      description:
-        "UNESCO World Heritage Site with rich history and famous street food",
-      matchLabel: "59% Match",
-      cost: "RM800",
-      season: "Raya",
-      interests: "Culture, Food, Shopping",
-      alignmentPercent: 59,
-    },
-    {
-      title: "Jonker Street & Chinatown",
-      description:
-        "Vibrant night market with antiques and Peranakan cuisine",
-      matchLabel: "47% Match",
-      cost: "RM600",
-      season: "CNY",
-      interests: "Culture, Food, Shopping",
-      alignmentPercent: 47,
-    },
-  ];
+    // Generate different conflicts based on member count
+    const numConflicts = Math.min(memberCount + 1, 4);
+    return conflictTemplates.slice(0, numConflicts).map((c, i) => ({
+      severity: c.severity,
+      title: names[i % names.length] || `Member ${i + 1}`,
+      description: c.template,
+    }));
+  }, [selectedTrip, memberCount, mockupData.memberNames]);
+
+  const destinations: DashboardDestination[] = mockupData.destinations;
 
   const filteredConflicts = conflicts.filter((c) => {
     if (conflictFilter === "all") return true;
@@ -146,14 +139,15 @@ export default function DashboardPage() {
   };
 
   const filterOptions = [
-    { value: "all", label: `All (${conflicts.length})` },
+    { value: "all", label: `All (${conflicts.length})`, color: "var(--duo-green)" },
     { value: "high", label: `High (${conflictCounts.high})`, color: "var(--duo-red)" },
-    { value: "medium", label: `Medium (${conflictCounts.medium})`, color: "var(--duo-orange)" },
+    { value: "medium", label: `Medium (${conflictCounts.medium})`, color: "var(--duo-yellow)" },
     { value: "low", label: `Low (${conflictCounts.low})`, color: "var(--duo-blue)" },
   ];
 
   return (
     <DuoResponsiveLayout showTopBar showBottomNav>
+      <TabBar />
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -170,6 +164,11 @@ export default function DashboardPage() {
             </p>
           </div>
         </motion.div>
+
+        {/* Trip Selector */}
+        <Suspense fallback={<div className="duo-card p-3 animate-pulse h-16" />}>
+          <DashboardTripSelector />
+        </Suspense>
 
         {/* Group Summary */}
         <motion.div
@@ -336,7 +335,14 @@ export default function DashboardPage() {
               <Wallet className="w-5 h-5 text-[var(--duo-green)]" />
               Budget Fit
             </h2>
-            <span className="text-2xl font-extrabold text-[var(--duo-red)]">13%</span>
+            <span className={cn(
+              "text-2xl font-extrabold",
+              mockupData.budgetFit >= 70 ? "text-[var(--duo-green)]" :
+              mockupData.budgetFit >= 50 ? "text-[var(--duo-yellow)]" :
+              "text-[var(--duo-red)]"
+            )}>
+              {mockupData.budgetFit}%
+            </span>
           </div>
 
           {/* Progress Bar */}
@@ -345,25 +351,37 @@ export default function DashboardPage() {
               <div
                 className="duo-progress-fill"
                 style={{
-                  width: "13%",
-                  background: "var(--duo-red)",
+                  width: `${mockupData.budgetFit}%`,
+                  background: mockupData.budgetFit >= 70 ? "var(--duo-green)" :
+                             mockupData.budgetFit >= 50 ? "var(--duo-yellow)" :
+                             "var(--duo-red)",
                 }}
               />
             </div>
-            <div className="flex items-center gap-2 text-sm font-semibold text-[var(--duo-red)]">
-              <TrendingDown className="w-4 h-4" />
-              Significantly over budget
+            <div className={cn(
+              "flex items-center gap-2 text-sm font-semibold",
+              mockupData.budgetFit >= 70 ? "text-[var(--duo-green)]" :
+              mockupData.budgetFit >= 50 ? "text-[var(--duo-yellow)]" :
+              "text-[var(--duo-red)]"
+            )}>
+              {mockupData.budgetFit >= 70 ? (
+                <><TrendingUp className="w-4 h-4" /> Good budget alignment</>
+              ) : mockupData.budgetFit >= 50 ? (
+                <><TrendingUp className="w-4 h-4" /> Moderate budget fit</>
+              ) : (
+                <><TrendingDown className="w-4 h-4" /> Budget needs adjustment</>
+              )}
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 pt-2 border-t-2 border-border">
             <div>
               <p className="text-xs text-muted-foreground">Avg. Cost/Person</p>
-              <p className="text-lg font-extrabold">RM350</p>
+              <p className="text-lg font-extrabold">RM{mockupData.avgCost}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground">Avg. Budget Range</p>
-              <p className="text-lg font-extrabold">RM1,325 - RM2,625</p>
+              <p className="text-lg font-extrabold">{mockupData.budgetRange}</p>
             </div>
           </div>
         </motion.div>
@@ -376,17 +394,39 @@ export default function DashboardPage() {
           className="space-y-3"
         >
           <div className="flex items-center justify-between">
-            <h2 className="font-extrabold flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-[var(--duo-orange)]" />
-              Potential Conflicts
-            </h2>
+          <h2 className="font-extrabold flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-[var(--duo-yellow)]" />
+            Potential Conflicts
+          </h2>
 
             {/* Filter Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-                className="px-3 py-1.5 rounded-xl border-2 border-border text-sm font-bold flex items-center gap-2 hover:border-[var(--duo-blue)] transition-colors"
+                className={cn(
+                  "px-3 py-1.5 rounded-xl border-2 text-sm font-bold flex items-center gap-2 transition-colors",
+                  conflictFilter === "all"
+                    ? "border-border hover:border-[var(--duo-blue)]"
+                    : {
+                        "border-[var(--duo-red)] text-[var(--duo-red)] bg-[var(--duo-red)]/5":
+                          conflictFilter === "high",
+                        "border-[var(--duo-yellow)] text-[var(--duo-yellow)] bg-[var(--duo-yellow)]/5":
+                          conflictFilter === "medium",
+                        "border-[var(--duo-blue)] text-[var(--duo-blue)] bg-[var(--duo-blue)]/5":
+                          conflictFilter === "low",
+                      }
+                )}
               >
+                {conflictFilter !== "all" && (
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: filterOptions.find(
+                        (f) => f.value === conflictFilter
+                      )?.color,
+                    }}
+                  />
+                )}
                 {filterOptions.find((f) => f.value === conflictFilter)?.label}
                 <ChevronDown
                   className={cn(
@@ -409,11 +449,23 @@ export default function DashboardPage() {
                         setShowFilterDropdown(false);
                       }}
                       className={cn(
-                        "w-full px-4 py-2 text-left text-sm font-semibold hover:bg-muted transition-colors",
-                        conflictFilter === option.value &&
-                          "bg-[var(--duo-green)]/10 text-[var(--duo-green)]"
+                        "w-full px-4 py-2 text-left text-sm font-semibold hover:bg-muted transition-colors flex items-center gap-2",
+                        conflictFilter === option.value && {
+                          "bg-[var(--duo-green)]/10 text-[var(--duo-green)]":
+                            option.color === "var(--duo-green)",
+                          "bg-[var(--duo-red)]/10 text-[var(--duo-red)]":
+                            option.color === "var(--duo-red)",
+                          "bg-[var(--duo-yellow)]/10 text-[var(--duo-yellow)]":
+                            option.color === "var(--duo-yellow)",
+                          "bg-[var(--duo-blue)]/10 text-[var(--duo-blue)]":
+                            option.color === "var(--duo-blue)",
+                        }
                       )}
                     >
+                      <div
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: option.color }}
+                      />
                       {option.label}
                     </button>
                   ))}
@@ -569,5 +621,24 @@ export default function DashboardPage() {
         </motion.div>
       </div>
     </DuoResponsiveLayout>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={
+      <DuoResponsiveLayout showTopBar showBottomNav>
+        <TabBar />
+        <div className="max-w-lg mx-auto px-4 py-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-16 bg-muted rounded-xl" />
+            <div className="h-12 bg-muted rounded-xl" />
+            <div className="h-64 bg-muted rounded-xl" />
+          </div>
+        </div>
+      </DuoResponsiveLayout>
+    }>
+      <DashboardContent />
+    </Suspense>
   );
 }

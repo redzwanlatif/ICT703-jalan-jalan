@@ -106,7 +106,7 @@ const groups = [
     textClass: "text-violet-600 dark:text-violet-400",
     pages: [
       { path: "/informatics", name: "Informatics Onboarding", description: "Travel DNA setup" },
-      { path: "/informatics/dashboard", name: "My Travel Pulse", description: "Personal travel dashboard" },
+      { path: "/informatics/dashboard", name: "My Profile", description: "Personal travel dashboard" },
       { path: "/informatics/planner", name: "Trip Planner", description: "Plan upcoming trips" },
       { path: "/informatics/planner/1/expenses", name: "Expenses", description: "Trip expense tracking" },
       { path: "/informatics/insights", name: "Insights", description: "Spending analytics" },

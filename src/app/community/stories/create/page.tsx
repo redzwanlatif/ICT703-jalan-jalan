@@ -8,7 +8,6 @@ import Link from "next/link";
 import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
-import { AuthGuard } from "@/components/shared/auth-guard";
 import { cn } from "@/lib/utils";
 
 export default function CreateStoryPage() {
@@ -38,8 +37,7 @@ export default function CreateStoryPage() {
   };
 
   return (
-    <AuthGuard>
-      <DuoResponsiveLayout showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
         <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -232,7 +230,6 @@ export default function CreateStoryPage() {
           </div>
         </motion.section>
         </div>
-      </DuoResponsiveLayout>
-    </AuthGuard>
+    </DuoResponsiveLayout>
   );
 }

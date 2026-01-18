@@ -15,12 +15,12 @@ import {
   Sparkles,
   Settings,
   LogOut,
+  LogIn,
+  UserPlus,
   Menu,
   X,
   Bell,
-  Eye,
 } from "lucide-react";
-import { AccessibilityDialog } from "./accessibility-dialog";
 import { useGamification, getXpProgress } from "@/contexts/gamification-context";
 import { DuoTopStatsBar, DuoBottomNav } from "./duo-bottom-nav";
 import { cn } from "@/lib/utils";
@@ -37,6 +37,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 // ============================================================================
 // Navigation Items
@@ -92,7 +99,7 @@ export function DuoWebNav() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white dark:bg-gray-950 border-b-2 border-[#E5E5E5] dark:border-gray-800">
+    <header className="sticky top-0 z-[100] w-full bg-white dark:bg-gray-950 border-b-2 border-[#E5E5E5] dark:border-gray-800">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
@@ -198,20 +205,6 @@ export function DuoWebNav() {
               </TooltipContent>
             </Tooltip>
 
-            {/* Accessibility */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <AccessibilityDialog>
-                  <Button variant="ghost" size="icon" aria-label="Accessibility settings">
-                    <Eye className="w-5 h-5" />
-                  </Button>
-                </AccessibilityDialog>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Accessibility</p>
-              </TooltipContent>
-            </Tooltip>
-
             {/* Profile Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -226,28 +219,57 @@ export function DuoWebNav() {
                   <p className="font-bold">Traveler</p>
                   <p className="text-xs text-muted-foreground">{level.title}</p>
                 </div>
-                <DropdownMenuItem asChild>
-                  <Link href="/informatics/dashboard" className="cursor-pointer">
+                <Link href="/login">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Login
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/onboarding">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Sign Up
+                  </DropdownMenuItem>
+                </Link>
+                <DropdownMenuSeparator />
+                <Link href="/informatics/dashboard">
+                  <DropdownMenuItem className="cursor-pointer">
                     <User className="w-4 h-4 mr-2" />
                     My Profile
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/informatics/settings" className="cursor-pointer">
+                  </DropdownMenuItem>
+                </Link>
+                <Link href="/informatics/settings">
+                  <DropdownMenuItem className="cursor-pointer">
                     <Settings className="w-4 h-4 mr-2" />
                     Settings
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/login" className="cursor-pointer text-[var(--duo-red)]">
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Log Out
-                  </Link>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+
+          {/* Mobile User Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="lg:hidden">
+                <User className="w-5 h-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <Link href="/login">
+                <DropdownMenuItem className="cursor-pointer">
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Login
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/onboarding">
+                <DropdownMenuItem className="cursor-pointer">
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Sign Up
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Mobile Menu Button */}
           <Button
@@ -308,29 +330,6 @@ export function DuoWebNav() {
               })}
             </div>
 
-            {/* Accessibility */}
-            <div className="mt-4 pt-4 border-t">
-              <AccessibilityDialog>
-                <Button variant="ghost" className="w-full justify-start gap-3 font-semibold">
-                  <Eye className="w-5 h-5" />
-                  Accessibility
-                </Button>
-              </AccessibilityDialog>
-            </div>
-
-            {/* Mobile Auth */}
-            <div className="mt-4 pt-4 border-t space-y-2">
-              <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" className="w-full">
-                  Log In
-                </Button>
-              </Link>
-              <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full duo-btn">
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
           </nav>
         )}
       </div>
@@ -343,40 +342,42 @@ export function DuoWebNav() {
 // ============================================================================
 
 export function DuoWebFooter() {
+  const [showComingSoon, setShowComingSoon] = React.useState(false);
+
   const footerLinks = [
     {
       title: "Product",
       links: [
-        { href: "/predictions", label: "Trip Planner" },
-        { href: "/chat", label: "AI Assistant" },
-        { href: "/dashboard", label: "Dashboard" },
-        { href: "/community", label: "Community" },
+        { href: "/predictions", label: "Trip Planner", exists: true },
+        { href: "/chat", label: "AI Assistant", exists: true },
+        { href: "/dashboard", label: "Dashboard", exists: true },
+        { href: "/community", label: "Community", exists: true },
       ],
     },
     {
       title: "Company",
       links: [
-        { href: "/about", label: "About Us" },
-        { href: "/careers", label: "Careers" },
-        { href: "/press", label: "Press" },
-        { href: "/contact", label: "Contact" },
+        { href: "/about", label: "About Us", exists: false },
+        { href: "/careers", label: "Careers", exists: false },
+        { href: "/press", label: "Press", exists: false },
+        { href: "/contact", label: "Contact", exists: false },
       ],
     },
     {
       title: "Resources",
       links: [
-        { href: "/blog", label: "Blog" },
-        { href: "/help", label: "Help Center" },
-        { href: "/guides", label: "Travel Guides" },
-        { href: "/sitemap", label: "Sitemap" },
+        { href: "/blog", label: "Blog", exists: false },
+        { href: "/help", label: "Help Center", exists: false },
+        { href: "/guides", label: "Travel Guides", exists: false },
+        { href: "/sitemap", label: "Sitemap", exists: true },
       ],
     },
     {
       title: "Legal",
       links: [
-        { href: "/privacy", label: "Privacy" },
-        { href: "/terms", label: "Terms" },
-        { href: "/cookies", label: "Cookies" },
+        { href: "/privacy", label: "Privacy", exists: false },
+        { href: "/terms", label: "Terms", exists: false },
+        { href: "/cookies", label: "Cookies", exists: false },
       ],
     },
   ];
@@ -414,12 +415,21 @@ export function DuoWebFooter() {
               <ul className="space-y-2">
                 {group.links.map((link) => (
                   <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.exists ? (
+                      <Link
+                        href={link.href}
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => setShowComingSoon(true)}
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors text-left"
+                      >
+                        {link.label}
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -439,6 +449,31 @@ export function DuoWebFooter() {
           </div>
         </div>
       </div>
+
+      {/* Coming Soon Modal */}
+      <Dialog open={showComingSoon} onOpenChange={setShowComingSoon}>
+        <DialogContent className="max-w-xs sm:max-w-sm rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-center flex flex-col items-center gap-4 pt-4">
+              <div className="w-16 h-16 rounded-full bg-[var(--duo-yellow)]/10 flex items-center justify-center">
+                <Sparkles className="w-8 h-8 text-[var(--duo-yellow)]" />
+              </div>
+              <span className="text-xl font-extrabold">Coming Soon!</span>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="py-4 text-center">
+            <p className="text-muted-foreground">
+              We're working hard to bring you this feature. Stay tuned for updates!
+            </p>
+          </div>
+          <button
+            onClick={() => setShowComingSoon(false)}
+            className="duo-btn w-full mt-2"
+          >
+            Got it!
+          </button>
+        </DialogContent>
+      </Dialog>
     </footer>
   );
 }

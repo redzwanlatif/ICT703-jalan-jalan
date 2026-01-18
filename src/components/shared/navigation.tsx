@@ -18,9 +18,10 @@ import {
   ChevronDown,
   Bot,
   Compass,
-  Eye,
+  User,
+  LogIn,
+  UserPlus,
 } from "lucide-react";
-import { AccessibilityDialog } from "./accessibility-dialog";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
@@ -169,30 +170,38 @@ export function Navigation() {
 
           {/* Right side actions */}
           <div className="flex items-center gap-2">
-            {/* Accessibility Toggle */}
-            <AccessibilityDialog>
+            {/* User Dropdown - works on both mobile and desktop */}
+            <div className="relative" ref={dropdownRef}>
               <Button
                 variant="ghost"
                 size="icon"
-                aria-label="Accessibility settings"
+                onClick={() => setOpenDropdown(openDropdown === "user" ? null : "user")}
+                aria-label="User menu"
               >
-                <Eye className="size-5" />
+                <User className="size-5" />
               </Button>
-            </AccessibilityDialog>
 
-            <Link href="/login" className="hidden md:block">
-              <Button variant="ghost" size="sm">
-                Login
-              </Button>
-            </Link>
-            <Link href="/register" className="hidden md:block">
-              <Button
-                size="sm"
-                className="bg-jj-terracotta hover:bg-jj-terracotta-dark text-white border-0 shadow-[0_3px_0_var(--jj-terracotta-dark)]"
-              >
-                Sign Up
-              </Button>
-            </Link>
+              {openDropdown === "user" && (
+                <div className="absolute top-full right-0 mt-1 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg border py-2 z-50">
+                  <Link href="/login" onClick={() => setOpenDropdown(null)}>
+                    <div className="px-4 py-2 hover:bg-jj-cream dark:hover:bg-jj-brown/20 cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <LogIn className="size-4 text-muted-foreground" />
+                        <span className="text-sm font-medium">Login</span>
+                      </div>
+                    </div>
+                  </Link>
+                  <Link href="/onboarding" onClick={() => setOpenDropdown(null)}>
+                    <div className="px-4 py-2 hover:bg-jj-cream dark:hover:bg-jj-brown/20 cursor-pointer">
+                      <div className="flex items-center gap-3">
+                        <UserPlus className="size-4 text-muted-foreground" />
+                        <span className="text-sm font-medium">Sign Up</span>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
 
             {/* Mobile menu button */}
             <Button
@@ -268,19 +277,17 @@ export function Navigation() {
                 );
               })}
 
-              {/* Mobile accessibility and auth links */}
+              {/* Mobile auth links */}
               <div className="border-t mt-2 pt-2 flex flex-col gap-1">
-                <AccessibilityDialog>
-                  <Button variant="ghost" className="w-full justify-start gap-3">
-                    <Eye className="size-4" />
-                    Accessibility
-                  </Button>
-                </AccessibilityDialog>
                 <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                  <Button variant="ghost" className="w-full justify-start">Login</Button>
+                  <Button variant="ghost" className="w-full justify-start gap-3">
+                    <LogIn className="size-4" />
+                    Login
+                  </Button>
                 </Link>
-                <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
-                  <Button className="w-full bg-jj-terracotta hover:bg-jj-terracotta-dark text-white shadow-[0_3px_0_var(--jj-terracotta-dark)]">
+                <Link href="/onboarding" onClick={() => setMobileMenuOpen(false)}>
+                  <Button className="w-full bg-jj-terracotta hover:bg-jj-terracotta-dark text-white shadow-[0_3px_0_var(--jj-terracotta-dark)] gap-3">
+                    <UserPlus className="size-4" />
                     Sign Up
                   </Button>
                 </Link>

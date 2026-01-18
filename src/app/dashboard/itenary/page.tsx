@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -24,6 +25,12 @@ import TabBar from "@/components/ui/TabBar";
 import { cn } from "@/lib/utils";
 import { initialMembers, initialDestinations } from "@/data/seed";
 import Link from "next/link";
+import {
+  DashboardTripSelector,
+  useSelectedTrip,
+  getMockupDataForDestination,
+  DayItinerary,
+} from "@/components/dashboard/trip-selector";
 
 type ConflictIssue = {
   id: string;
@@ -95,10 +102,10 @@ function severityStyles(severity: ConflictIssue["severity"]) {
       };
     case "medium":
       return {
-        container: "border-[var(--duo-orange)] bg-[var(--duo-orange)]/10",
-        icon: "text-[var(--duo-orange)]",
-        badge: "bg-[var(--duo-orange)] text-white",
-        dot: "bg-[var(--duo-orange)]",
+        container: "border-[var(--duo-yellow)] bg-[var(--duo-yellow)]/10",
+        icon: "text-[var(--duo-yellow)]",
+        badge: "bg-[var(--duo-yellow)] text-white",
+        dot: "bg-[var(--duo-yellow)]",
       };
     case "low":
     default:
@@ -111,10 +118,23 @@ function severityStyles(severity: ConflictIssue["severity"]) {
   }
 }
 
-export default function ItineraryPage() {
+function ItineraryContent() {
+  const { selectedTrip } = useSelectedTrip();
   const [selectedDay, setSelectedDay] = React.useState("1");
   const [conflictFilter, setConflictFilter] = React.useState<string>("all");
   const [showFilterDropdown, setShowFilterDropdown] = React.useState(false);
+
+  // Get mockup data based on selected trip destination
+  const destination = selectedTrip?.destination || "Malaysia";
+  const mockupData = React.useMemo(() => {
+    return getMockupDataForDestination(destination);
+  }, [destination]);
+
+  // Get current day's itinerary
+  const currentDayItinerary: DayItinerary = React.useMemo(() => {
+    const dayKey = `day${selectedDay}` as keyof typeof mockupData.itinerary;
+    return mockupData.itinerary[dayKey];
+  }, [mockupData, selectedDay]);
 
   const [currentSelectedDestinations, setCurrentSelectedDestinations] =
     React.useState<Destination[]>(() => {
@@ -263,7 +283,7 @@ export default function ItineraryPage() {
   };
 
   const filterOptions = [
-    { value: "all", label: `All (${conflictIssues.length})` },
+    { value: "all", label: `All (${conflictIssues.length})`, color: "var(--duo-green)" },
     {
       value: "high",
       label: `High (${conflictCounts.high})`,
@@ -272,7 +292,7 @@ export default function ItineraryPage() {
     {
       value: "medium",
       label: `Medium (${conflictCounts.medium})`,
-      color: "var(--duo-orange)",
+      color: "var(--duo-yellow)",
     },
     {
       value: "low",
@@ -296,11 +316,16 @@ export default function ItineraryPage() {
           <div className="flex-1">
             <h1 className="text-2xl font-extrabold">Trip Itinerary</h1>
             <p className="text-muted-foreground flex items-center gap-1">
-              <Map className="w-4 h-4" />3 days •{" "}
-              {currentSelectedDestinations.length} destinations
+              <MapPin className="w-4 h-4" />
+              {selectedTrip?.destination || "Malaysia"} • {currentSelectedDestinations.length} destinations
             </p>
           </div>
         </motion.div>
+
+        {/* Trip Selector */}
+        <Suspense fallback={<div className="duo-card p-3 animate-pulse h-16" />}>
+          <DashboardTripSelector />
+        </Suspense>
 
         {/* Day Tabs */}
         <motion.div
@@ -334,25 +359,23 @@ export default function ItineraryPage() {
         >
           <div className="flex items-center gap-2">
             <MapPin className="w-5 h-5 text-[var(--duo-blue)]" />
-            <h3 className="font-extrabold">Jonker Street & A Famosa</h3>
+            <h3 className="font-extrabold">{currentDayItinerary.location}</h3>
           </div>
           <p className="text-sm text-muted-foreground">
-            Explore UNESCO World Heritage sites including A Famosa fortress, St.
-            Paul's Hill, and vibrant Jonker Street with its night market,
-            antiques, and authentic Peranakan cuisine
+            {currentDayItinerary.description}
           </p>
 
           <div className="flex flex-wrap gap-3 text-sm">
             <span className="flex items-center gap-1 text-muted-foreground">
               <Wallet className="w-4 h-4" />
-              RM600
+              {currentDayItinerary.cost}
             </span>
             <span className="flex items-center gap-1 text-muted-foreground">
               <Clock className="w-4 h-4" />1 day
             </span>
             <span className="flex items-center gap-1 text-muted-foreground">
               <CalendarDays className="w-4 h-4" />
-              CNY
+              Day {selectedDay}
             </span>
           </div>
 
@@ -360,19 +383,19 @@ export default function ItineraryPage() {
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Group Match</span>
-              <span className="font-bold text-[var(--duo-purple)]">47%</span>
+              <span className="font-bold text-[var(--duo-purple)]">{mockupData.budgetFit}%</span>
             </div>
             <div className="duo-progress-bar h-2">
               <div
                 className="duo-progress-fill"
-                style={{ width: "47%", background: "var(--duo-purple)" }}
+                style={{ width: `${mockupData.budgetFit}%`, background: "var(--duo-purple)" }}
               />
             </div>
           </div>
 
           {/* Interests */}
           <div className="flex flex-wrap gap-2">
-            {["Culture", "Food", "Shopping"].map((interest) => (
+            {currentDayItinerary.interests.map((interest) => (
               <span
                 key={interest}
                 className="px-3 py-1 rounded-full text-xs font-bold bg-[var(--duo-purple)]/10 text-[var(--duo-purple)] border-2 border-[var(--duo-purple)]/20"
@@ -389,7 +412,7 @@ export default function ItineraryPage() {
               Day {selectedDay} Activities
             </h4>
             <ul className="space-y-2">
-              {day1Activities.map((activity, index) => (
+              {currentDayItinerary.activities.map((activity, index) => (
                 <li
                   key={index}
                   className="flex items-start gap-2 text-sm text-muted-foreground"
@@ -411,7 +434,7 @@ export default function ItineraryPage() {
         >
           <div className="flex items-center justify-between">
             <h2 className="font-extrabold flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-[var(--duo-orange)]" />
+              <AlertTriangle className="w-5 h-5 text-[var(--duo-yellow)]" />
               Conflict Analysis
             </h2>
 
@@ -419,8 +442,30 @@ export default function ItineraryPage() {
             <div className="relative">
               <button
                 onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-                className="px-3 py-1.5 rounded-xl border-2 border-border text-sm font-bold flex items-center gap-2 hover:border-[var(--duo-blue)] transition-colors"
+                className={cn(
+                  "px-3 py-1.5 rounded-xl border-2 text-sm font-bold flex items-center gap-2 transition-colors",
+                  conflictFilter === "all"
+                    ? "border-border hover:border-[var(--duo-blue)]"
+                    : {
+                        "border-[var(--duo-red)] text-[var(--duo-red)] bg-[var(--duo-red)]/5":
+                          conflictFilter === "high",
+                        "border-[var(--duo-yellow)] text-[var(--duo-yellow)] bg-[var(--duo-yellow)]/5":
+                          conflictFilter === "medium",
+                        "border-[var(--duo-blue)] text-[var(--duo-blue)] bg-[var(--duo-blue)]/5":
+                          conflictFilter === "low",
+                      }
+                )}
               >
+                {conflictFilter !== "all" && (
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{
+                      backgroundColor: filterOptions.find(
+                        (f) => f.value === conflictFilter
+                      )?.color,
+                    }}
+                  />
+                )}
                 {filterOptions.find((f) => f.value === conflictFilter)?.label}
                 <ChevronDown
                   className={cn(
@@ -443,11 +488,23 @@ export default function ItineraryPage() {
                         setShowFilterDropdown(false);
                       }}
                       className={cn(
-                        "w-full px-4 py-2 text-left text-sm font-semibold hover:bg-muted transition-colors",
-                        conflictFilter === option.value &&
-                          "bg-[var(--duo-green)]/10 text-[var(--duo-green)]"
+                        "w-full px-4 py-2 text-left text-sm font-semibold hover:bg-muted transition-colors flex items-center gap-2",
+                        conflictFilter === option.value && {
+                          "bg-[var(--duo-green)]/10 text-[var(--duo-green)]":
+                            option.color === "var(--duo-green)",
+                          "bg-[var(--duo-red)]/10 text-[var(--duo-red)]":
+                            option.color === "var(--duo-red)",
+                          "bg-[var(--duo-yellow)]/10 text-[var(--duo-yellow)]":
+                            option.color === "var(--duo-yellow)",
+                          "bg-[var(--duo-blue)]/10 text-[var(--duo-blue)]":
+                            option.color === "var(--duo-blue)",
+                        }
                       )}
                     >
+                      <div
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: option.color }}
+                      />
                       {option.label}
                     </button>
                   ))}
@@ -468,10 +525,10 @@ export default function ItineraryPage() {
               <p className="text-xs text-muted-foreground">Budget</p>
             </div>
             <div className="duo-card p-3 text-center">
-              <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-[var(--duo-orange)]/10 flex items-center justify-center">
-                <AlertCircle className="w-4 h-4 text-[var(--duo-orange)]" />
+              <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-[var(--duo-yellow)]/10 flex items-center justify-center">
+                <AlertCircle className="w-4 h-4 text-[var(--duo-yellow)]" />
               </div>
-              <p className="text-xl font-extrabold text-[var(--duo-orange)]">
+              <p className="text-xl font-extrabold text-[var(--duo-yellow)]">
                 {conflictCounts.medium}
               </p>
               <p className="text-xs text-muted-foreground">Interest</p>
@@ -723,5 +780,24 @@ export default function ItineraryPage() {
         </motion.div>
       </div>
     </DuoResponsiveLayout>
+  );
+}
+
+export default function ItineraryPage() {
+  return (
+    <Suspense fallback={
+      <DuoResponsiveLayout showTopBar showBottomNav>
+        <TabBar />
+        <div className="max-w-lg mx-auto px-4 py-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-16 bg-muted rounded-xl" />
+            <div className="h-12 bg-muted rounded-xl" />
+            <div className="h-64 bg-muted rounded-xl" />
+          </div>
+        </div>
+      </DuoResponsiveLayout>
+    }>
+      <ItineraryContent />
+    </Suspense>
   );
 }

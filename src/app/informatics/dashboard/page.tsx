@@ -15,13 +15,14 @@ import {
   Settings,
   Target,
   Pencil,
+  Bot,
+  Wand2,
 } from "lucide-react";
 import Link from "next/link";
 import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DonutChart, WatchlistCard } from "@/components/informatics";
 import { useGamification } from "@/contexts/gamification-context";
-import { AuthGuard } from "@/components/shared/auth-guard";
 import { cn } from "@/lib/utils";
 
 const insights = [
@@ -105,8 +106,7 @@ export default function InformaticsDashboardPage() {
   }, [isPaused]);
 
   return (
-    <AuthGuard>
-      <DuoResponsiveLayout showTopBar showBottomNav>
+    <DuoResponsiveLayout showTopBar showBottomNav>
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -117,7 +117,7 @@ export default function InformaticsDashboardPage() {
           <DuoMascot mood="happy" size="sm" />
           <div className="flex-1">
             <p className="text-sm text-muted-foreground">Welcome back, Traveler</p>
-            <h1 className="text-2xl font-extrabold">My Travel Pulse</h1>
+            <h1 className="text-2xl font-extrabold">My Profile</h1>
           </div>
           <Link href="/informatics/settings">
             <button className="w-10 h-10 rounded-xl border-2 border-border flex items-center justify-center hover:bg-muted transition-colors">
@@ -315,20 +315,33 @@ export default function InformaticsDashboardPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.35 }}
-          className="grid grid-cols-2 gap-3"
+          className="space-y-3"
         >
           <Link href="/informatics/edit-dna">
             <button className="w-full duo-btn duo-btn-outline py-3">
               <Pencil className="w-5 h-5 mr-2" />
-              Edit Travel DNA
+              Edit Profile
             </button>
           </Link>
-          <Link href="/predictions">
-            <button className="w-full duo-btn py-3">
-              <Sparkles className="w-5 h-5 mr-2" />
-              Plan Trip
-            </button>
-          </Link>
+          <div className="space-y-2">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              Plan New Trip
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <Link href="/chat">
+                <button className="w-full duo-btn duo-btn-outline py-3">
+                  <Bot className="w-5 h-5 mr-2" />
+                  AI Chat
+                </button>
+              </Link>
+              <Link href="/predictions">
+                <button className="w-full duo-btn py-3">
+                  <Wand2 className="w-5 h-5 mr-2" />
+                  Wizard
+                </button>
+              </Link>
+            </div>
+          </div>
         </motion.div>
 
         {/* XP Hint */}
@@ -344,7 +357,6 @@ export default function InformaticsDashboardPage() {
           </span>
         </motion.div>
       </div>
-      </DuoResponsiveLayout>
-    </AuthGuard>
+    </DuoResponsiveLayout>
   );
 }

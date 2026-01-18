@@ -14,6 +14,8 @@ import {
   Flame,
   Heart,
   Sparkles,
+  LogIn,
+  UserPlus,
 } from "lucide-react";
 import { useGamification, getXpProgress } from "@/contexts/gamification-context";
 import { cn } from "@/lib/utils";
@@ -22,6 +24,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // ============================================================================
 // Navigation Items
@@ -111,7 +119,7 @@ export function DuoTopStatsBar() {
   const xpProgress = getXpProgress(xp, level);
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b-2 border-[#E5E5E5]">
+    <header className="sticky top-0 z-[100] bg-white border-b-2 border-[#E5E5E5]">
       <div className="flex items-center justify-between px-4 py-2 md:py-2 max-w-5xl mx-auto h-14 md:h-16">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 h-full">
@@ -170,20 +178,28 @@ export function DuoTopStatsBar() {
             </div>
           </div>
 
-          {/* Profile / Login */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link
-                href="/login"
-                className="w-9 h-9 rounded-full bg-[#E5E5E5] flex items-center justify-center hover:bg-[#D5D5D5] transition-colors"
-              >
+          {/* Profile / Login Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="w-9 h-9 rounded-full bg-[#E5E5E5] flex items-center justify-center hover:bg-[#D5D5D5] transition-colors">
                 <User className="w-5 h-5 text-[#777777]" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <Link href="/login">
+                <DropdownMenuItem className="cursor-pointer">
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Login
+                </DropdownMenuItem>
               </Link>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Login / Sign up</p>
-            </TooltipContent>
-          </Tooltip>
+              <Link href="/onboarding">
+                <DropdownMenuItem className="cursor-pointer">
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Sign Up
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

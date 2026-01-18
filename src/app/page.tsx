@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 import { useGamification } from "@/contexts/gamification-context";
-import { DuoResponsiveLayout } from "@/components/shared";
+import { DuoResponsiveLayout, LandingHero } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { StoryCard } from "@/components/community/story-card";
@@ -242,21 +242,26 @@ export default function WelcomePage() {
 
   return (
     <DuoResponsiveLayout showTopBar showBottomNav>
-      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
-        {/* Header */}
+      <div className="max-w-5xl mx-auto px-4 py-6">
+        {/* Hero Section */}
+        <LandingHero />
+
+        {/* Community Stories Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-4"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex items-center gap-4 pt-8 pb-6"
         >
           <DuoMascot mood="happy" size="sm" />
           <div className="flex-1">
-            <h1 className="text-2xl font-extrabold">Community Stories</h1>
-            <p className="text-muted-foreground">Discover travel experiences</p>
+            <h2 className="text-2xl font-extrabold">Community Stories</h2>
+            <p className="text-muted-foreground text-sm md:text-base">Discover travel experiences from our community</p>
           </div>
         </motion.div>
 
-        {/* Create Story CTA */}
+        <div className="space-y-8">
+          {/* Create Story CTA */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -320,12 +325,13 @@ export default function WelcomePage() {
           </span>
         </motion.div>
 
-        {/* Auth Prompt Modal */}
-        <AuthPromptModal
-          isOpen={showAuthPrompt}
-          onClose={() => setShowAuthPrompt(false)}
-          action={authAction}
-        />
+          {/* Auth Prompt Modal */}
+          <AuthPromptModal
+            isOpen={showAuthPrompt}
+            onClose={() => setShowAuthPrompt(false)}
+            action={authAction}
+          />
+        </div>
       </div>
     </DuoResponsiveLayout>
   );

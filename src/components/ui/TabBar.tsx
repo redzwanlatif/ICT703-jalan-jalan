@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { LayoutDashboard, Users, Map, Wallet } from "lucide-react";
@@ -19,16 +19,26 @@ const tabs = [
 
 const TabBar = ({ totalCost, memberCount }: TabBarProps) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const tripId = searchParams.get("tripId");
 
   const isActive = (href: string) => {
     return pathname === href;
+  };
+
+  // Build href with preserved tripId
+  const getHref = (baseHref: string) => {
+    if (tripId) {
+      return `${baseHref}?tripId=${tripId}`;
+    }
+    return baseHref;
   };
 
   const displayCost = totalCost ?? 1400;
   const costPerPerson = displayCost && memberCount ? displayCost / memberCount : 350;
 
   return (
-    <div className="sticky top-14 lg:top-16 z-40 bg-card border-b border-border shadow-sm">
+    <div className="sticky top-14 lg:top-16 z-[80] bg-card border-b border-border shadow-sm">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between gap-4 py-3">
           {/* Tabs */}
@@ -37,7 +47,7 @@ const TabBar = ({ totalCost, memberCount }: TabBarProps) => {
               const active = isActive(tab.href);
               const Icon = tab.icon;
               return (
-                <Link key={tab.id} href={tab.href}>
+                <Link key={tab.id} href={getHref(tab.href)}>
                   <motion.div
                     className={cn(
                       "relative px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 transition-all",

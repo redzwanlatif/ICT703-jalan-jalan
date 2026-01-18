@@ -94,7 +94,7 @@ const DashboardScreen = () => {
       <div className="px-6 pt-8 pb-4">
         <p className="text-muted-foreground text-sm">Welcome back, Traveler</p>
         <h1 className="font-display text-2xl font-bold text-foreground">
-          My Travel Pulse
+          My Profile
         </h1>
       </div>
 

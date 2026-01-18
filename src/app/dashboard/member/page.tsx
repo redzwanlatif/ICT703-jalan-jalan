@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Users,
@@ -20,9 +20,33 @@ import { GroupAggregate } from "@/components/members/GroupAggregate";
 import { PreferenceChart } from "@/components/members/PreferenceChart";
 import { IndividualMemberDetails } from "@/components/members/IndividualMemberDetails";
 import Link from "next/link";
+import { DashboardTripSelector, useSelectedTrip } from "@/components/dashboard/trip-selector";
 
-export default function MembersPage() {
-  const [members, setMembers] = useState<Member[]>(initialMembers);
+function MembersContent() {
+  const { selectedTrip } = useSelectedTrip();
+
+  // Convert trip members to Member type or use initialMembers as fallback
+  const tripMembers = useMemo(() => {
+    if (selectedTrip?.members && selectedTrip.members.length > 0) {
+      return selectedTrip.members.map((m, index) => ({
+        id: m.id || `member-${index}`,
+        name: m.name,
+        budgetMin: 500,
+        budgetMax: 2000,
+        interests: ["Culture", "Food", "Nature"],
+        seasons: ["CNY", "Raya"],
+        avatar: m.avatar,
+      })) as Member[];
+    }
+    return initialMembers;
+  }, [selectedTrip]);
+
+  const [members, setMembers] = useState<Member[]>(tripMembers);
+
+  // Update members when trip changes
+  useEffect(() => {
+    setMembers(tripMembers);
+  }, [tripMembers]);
   const [activeSection, setActiveSection] = useState<
     "overview" | "charts" | "details" | "cards"
   >("overview");
@@ -48,11 +72,16 @@ export default function MembersPage() {
           <div className="flex-1">
             <h1 className="text-2xl font-extrabold">Group Members</h1>
             <p className="text-muted-foreground flex items-center gap-1">
-              <Users className="w-4 h-4" />
-              {members.length} travelers
+              <MapPin className="w-4 h-4" />
+              {selectedTrip?.destination || "Malaysia"} • {members.length} travelers
             </p>
           </div>
         </motion.div>
+
+        {/* Trip Selector */}
+        <Suspense fallback={<div className="duo-card p-3 animate-pulse h-16" />}>
+          <DashboardTripSelector />
+        </Suspense>
 
         {/* Section Tabs */}
         <motion.div
@@ -193,5 +222,24 @@ export default function MembersPage() {
         </motion.div>
       </div>
     </DuoResponsiveLayout>
+  );
+}
+
+export default function MembersPage() {
+  return (
+    <Suspense fallback={
+      <DuoResponsiveLayout showTopBar showBottomNav>
+        <TabBar />
+        <div className="max-w-lg mx-auto px-4 py-6">
+          <div className="animate-pulse space-y-4">
+            <div className="h-16 bg-muted rounded-xl" />
+            <div className="h-12 bg-muted rounded-xl" />
+            <div className="h-64 bg-muted rounded-xl" />
+          </div>
+        </div>
+      </DuoResponsiveLayout>
+    }>
+      <MembersContent />
+    </Suspense>
   );
 }

@@ -65,7 +65,7 @@ export default function EditDNAPage() {
             <ChevronLeft className="w-5 h-5" />
           </button>
           <div className="flex-1">
-            <h1 className="text-2xl font-extrabold">Edit Travel DNA</h1>
+            <h1 className="text-2xl font-extrabold">Edit Profile</h1>
             <p className="text-muted-foreground text-sm">
               Update your travel preferences
             </p>

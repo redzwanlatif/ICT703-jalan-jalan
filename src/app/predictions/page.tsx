@@ -18,7 +18,6 @@ import { DuoResponsiveLayout } from "@/components/shared";
 import { DuoMascot } from "@/components/shared/duo-mascot";
 import { DuoButton } from "@/components/shared/duo-wizard-layout";
 import { useGamification } from "@/contexts/gamification-context";
-import { AuthGuard } from "@/components/shared/auth-guard";
 import { cn } from "@/lib/utils";
 
 const popularDestinations = [
@@ -64,8 +63,7 @@ export default function PredictionsPage() {
   };
 
   return (
-    <AuthGuard>
-      <DuoResponsiveLayout>
+    <DuoResponsiveLayout>
         <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <motion.div
@@ -303,7 +301,6 @@ export default function PredictionsPage() {
           </Link>
         </motion.div>
         </div>
-      </DuoResponsiveLayout>
-    </AuthGuard>
+    </DuoResponsiveLayout>
   );
 }

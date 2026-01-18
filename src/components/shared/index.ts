@@ -21,6 +21,9 @@ export {
   AnimatedBackground,
 } from "./page-layout";
 
+// Hero
+export { LandingHero } from "./landing-hero";
+
 // Player
 export { PlayerAvatar } from "./player-avatar";
 

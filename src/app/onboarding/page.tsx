@@ -101,9 +101,9 @@ function CreateAccountStep({
   onNext: () => void;
   onBack: () => void;
 }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState("John Traveler");
+  const [email, setEmail] = useState("traveler@example.com");
+  const [password, setPassword] = useState("password123");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
@@ -772,12 +772,12 @@ export default function OnboardingPage() {
   const router = useRouter();
   const { isFirstTime, onboardingStep, setOnboardingStep } = useGamification();
 
-  // Redirect if not first time
+  // Reset to welcome step when visiting onboarding page
   useEffect(() => {
-    if (!isFirstTime && onboardingStep === "complete") {
-      router.replace("/");
+    if (onboardingStep === "complete") {
+      setOnboardingStep("welcome");
     }
-  }, [isFirstTime, onboardingStep, router]);
+  }, []);
 
   const steps: Record<OnboardingStep, React.ReactNode> = {
     welcome: <WelcomeStep onNext={() => setOnboardingStep("create-account")} />,
