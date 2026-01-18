@@ -150,7 +150,10 @@ export default function ChatPage() {
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
+    // Only scroll to bottom when there are messages (not on initial load)
+    if (messages.length > 0) {
+      scrollToBottom();
+    }
   }, [messages, scrollToBottom]);
 
   const getTimestamp = () => {
