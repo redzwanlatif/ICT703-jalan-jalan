@@ -43,7 +43,7 @@ export function GroupAggregate({ members }: GroupAggregateProps) {
 
     return (
         <div className="bg-white rounded-xl border-1 border-purple-500 p-6">
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">Group Aggregate</h3>
+            <h3 className="text-lg font-bold mb-4 text-gray-900">Group Aggregate</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Average Budget */}

@@ -48,7 +48,8 @@ const CustomSeasonTooltip = ({ active, payload }: { active?: boolean; payload?: 
 };
 
 export function PreferenceChart({ members }: PreferenceChartProps) {
-    const [showPieLabels, setShowPieLabels] = useState(false);
+    // Always show pie labels
+    const showPieLabels = true;
 
     const renderInterestLabel = ({
         cx = 0,
@@ -124,15 +125,11 @@ export function PreferenceChart({ members }: PreferenceChartProps) {
 
     return (
         <div className="bg-white rounded-xl border-1 border-purple-500 p-6">
-            <h2 className="text-xl font-semibold mb-6">Group Preferences Overview</h2>
+            <h2 className="text-xl font-bold mb-6">Group Preferences Overview</h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Interest Distribution */}
-                <div
-                    className="px-8 py-4"
-                    onMouseEnter={() => setShowPieLabels(true)}
-                    onMouseLeave={() => setShowPieLabels(false)}
-                >
+                <div className="px-8 py-4">
                     <h3 className="text-sm font-medium text-gray-700 mb-4 text-center">
                         Interest Distribution
                     </h3>
@@ -152,15 +149,6 @@ export function PreferenceChart({ members }: PreferenceChartProps) {
                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>
-                            <Legend
-                                formatter={(value, entry) => {
-                                    const { color } = entry;
-                                    const item = pieData.find(d => d.name === value);
-                                    if (!item) return value;
-                                    const percentage = ((item.value / members.length) * 100).toFixed(0);
-                                    return <span style={{ color }}>{value} ({percentage}%)</span>;
-                                }}
-                            />
                         </PieChart>
                     </ResponsiveContainer>
                 </div>

@@ -323,10 +323,12 @@ function ItineraryContent() {
                   <span>/</span>
                   <span>Trip Planning</span>
                 </div>
-                <h1 className="text-3xl font-bold flex items-center gap-3">
-                  <MapPin className="size-8 text-emerald-600" />
-                  {destinationParam || trip.destination} Trip
-                </h1>
+                <header className="flex items-center gap-7 py-2">
+                  <div className="shrink-0 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 p-4 transition-transform duration-300 group-hover:scale-110">
+                    <MapPin className="size-8 text-white" strokeWidth={2} />
+                  </div>
+                  <h1 className="text-4xl font-bold text-slate-900">{destinationParam || trip.destination} Trip</h1>
+                </header>
                 <p className="text-muted-foreground mt-1">
                   {formatDate(trip.startDate)} - {formatDate(trip.endDate)} · {trip.days.length} days
                 </p>

@@ -24,6 +24,7 @@ import {
   Heart,
   Users,
   Wallet,
+  LayoutDashboard,
 } from "lucide-react"
 import { ConflictItem, SummaryStat, DashboardDestination } from "@/types"
 
@@ -172,53 +173,58 @@ const DashboardPage = () => {
     low: conflicts.filter((c) => c.severity === "low").length,
   }
 
+  const summaryIconColors = [
+    { icon: "text-blue-400", bg: "bg-blue-50" },    // Group Size
+    { icon: "text-green-400", bg: "bg-green-50" },  // Avg. Budget
+    { icon: "text-yellow-400", bg: "bg-yellow-50" }, // Preferred Seasons
+    { icon: "text-pink-400", bg: "bg-pink-50" },   // Common Interests
+    { icon: "text-violet-400", bg: "bg-violet-50" }  // Crowd Preference
+  ];
+
+  const summaryIconGradients = [
+    "bg-gradient-to-br from-purple-400 to-purple-700",
+    "bg-gradient-to-br from-green-400 to-green-600",
+    "bg-gradient-to-br from-yellow-300 to-yellow-500",
+    "bg-gradient-to-br from-pink-400 to-pink-600",
+    "bg-gradient-to-br from-blue-400 to-blue-700"
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-violet-50 to-slate-100 text-slate-900">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom, #f5f3ff 0%, #F1F5F9 20%)' }}>
       <div className="sticky top-0 z-20">
         <Navigation />
         <TabBar />
       </div>
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-2">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-0">
         <div className="flex flex-col gap-6">
-          <header className="flex items-center gap-4 py-2 ">
-            <div className="shrink-0 rounded-full bg-violet-100 p-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="size-6 text-violet-700"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 3v11.25m0 0c0 3.727 3.023 6.75 6.75 6.75s6.75-3.023 6.75-6.75m-13.5 0h13.5m0 0V3m0 11.25c0 3.727-3.023 6.75-6.75 6.75s-6.75-3.023-6.75-6.75"
-                />
-              </svg>
+          <header className="flex items-center gap-7 pt-15 mb-2">
+            <div className="shrink-0 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 p-4 transition-transform duration-300 group-hover:scale-110">
+              <LayoutDashboard className="size-8 text-white" strokeWidth={2} />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">My Dashboard</h1>
+            <h1 className="text-3xl font-bold text-slate-900">My Dashboard</h1>
           </header>
 
           {/* Group Summary */}
-          <Card className="border-[#AD46FF] bg-white">
-            <CardHeader className="pb-2">
+          <Card className="border-[#AD46FF] bg-white mt-0">
+            <CardHeader className="pb-0">
               <CardTitle className="text-xl font-bold">Group Summary</CardTitle>
             </CardHeader>
             <CardContent className="pt-2">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                {summary.map((s) => (
+                {summary.map((s, i) => (
                   <div
                     key={s.label}
                     className="flex items-start gap-3 rounded-xl bg-white"
                   >
-                    <div className="shrink-0 rounded-xl bg-violet-100 p-2">
-                      {s.icon}
+                    <div className={`shrink-0 rounded-2xl ${summaryIconGradients[i]} p-4 flex items-center justify-center`}>
+                      {React.isValidElement(s.icon)
+                        ? React.cloneElement(s.icon, { className: "size-10 text-white" })
+                        : null}
                     </div>
                     <div className="min-w-0">
                       <div className="text-sm text-slate-600">{s.label}</div>
-                      <div className="mt-1 text-base font-bold text-slate-900">
+                      <div className="mt-1 text-xl font-bold text-slate-900">
                         {s.value}
                       </div>
                       <div className="text-xs text-slate-500">{s.sub}</div>
@@ -283,31 +289,45 @@ const DashboardPage = () => {
                 <CardTitle className="text-xl font-bold">
                   Potential Conflicts
                 </CardTitle>
+                <div className="flex items-center gap-3 mt-2">
+                  <span className="font-semibold text-slate-800">Conflict Level:</span>
+                  <Pill dotClassName="bg-red-500">High</Pill>
+                  <Pill dotClassName="bg-yellow-400">Medium</Pill>
+                  <Pill dotClassName="bg-blue-500">Low</Pill>
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <button
+                    className={`px-4 py-1 rounded-full font-semibold text-sm border transition-all duration-150 
+                      ${conflictFilter === "all" ? "bg-violet-500 text-white" : "bg-white text-slate-700 border-slate-200"}`}
+                    onClick={() => setConflictFilter("all")}
+                  >
+                    All ({conflicts.length})
+                  </button>
+                  <button
+                    className={`px-4 py-1 rounded-full font-semibold text-sm border transition-all duration-150 
+                      ${conflictFilter === "high" ? "bg-red-500 text-white" : "bg-white text-slate-700 border-slate-200"}`}
+                    onClick={() => setConflictFilter("high")}
+                  >
+                    High ({conflictCounts.high})
+                  </button>
+                  <button
+                    className={`px-4 py-1 rounded-full font-semibold text-sm border transition-all duration-150 
+                      ${conflictFilter === "medium" ? "bg-yellow-500 text-white" : "bg-white text-slate-700 border-slate-200"}`}
+                    onClick={() => setConflictFilter("medium")}
+                  >
+                    Medium ({conflictCounts.medium})
+                  </button>
+                  <button
+                    className={`px-4 py-1 rounded-full font-semibold text-sm border transition-all duration-150 
+                      ${conflictFilter === "low" ? "bg-blue-500 text-white" : "bg-white text-slate-700 border-slate-200"}`}
+                    onClick={() => setConflictFilter("low")}
+                  >
+                    Low ({conflictCounts.low})
+                  </button>
+                </div>
               </CardHeader>
               <CardContent className="pt-1">
-                <Select value={conflictFilter} onValueChange={setConflictFilter}>
-                  <SelectTrigger 
-                    className={`w-[180px] ${
-                      conflictFilter === "high" 
-                        ? "border-red-500 text-red-700 bg-red-50" 
-                        : conflictFilter === "medium"
-                        ? "border-yellow-500 text-yellow-700 bg-yellow-50"
-                        : conflictFilter === "low"
-                        ? "border-blue-500 text-blue-700 bg-blue-50"
-                        : "border-violet-300 text-violet-700 bg-violet-50"
-                    }`}
-                  >
-                    <SelectValue placeholder="Filter" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All ({conflicts.length})</SelectItem>
-                    <SelectItem value="high">High ({conflictCounts.high})</SelectItem>
-                    <SelectItem value="medium">Medium ({conflictCounts.medium})</SelectItem>
-                    <SelectItem value="low">Low ({conflictCounts.low})</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <div className="mt-4 space-y-2">
+                <div className="mt-4 max-h-[260px] overflow-y-auto pr-2 flex flex-col gap-2">
                   {filteredConflicts.map((c, idx) => {
                     const s = severityStyles(c.severity)
                     return (
@@ -316,7 +336,7 @@ const DashboardPage = () => {
                         className={`flex items-start gap-3 rounded-xl border p-3 ${s.container}`}
                       >
                         <div className="mt-0.5 rounded-md bg-white/60 p-1">
-                          <Coins className={`size-4 ${s.icon}`} />
+                          <AlertTriangle className={`size-4 ${s.icon}`} />
                         </div>
                         <div className="min-w-0">
                           <div className={`text-sm font-semibold ${s.text}`}>
@@ -394,6 +414,8 @@ const DashboardPage = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Removed floating Total Trip Cost section as requested */}
         </div>
       </main>
     </div>

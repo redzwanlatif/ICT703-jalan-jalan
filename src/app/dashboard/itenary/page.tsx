@@ -277,7 +277,7 @@ export default function ItineraryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-violet-50 to-slate-100">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(to bottom, #f5f3ff 0%, #F1F5F9 20%)' }}>
       <div className="sticky top-0 z-20">
         <Navigation />
         <TabBar totalCost={totalCost} memberCount={memberCount} />
@@ -285,25 +285,12 @@ export default function ItineraryPage() {
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-2">
 
-        <header className="flex items-center gap-4 py-4">
-            <div className="shrink-0 rounded-full bg-violet-100 p-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="size-6 text-violet-700"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 3v11.25m0 0c0 3.727 3.023 6.75 6.75 6.75s6.75-3.023 6.75-6.75m-13.5 0h13.5m0 0V3m0 11.25c0 3.727-3.023 6.75-6.75 6.75s-6.75-3.023-6.75-6.75"
-                />
-              </svg>
-            </div>
-            <h1 className="text-2xl font-bold text-slate-900">My Itinerary</h1>
-          </header>
+        <header className="flex items-center gap-7 pt-13 mb-8">
+          <div className="shrink-0 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 p-4 transition-transform duration-300 group-hover:scale-110">
+            <MapPin className="size-8 text-white" strokeWidth={2} />
+          </div>
+          <h1 className="text-3xl font-bold text-slate-900">My Itinerary</h1>
+        </header>
 
 
         <div className="flex flex-col gap-6">
@@ -328,19 +315,19 @@ export default function ItineraryPage() {
                   <TabsList className="bg-slate-100 h-auto p-1 flex-col lg:flex-col">
                     <TabsTrigger
                       value="1"
-                      className="w-full lg:w-auto data-[state=active]:bg-white"
+                      className="w-full lg:w-auto data-[state=active]:bg-violet-500 data-[state=active]:text-white"
                     >
                       Day 1
                     </TabsTrigger>
                     <TabsTrigger
                       value="2"
-                      className="w-full lg:w-auto data-[state=active]:bg-white"
+                      className="w-full lg:w-auto data-[state=active]:bg-violet-500 data-[state=active]:text-white"
                     >
                       Day 2
                     </TabsTrigger>
                     <TabsTrigger
                       value="3"
-                      className="w-full lg:w-auto data-[state=active]:bg-white"
+                      className="w-full lg:w-auto data-[state=active]:bg-violet-500 data-[state=active]:text-white"
                     >
                       Day 3
                     </TabsTrigger>
@@ -455,27 +442,12 @@ export default function ItineraryPage() {
             <CardContent className="pt-1">
               <div className="space-y-6">
                 {/* Conflict Filter Dropdown */}
-                <Select value={conflictFilter} onValueChange={setConflictFilter}>
-                  <SelectTrigger 
-                    className={`w-[180px] ${
-                      conflictFilter === "high" 
-                        ? "border-red-500 text-red-700 bg-red-50" 
-                        : conflictFilter === "medium"
-                        ? "border-yellow-500 text-yellow-700 bg-yellow-50"
-                        : conflictFilter === "low"
-                        ? "border-blue-500 text-blue-700 bg-blue-50"
-                        : "border-violet-300 text-violet-700 bg-violet-50"
-                    }`}
-                  >
-                    <SelectValue placeholder="Filter" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All ({conflictIssues.length})</SelectItem>
-                    <SelectItem value="high">High ({conflictCounts.high})</SelectItem>
-                    <SelectItem value="medium">Medium ({conflictCounts.medium})</SelectItem>
-                    <SelectItem value="low">Low ({conflictCounts.low})</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center gap-4 mb-2">
+                  <span className="font-semibold text-slate-800">Conflict Level:</span>
+                  <span className="inline-flex items-center gap-1 text-sm"><span className="size-3 rounded-full bg-red-500 inline-block" /> High</span>
+                  <span className="inline-flex items-center gap-1 text-sm"><span className="size-3 rounded-full bg-yellow-400 inline-block" /> Medium</span>
+                  <span className="inline-flex items-center gap-1 text-sm"><span className="size-3 rounded-full bg-blue-500 inline-block" /> Low</span>
+                </div>
 
                 {/* Conflict Summary */}
                 <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
@@ -522,16 +494,57 @@ export default function ItineraryPage() {
                   <h3 className="text-base font-semibold text-slate-900 mb-4">
                     Detailed Issues:
                   </h3>
-                  <div className="space-y-2">
-                    {filteredConflicts.map((issue) => (
-                      <div
-                        key={issue.id}
-                        className={`p-3 rounded-xl border ${getSeverityColor(issue.severity)}`}
-                      >
-                        <p className="text-sm font-medium">{issue.member}</p>
-                        <p className="text-xs mt-1">{issue.description}</p>
-                      </div>
-                    ))}
+                  <div className="flex gap-2 mb-4 flex-wrap">
+                    <button
+                      className={`px-4 py-1 rounded-full font-semibold text-sm border transition-all duration-150 ${conflictFilter === "all" ? "bg-violet-500 text-white" : "bg-white text-slate-700 border-slate-200"}`}
+                      onClick={() => setConflictFilter("all")}
+                    >
+                      All ({conflictIssues.length})
+                    </button>
+                    <button
+                      className={`px-4 py-1 rounded-full font-semibold text-sm border transition-all duration-150 ${conflictFilter === "high" ? "bg-red-500 text-white" : "bg-white text-slate-700 border-slate-200"}`}
+                      onClick={() => setConflictFilter("high")}
+                    >
+                      High ({conflictCounts.high})
+                    </button>
+                    <button
+                      className={`px-4 py-1 rounded-full font-semibold text-sm border transition-all duration-150 ${conflictFilter === "medium" ? "bg-yellow-500 text-white" : "bg-white text-slate-700 border-slate-200"}`}
+                      onClick={() => setConflictFilter("medium")}
+                    >
+                      Medium ({conflictCounts.medium})
+                    </button>
+                    <button
+                      className={`px-4 py-1 rounded-full font-semibold text-sm border transition-all duration-150 ${conflictFilter === "low" ? "bg-blue-500 text-white" : "bg-white text-slate-700 border-slate-200"}`}
+                      onClick={() => setConflictFilter("low")}
+                    >
+                      Low ({conflictCounts.low})
+                    </button>
+                  </div>
+                  <div className="max-h-[260px] overflow-y-auto flex flex-col gap-2">
+                    {filteredConflicts.map((issue) => {
+                      const s = getSeverityColor(issue.severity);
+                      let bg = "";
+                      let border = "";
+                      if (issue.severity === "high") {
+                        bg = "bg-red-50";
+                        border = "border-red-200";
+                      } else if (issue.severity === "medium") {
+                        bg = "bg-yellow-50";
+                        border = "border-yellow-200";
+                      } else if (issue.severity === "low") {
+                        bg = "bg-blue-50";
+                        border = "border-blue-200";
+                      }
+                      return (
+                        <div
+                          key={issue.id}
+                          className={`p-3 rounded-xl border ${bg} ${border}`}
+                        >
+                          <p className="text-sm font-medium">{issue.member}</p>
+                          <p className="text-xs mt-1">{issue.description}</p>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 

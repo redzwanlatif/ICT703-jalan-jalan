@@ -15,7 +15,7 @@ export function IndividualMemberDetails({ members }: IndividualMemberDetailsProp
 
     return (
         <div className="bg-white rounded-xl border-1 border-purple-500 p-6">
-            <h3 className="text-lg font-semibold mb-4 text-gray-900">Individual Member Details</h3>
+            <h3 className="text-lg font-bold mb-4 text-gray-900">Individual Member Details</h3>
 
             <div className="overflow-x-auto">
                 <table className="w-full">
