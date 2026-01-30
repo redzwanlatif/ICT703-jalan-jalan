@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 type GroupNumber = 1 | 2 | 3 | 4 | 5;
@@ -38,28 +39,44 @@ const groupConfig: Record<GroupNumber, { name: string; color: string; bg: string
 };
 
 export function GroupLabel({ group, className }: GroupLabelProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
   const config = groupConfig[group];
 
   return (
     <div
       className={cn(
-        "fixed bottom-4 right-4 z-50 flex items-center gap-2 px-3 py-2 rounded-full border shadow-lg backdrop-blur-sm",
+        "fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-50 flex items-center gap-2 rounded-full border shadow-lg backdrop-blur-sm select-none cursor-pointer",
+        "transition-all duration-300 ease-out",
+        isExpanded ? "px-3 py-2" : "p-1.5",
         config.bg,
         className
       )}
+      onClick={() => setIsExpanded(!isExpanded)}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
     >
       <div
         className={cn(
-          "flex items-center justify-center size-6 rounded-full text-xs font-bold",
+          "flex items-center justify-center rounded-full font-bold shrink-0",
           "bg-white dark:bg-gray-800 shadow-sm",
+          "size-6 text-xs",
           config.color
         )}
       >
         {group}
       </div>
-      <span className={cn("text-sm font-medium", config.color)}>
-        Group {group}: {config.name}
-      </span>
+
+      {/* Expandable text - works on all screen sizes */}
+      <div
+        className={cn(
+          "overflow-hidden transition-all duration-300 ease-out whitespace-nowrap",
+          isExpanded ? "max-w-[280px] opacity-100" : "max-w-0 opacity-0"
+        )}
+      >
+        <span className={cn("text-sm font-medium pr-1", config.color)}>
+          Group {group}: {config.name}
+        </span>
+      </div>
     </div>
   );
 }

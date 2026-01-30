@@ -1,0 +1,698 @@
+{
+  "group_id": "group-2",
+  "created_at": "2026-01-30 03:22:24",
+  "timestamp": 1769743344,
+  "trip_details": {
+    "destination": "Melaka",
+    "start_date": "2026-02-01",
+    "end_date": "2026-02-04"
+  },
+  "travelers": [
+    {
+      "name": "Test",
+      "gender": "male",
+      "preferences": {
+        "travelStyle": "balanced",
+        "crowdTolerance": "avoid-crowd",
+        "preferredSeasons": [
+          "chinese-new-year",
+          "hari-raya-haji"
+        ],
+        "safetyOptions": {
+          "avoidLateNight": true,
+          "preferWellLit": true,
+          "verifiedTransport": true
+        },
+        "budgetMin": "10",
+        "budgetMax": "1000",
+        "notifications": {
+          "crowd": true,
+          "weather": true,
+          "price": true,
+          "safety": true
+        },
+        "travelerBasedPreferences": {
+          "groupType": "",
+          "specialNeeds": [],
+          "activityPreferences": []
+        }
+      }
+    },
+    {
+      "name": "Test B",
+      "gender": "female",
+      "preferences": {
+        "travelStyle": "balanced",
+        "crowdTolerance": "avoid-crowd",
+        "preferredSeasons": [
+          "christmas",
+          "malaysia-day",
+          "merdeka"
+        ],
+        "safetyOptions": {
+          "avoidLateNight": true,
+          "preferWellLit": true,
+          "verifiedTransport": true
+        },
+        "budgetMin": "20",
+        "budgetMax": "2500",
+        "notifications": {
+          "crowd": true,
+          "weather": true,
+          "price": true,
+          "safety": true
+        },
+        "travelerBasedPreferences": {
+          "groupType": "",
+          "specialNeeds": [],
+          "activityPreferences": []
+        }
+      }
+    }
+  ],
+  "generated_plan": {
+    "summary": {
+      "destination": "Melaka",
+      "duration": "4 days",
+      "travelers": 2,
+      "dateRange": "2026-02-01 to 2026-02-04",
+      "groupBudget": "RM 20 - RM 1000",
+      "highlights": [
+        "Historical sites",
+        "Cultural cuisine",
+        "River cruise"
+      ]
+    },
+    "plans": {
+      "Budget Friendly": {
+        "pricePerPerson": "RM 300",
+        "description": "Affordable attractions and dining options.",
+        "crowdLevel": "Medium Crowd",
+        "keyFeatures": [
+          "Local food stalls",
+          "Free walking tours",
+          "Budget accommodations",
+          "Public transport access"
+        ],
+        "benefits": [
+          "Save money on meals",
+          "Explore on foot",
+          "Visit free sites",
+          "Enjoy local culture"
+        ],
+        "bestWindow": {
+          "optimalPeriod": "2026-02-01 to 2026-02-04",
+          "priceAdvantage": "20% lower",
+          "priceDirection": "lower",
+          "crowdLevel": "Medium"
+        },
+        "analytics": {
+          "weather": {
+            "temperature": "28-32°C",
+            "condition": "Sunny",
+            "icon": "sun",
+            "rainChance": 30,
+            "humidity": 75,
+            "summary": "Warm and sunny weather."
+          },
+          "priceIndex": {
+            "percentChange": -10,
+            "trend": "down",
+            "hotels": -12,
+            "flights": -8,
+            "activities": -5,
+            "summary": "Prices declining for bookings."
+          },
+          "hotelOccupancy": {
+            "percentage": 65,
+            "level": "Medium",
+            "summary": "Moderate hotel occupancy rate."
+          },
+          "crowdLevel": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 15
+              },
+              {
+                "time": "8am",
+                "level": 35
+              },
+              {
+                "time": "10am",
+                "level": 55
+              },
+              {
+                "time": "12pm",
+                "level": 75
+              },
+              {
+                "time": "2pm",
+                "level": 70
+              },
+              {
+                "time": "4pm",
+                "level": 60
+              },
+              {
+                "time": "6pm",
+                "level": 45
+              },
+              {
+                "time": "9pm",
+                "level": 25
+              }
+            ],
+            "peakTime": "11am-2pm",
+            "summary": "Crowded during midday hours."
+          },
+          "traffic": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 20
+              },
+              {
+                "time": "8am",
+                "level": 75
+              },
+              {
+                "time": "10am",
+                "level": 45
+              },
+              {
+                "time": "12pm",
+                "level": 50
+              },
+              {
+                "time": "2pm",
+                "level": 40
+              },
+              {
+                "time": "4pm",
+                "level": 55
+              },
+              {
+                "time": "6pm",
+                "level": 80
+              },
+              {
+                "time": "9pm",
+                "level": 30
+              }
+            ],
+            "peakDelay": "15-25 min",
+            "summary": "Traffic peaks in evening hours."
+          }
+        },
+        "sustainability": {
+          "waterUsage": {
+            "value": 50,
+            "level": "Medium"
+          },
+          "wasteGeneration": {
+            "value": 40,
+            "level": "Medium"
+          },
+          "energyConsumption": {
+            "value": 55,
+            "level": "Medium"
+          },
+          "localBusinessSupport": "High",
+          "infrastructurePressure": "Medium",
+          "culturalPreservation": "Positive"
+        },
+        "alerts": {
+          "crowd": [
+            {
+              "title": "High crowd expected",
+              "location": "Jonker Street",
+              "time": "Evenings",
+              "level": "HIGH",
+              "levelType": "warning",
+              "description": "Expect large crowds during weekends.",
+              "suggestion": "Visit early morning instead."
+            }
+          ],
+          "weather": [
+            {
+              "title": "Rain expected",
+              "location": "Melaka River",
+              "time": "Afternoons",
+              "level": "WARNING",
+              "levelType": "warning",
+              "description": "Carry an umbrella for rain.",
+              "suggestion": "Plan indoor activities."
+            }
+          ],
+          "price": [
+            {
+              "title": "Dining deals available",
+              "location": "Chinatown",
+              "time": "Lunch hours",
+              "level": "DEAL",
+              "levelType": "success",
+              "description": "Enjoy discounts at local eateries.",
+              "suggestion": "Try street food stalls."
+            }
+          ],
+          "safety": [
+            {
+              "title": "Exercise caution",
+              "location": "Little India",
+              "time": "Nighttime",
+              "level": "CAUTION",
+              "levelType": "warning",
+              "description": "Stay alert in crowded areas.",
+              "suggestion": "Travel in groups."
+            }
+          ]
+        },
+        "suggestions": [
+          {
+            "title": "Local food tour",
+            "description": "Explore Melaka's culinary delights."
+          },
+          {
+            "title": "Visit museums",
+            "description": "Learn about Melaka's history."
+          },
+          {
+            "title": "River cruise",
+            "description": "Enjoy scenic views on water."
+          },
+          {
+            "title": "Street performances",
+            "description": "Experience local culture nightly."
+          }
+        ]
+      },
+      "Balanced Explorer": {
+        "pricePerPerson": "RM 600",
+        "description": "Mix of adventure and relaxation.",
+        "crowdLevel": "Medium Crowd",
+        "keyFeatures": [
+          "Heritage sites",
+          "Shopping experiences",
+          "Local dining",
+          "Night markets"
+        ],
+        "benefits": [
+          "Explore rich history",
+          "Taste diverse cuisines",
+          "Relax in parks",
+          "Shop for souvenirs"
+        ],
+        "bestWindow": {
+          "optimalPeriod": "2026-02-01 to 2026-02-04",
+          "priceAdvantage": "10% higher",
+          "priceDirection": "higher",
+          "crowdLevel": "Medium"
+        },
+        "analytics": {
+          "weather": {
+            "temperature": "28-32°C",
+            "condition": "Sunny",
+            "icon": "sun",
+            "rainChance": 30,
+            "humidity": 75,
+            "summary": "Pleasant and sunny conditions."
+          },
+          "priceIndex": {
+            "percentChange": -5,
+            "trend": "stable",
+            "hotels": -5,
+            "flights": -5,
+            "activities": -5,
+            "summary": "Prices remain steady overall."
+          },
+          "hotelOccupancy": {
+            "percentage": 70,
+            "level": "Medium",
+            "summary": "Moderate occupancy in hotels."
+          },
+          "crowdLevel": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 15
+              },
+              {
+                "time": "8am",
+                "level": 30
+              },
+              {
+                "time": "10am",
+                "level": 60
+              },
+              {
+                "time": "12pm",
+                "level": 80
+              },
+              {
+                "time": "2pm",
+                "level": 75
+              },
+              {
+                "time": "4pm",
+                "level": 50
+              },
+              {
+                "time": "6pm",
+                "level": 40
+              },
+              {
+                "time": "9pm",
+                "level": 20
+              }
+            ],
+            "peakTime": "12pm-2pm",
+            "summary": "Busy during lunch hours."
+          },
+          "traffic": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 20
+              },
+              {
+                "time": "8am",
+                "level": 60
+              },
+              {
+                "time": "10am",
+                "level": 50
+              },
+              {
+                "time": "12pm",
+                "level": 40
+              },
+              {
+                "time": "2pm",
+                "level": 30
+              },
+              {
+                "time": "4pm",
+                "level": 50
+              },
+              {
+                "time": "6pm",
+                "level": 70
+              },
+              {
+                "time": "9pm",
+                "level": 25
+              }
+            ],
+            "peakDelay": "10-20 min",
+            "summary": "Traffic manageable during daytime."
+          }
+        },
+        "sustainability": {
+          "waterUsage": {
+            "value": 60,
+            "level": "Medium"
+          },
+          "wasteGeneration": {
+            "value": 50,
+            "level": "Medium"
+          },
+          "energyConsumption": {
+            "value": 60,
+            "level": "Medium"
+          },
+          "localBusinessSupport": "Medium",
+          "infrastructurePressure": "Medium",
+          "culturalPreservation": "Positive"
+        },
+        "alerts": {
+          "crowd": [
+            {
+              "title": "Medium crowd expected",
+              "location": "A Famosa",
+              "time": "Afternoons",
+              "level": "MEDIUM",
+              "levelType": "warning",
+              "description": "Expect visitors during peak hours.",
+              "suggestion": "Visit early in the morning."
+            }
+          ],
+          "weather": [
+            {
+              "title": "Heat advisory",
+              "location": "Melaka",
+              "time": "Midday",
+              "level": "INFO",
+              "levelType": "info",
+              "description": "Stay hydrated during outdoor activities.",
+              "suggestion": "Carry water bottles."
+            }
+          ],
+          "price": [
+            {
+              "title": "Attraction deals available",
+              "location": "Melaka Sultanate Palace",
+              "time": "During lunch",
+              "level": "DEAL",
+              "levelType": "success",
+              "description": "Discounted tickets for afternoon visits.",
+              "suggestion": "Plan your visit accordingly."
+            }
+          ],
+          "safety": [
+            {
+              "title": "Stay cautious",
+              "location": "Jonker Walk",
+              "time": "Evenings",
+              "level": "CAUTION",
+              "levelType": "warning",
+              "description": "Beware of pickpockets in crowds.",
+              "suggestion": "Keep belongings secure."
+            }
+          ]
+        },
+        "suggestions": [
+          {
+            "title": "Heritage walk",
+            "description": "Discover Melaka's rich history."
+          },
+          {
+            "title": "Cultural performances",
+            "description": "Experience local traditions."
+          },
+          {
+            "title": "Shopping spree",
+            "description": "Find unique souvenirs."
+          },
+          {
+            "title": "Relax at parks",
+            "description": "Enjoy nature within city."
+          }
+        ]
+      },
+      "Premium Experience": {
+        "pricePerPerson": "RM 900",
+        "description": "Luxury accommodations and exclusive experiences.",
+        "crowdLevel": "Low Crowd",
+        "keyFeatures": [
+          "Fine dining",
+          "Private tours",
+          "Spa services",
+          "Luxury hotels"
+        ],
+        "benefits": [
+          "Indulge in comfort",
+          "Personalized experiences",
+          "Exclusive access",
+          "Relax and unwind"
+        ],
+        "bestWindow": {
+          "optimalPeriod": "2026-02-01 to 2026-02-04",
+          "priceAdvantage": "5% higher",
+          "priceDirection": "higher",
+          "crowdLevel": "Low"
+        },
+        "analytics": {
+          "weather": {
+            "temperature": "28-32°C",
+            "condition": "Sunny",
+            "icon": "sun",
+            "rainChance": 30,
+            "humidity": 75,
+            "summary": "Ideal weather for outdoor activities."
+          },
+          "priceIndex": {
+            "percentChange": -5,
+            "trend": "stable",
+            "hotels": -5,
+            "flights": -5,
+            "activities": -5,
+            "summary": "Stable pricing for premium services."
+          },
+          "hotelOccupancy": {
+            "percentage": 80,
+            "level": "High",
+            "summary": "High demand for luxury stays."
+          },
+          "crowdLevel": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 10
+              },
+              {
+                "time": "8am",
+                "level": 20
+              },
+              {
+                "time": "10am",
+                "level": 40
+              },
+              {
+                "time": "12pm",
+                "level": 60
+              },
+              {
+                "time": "2pm",
+                "level": 50
+              },
+              {
+                "time": "4pm",
+                "level": 30
+              },
+              {
+                "time": "6pm",
+                "level": 20
+              },
+              {
+                "time": "9pm",
+                "level": 10
+              }
+            ],
+            "peakTime": "12pm-2pm",
+            "summary": "Less crowded in early hours."
+          },
+          "traffic": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 15
+              },
+              {
+                "time": "8am",
+                "level": 40
+              },
+              {
+                "time": "10am",
+                "level": 30
+              },
+              {
+                "time": "12pm",
+                "level": 20
+              },
+              {
+                "time": "2pm",
+                "level": 25
+              },
+              {
+                "time": "4pm",
+                "level": 35
+              },
+              {
+                "time": "6pm",
+                "level": 50
+              },
+              {
+                "time": "9pm",
+                "level": 15
+              }
+            ],
+            "peakDelay": "5-15 min",
+            "summary": "Traffic manageable throughout day."
+          }
+        },
+        "sustainability": {
+          "waterUsage": {
+            "value": 40,
+            "level": "Low"
+          },
+          "wasteGeneration": {
+            "value": 30,
+            "level": "Low"
+          },
+          "energyConsumption": {
+            "value": 45,
+            "level": "Low"
+          },
+          "localBusinessSupport": "High",
+          "infrastructurePressure": "Low",
+          "culturalPreservation": "Positive"
+        },
+        "alerts": {
+          "crowd": [
+            {
+              "title": "Low crowd expected",
+              "location": "Stadthuys",
+              "time": "Mornings",
+              "level": "LOW",
+              "levelType": "info",
+              "description": "Enjoy quiet visits during mornings.",
+              "suggestion": "Visit at sunrise."
+            }
+          ],
+          "weather": [
+            {
+              "title": "Sunny days ahead",
+              "location": "Melaka",
+              "time": "All day",
+              "level": "INFO",
+              "levelType": "info",
+              "description": "Perfect weather for sightseeing.",
+              "suggestion": "Plan outdoor activities."
+            }
+          ],
+          "price": [
+            {
+              "title": "Luxury dining deals",
+              "location": "Riverside restaurants",
+              "time": "Dinner time",
+              "level": "DEAL",
+              "levelType": "success",
+              "description": "Enjoy discounts on gourmet meals.",
+              "suggestion": "Reserve in advance."
+            }
+          ],
+          "safety": [
+            {
+              "title": "Travel safely",
+              "location": "Melaka streets",
+              "time": "Late night",
+              "level": "CAUTION",
+              "levelType": "warning",
+              "description": "Be cautious late at night.",
+              "suggestion": "Use reputable transport."
+            }
+          ]
+        },
+        "suggestions": [
+          {
+            "title": "Private city tour",
+            "description": "Explore with a local guide."
+          },
+          {
+            "title": "Spa day",
+            "description": "Indulge in relaxation and pampering."
+          },
+          {
+            "title": "Gourmet dining",
+            "description": "Savor the best local cuisine."
+          },
+          {
+            "title": "Luxury shopping",
+            "description": "Discover high-end products."
+          }
+        ]
+      }
+    }
+  }
+}
