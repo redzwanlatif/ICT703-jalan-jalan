@@ -136,7 +136,13 @@ export default function AdminReportDetailPage() {
                 {reportData.story.author.name}
               </span>
               <PlaneTakeoff className="w-6 h-6 text-emerald-700" />
-              <span className="px-2 py-[3px] text-xs font-semibold text-slate-700 border border-emerald-700 rounded-lg bg-slate-50">
+              <span
+                className="px-2 py-[3px] text-xs font-semibold rounded-lg border-0"
+                style={{
+                  backgroundColor: reportData.story.author.badge === "Verified Local" ? "#E6F3FF" : "#FE9A01",
+                  color: reportData.story.author.badge === "Verified Local" ? "#1d4ed8" : "white"
+                }}
+              >
                 {reportData.story.author.badge}
               </span>
             </div>

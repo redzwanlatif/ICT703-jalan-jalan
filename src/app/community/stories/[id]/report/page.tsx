@@ -146,7 +146,14 @@ export default function ReportPage({
                   <div className="relative ml-2">
                     <PlaneTakeoff className="w-6 h-6 text-purple-900 drop-shadow-md" />
                   </div>
-                  <Badge variant="outline" className="ml-2 rounded-lg border-purple-900">
+                  <Badge
+                    variant="outline"
+                    className="ml-2 rounded-lg border-0"
+                    style={{
+                      backgroundColor: storyData.author.badge === "Verified Local" ? "#E6F3FF" : "#FE9A01",
+                      color: storyData.author.badge === "Verified Local" ? "#1d4ed8" : "white"
+                    }}
+                  >
                     {storyData.author.badge}
                   </Badge>
                 </div>
@@ -186,7 +193,14 @@ export default function ReportPage({
                     <span className="text-base font-semibold text-slate-700">
                       {experience.author.name}
                     </span>
-                    <Badge variant="outline" className="rounded-lg border-purple-900">
+                    <Badge
+                      variant="outline"
+                      className="rounded-lg border-0"
+                      style={{
+                        backgroundColor: experience.author.badge === "Verified Local" ? "#E6F3FF" : "#FE9A01",
+                        color: experience.author.badge === "Verified Local" ? "#1d4ed8" : "white"
+                      }}
+                    >
                       {experience.author.badge}
                     </Badge>
                   </div>
@@ -212,7 +226,7 @@ export default function ReportPage({
       <div className="fixed inset-0 bg-black/50 z-40" onClick={handleClose} />
 
       {/* Report Modal */}
-      <div 
+      <div
         className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-[593px] bg-white rounded-[20px] z-50 p-0"
         onClick={(e) => e.stopPropagation()}
       >
@@ -265,9 +279,8 @@ export default function ReportPage({
           {/* Confirmation Checkbox */}
           <div className="flex items-start gap-[6px] mt-6">
             <div
-              className={`w-[14px] h-[14px] border border-black/40 rounded-sm cursor-pointer shrink-0 mt-0.5 ${
-                confirmed ? "bg-purple-900" : "bg-white"
-              }`}
+              className={`w-[14px] h-[14px] border border-black/40 rounded-sm cursor-pointer shrink-0 mt-0.5 ${confirmed ? "bg-purple-900" : "bg-white"
+                }`}
               onClick={() => setConfirmed(!confirmed)}
             />
             <span className="text-sm text-slate-500">

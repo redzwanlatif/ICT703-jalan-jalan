@@ -125,117 +125,172 @@ export default function StoryDetailPage({
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-16">
           {/* Left Column: Images */}
           <div className="space-y-6">
-            <div className="space-y-1">
-              <h2 className="text-xl font-bold text-neutral-800">{storyData.location}</h2>
-              <p className="text-neutral-500">{storyData.address}</p>
+            <div className="flex justify-between items-start">
+              <div className="space-y-1">
+                <h2 className="text-xl font-bold text-neutral-800">{storyData.location}</h2>
+                <p className="text-xs text-neutral-400">{storyData.address}</p>
+              </div>
+              <div className="text-sm font-semibold text-neutral-800">
+                18 January 2026
+              </div>
             </div>
 
-            {/* Main Image */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
-              <Image
-                src={storyData.mainImage}
-                alt={storyData.location}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            {/* Image Carousel */}
-            <div className="flex items-center gap-4">
-              <Button variant="outline" size="icon" className="shrink-0 h-10 w-10 rounded-full border-neutral-200">
-                <ChevronLeft className="h-5 w-5 text-neutral-600" />
-              </Button>
-
-              <div className="grid grid-cols-3 gap-4 flex-1">
-                {storyData.images.map((img) => (
-                  <div key={img.id} className="relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity">
-                    <Image
-                      src={img.src}
-                      alt={`Gallery ${img.id}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
+            <div className="relative pb-32">
+              {/* Main Image */}
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl shadow-sm">
+                <Image
+                  src={storyData.mainImage}
+                  alt={storyData.location}
+                  fill
+                  className="object-cover"
+                />
               </div>
 
-              <Button variant="outline" size="icon" className="shrink-0 h-10 w-10 rounded-full border-neutral-200">
-                <ChevronRight className="h-5 w-5 text-neutral-600" />
-              </Button>
+              {/* Floating Gallery Images */}
+              <div className="absolute -bottom-6 left-0 right-0 flex items-center justify-center gap-2 sm:gap-4 px-8">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="shrink-0 h-10 w-10 rounded-full border-neutral-200 bg-white shadow-sm flex items-center justify-center -ml-12"
+                >
+                  <ChevronLeft className="h-5 w-5 text-neutral-600" />
+                </Button>
+
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 flex-1 max-w-[500px]">
+                  {storyData.images.map((img) => (
+                    <div
+                      key={img.id}
+                      className="relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer shadow-lg border-2 border-white transform transition-transform hover:-translate-y-2"
+                    >
+                      <Image
+                        src={img.src}
+                        alt={`Gallery ${img.id}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="shrink-0 h-10 w-10 rounded-full border-neutral-200 bg-white shadow-sm flex items-center justify-center -mr-12"
+                >
+                  <ChevronRight className="h-5 w-5 text-neutral-600" />
+                </Button>
+              </div>
             </div>
           </div>
 
           {/* Right Column: Content */}
-          <div className="space-y-8">
-            {/* Author Section */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={storyData.author.avatar} />
-                  <AvatarFallback>{storyData.author.name[0]}</AvatarFallback>
-                </Avatar>
-                <span className="font-semibold text-neutral-800">{storyData.author.name}</span>
+          <div className="space-y-6 pt-2">
+            <h3 className="text-xl font-bold text-neutral-800 leading-tight">
+              {storyData.title}: All-inclusive Resort in Maldives
+            </h3>
 
-                <div className="flex items-center gap-2 ml-2 text-neutral-400">
-                  <Facebook className="h-4 w-4 hover:text-blue-600 cursor-pointer transition-colors" />
-                  <Twitter className="h-4 w-4 hover:text-blue-400 cursor-pointer transition-colors" />
-                  <LinkIcon className="h-4 w-4 hover:text-neutral-600 cursor-pointer transition-colors" />
-                  <ReportModal>
-                    <button type="button" aria-label="Report this story" className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 rounded">
-                      <AlertCircle className="h-4 w-4 hover:text-red-500 cursor-pointer transition-colors" />
-                    </button>
-                  </ReportModal>
+            {/* Author Section */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-10 w-10 border-2 border-orange-100 p-0.5">
+                  <AvatarImage src={storyData.author.avatar} />
+                  <AvatarFallback className="bg-orange-600 text-white">
+                    {storyData.author.name[0]}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-neutral-800 text-sm">
+                    {storyData.author.name}
+                  </span>
+                  <Badge
+                    className="border-0 text-[10px] h-6 px-3"
+                    style={{
+                      backgroundColor: storyData.author.badge === "Verified Local" ? "#E6F3FF" : "#FE9A01",
+                      color: storyData.author.badge === "Verified Local" ? "#1d4ed8" : "white"
+                    }}
+                  >
+                    {storyData.author.badge}
+                  </Badge>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <PlaneTakeoff className="h-5 w-5 text-neutral-600" />
-                <Badge variant="secondary" className="bg-white border text-xs font-normal border-neutral-200 text-neutral-600 hover:bg-neutral-50">
-                  {storyData.author.badge}
-                </Badge>
+              <div className="flex items-center gap-3 text-neutral-400">
+                <Facebook className="h-4 w-4 hover:text-blue-600 cursor-pointer transition-colors" />
+                <Twitter className="h-4 w-4 hover:text-black cursor-pointer transition-colors" />
+                <div className="flex items-center gap-1.5 opacity-60 hover:opacity-100 cursor-pointer">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="h-4 w-4"
+                  >
+                    <path d="M20 5V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v3M4 19v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3M20 11a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" />
+                    <path d="M4 11a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" />
+                  </svg>
+                </div>
+                <ReportModal>
+                  <button type="button" aria-label="Report this story" className="focus:outline-none rounded hover:text-red-500">
+                    <AlertCircle className="h-4 w-4 transition-colors" />
+                  </button>
+                </ReportModal>
               </div>
             </div>
 
             {/* Story Content */}
             <div className="space-y-4">
-              <h3 className="text-xl font-bold text-neutral-800">{storyData.title}</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed whitespace-pre-line text-justify">
+              <p className="text-neutral-500 text-sm leading-relaxed text-justify">
                 {storyData.content}
               </p>
             </div>
 
-            {/* Comment Input */}
-            <div className="flex gap-2 p-1 bg-neutral-100 rounded-lg border border-neutral-200">
-              <Input
-                className="border-0 bg-transparent focus-visible:ring-0 shadow-none placeholder:text-neutral-500"
-                placeholder="Add Comment"
-              />
-              <Button className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-white px-6">
-                Send
-              </Button>
+            {/* Comment Section */}
+            <div className="bg-[#334155] p-4 rounded-xl space-y-3 shadow-md">
+              <div className="flex gap-2">
+                <div className="flex-1 bg-white rounded-lg overflow-hidden border-0">
+                  <input
+                    className="w-full px-4 py-2.5 text-sm focus:outline-none placeholder:text-neutral-400"
+                    placeholder="Add Comment"
+                  />
+                </div>
+                <Button className="bg-[#1E3A8A] hover:bg-[#1E3A8A]/90 text-white px-6 font-semibold py-2.5 h-auto">
+                  Send
+                </Button>
+              </div>
             </div>
 
             {/* Traveler Experiences */}
-            <div className="space-y-6">
-              <h4 className="font-bold text-neutral-800">Traveler Experiences</h4>
+            <div className="space-y-6 pt-2">
+              <h4 className="font-bold text-neutral-800 border-b pb-2">
+                Traveler Experiences
+              </h4>
 
               <div className="space-y-6">
-                {storyData.experiences.map((exp) => (
+                {storyData.experiences.slice(0, 1).map((exp) => (
                   <div key={exp.id} className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <Avatar className="h-8 w-8">
+                      <Avatar className="h-8 w-8 border border-neutral-100">
                         <AvatarImage src={exp.author.avatar} />
                         <AvatarFallback>{exp.author.name[0]}</AvatarFallback>
                       </Avatar>
-                      <span className="font-semibold text-neutral-800 text-sm">{exp.author.name}</span>
-                      <Badge variant="secondary" className="bg-white border text-[10px] font-normal border-neutral-200 text-neutral-500 h-5">
-                        {exp.author.badge}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-neutral-800 text-xs">{exp.author.name}</span>
+                        <Badge
+                          variant="outline"
+                          className="text-[9px] h-5 px-2 border-0 font-medium whitespace-nowrap"
+                          style={{
+                            backgroundColor: exp.author.badge === "Verified Local" ? "#E6F3FF" : "#FE9A01",
+                            color: exp.author.badge === "Verified Local" ? "#1d4ed8" : "white"
+                          }}
+                        >
+                          {exp.author.badge}
+                        </Badge>
+                      </div>
                     </div>
-                    <p className="text-neutral-600 text-sm leading-relaxed pl-11 text-justify">
+                    <p className="text-neutral-600 text-xs leading-relaxed text-justify">
                       {exp.content}
                     </p>
                   </div>
@@ -246,7 +301,7 @@ export default function StoryDetailPage({
         </div>
 
         {/* More Stories Section */}
-        <div className="mt-16 sm:mt-24 space-y-6">
+        <div className="mt-16 sm:mt-8 space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-xl md:text-2xl font-bold text-neutral-800">
               More Stories about {storyData.location}

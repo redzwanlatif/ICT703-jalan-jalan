@@ -57,6 +57,7 @@ export default function CommunityPage() {
 
       <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-8">
         {/* My Trip Section */}
+        {/*
         <section className="relative z-10 py-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
             <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
@@ -84,6 +85,53 @@ export default function CommunityPage() {
               title="Menara Taming Sari"
               dates="25th April - 26th April 2026"
               status="Upcoming"
+            />
+          </div>
+        </section> */}
+
+        {/* Community Story Section */}
+        <section className="relative z-10 py-8 pb-16">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
+              Community Story
+            </h2>
+            <Link
+              href="/community/stories"
+              className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
+            >
+              View More
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <StoryCard
+              id={1}
+              location="Melaka"
+              place="Malacca Sultanate Museum"
+              author="Imran Rosli"
+              authorBadge="Verified Local"
+              tags={["#LocalTourist", "#Melaka"]}
+              bgGradient="bg-gradient-to-br from-blue-400 to-purple-500"
+              image="story-01.webp"
+            />
+            <StoryCard
+              id={2}
+              location="Melaka"
+              place="Muzium Samudera"
+              author="Farah Shazwanie"
+              authorBadge="Frequent Traveller"
+              tags={["#Melaka"]}
+              bgGradient="bg-gradient-to-br from-cyan-400 to-blue-500"
+              image="story-02.webp"
+            />
+            <StoryCard
+              id={3}
+              location="Melaka"
+              place="Kampung Morten"
+              author="Hafiz Suhaimi"
+              authorBadge="Verified Local"
+              tags={["#Melaka", "#Local", "#Tourist"]}
+              bgGradient="bg-gradient-to-br from-orange-400 to-red-500"
+              image="story-03.webp"
             />
           </div>
         </section>
@@ -135,52 +183,7 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        {/* Community Story Section */}
-        <section className="relative z-10 py-8 pb-16">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 dark:text-neutral-100">
-              Community Story
-            </h2>
-            <Link
-              href="/community/stories"
-              className="text-base font-semibold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 transition-colors"
-            >
-              View More
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            <StoryCard
-              id={1}
-              location="Melaka"
-              place="Malacca Sultanate Museum"
-              author="Imran Rosli"
-              authorBadge="Verified Local"
-              tags={["#LocalTourist", "#Melaka"]}
-              bgGradient="bg-gradient-to-br from-blue-400 to-purple-500"
-              image="story-01.webp"
-            />
-            <StoryCard
-              id={2}
-              location="Melaka"
-              place="Muzium Samudera"
-              author="Farah Shazwanie"
-              authorBadge="Frequent Traveller"
-              tags={["#Melaka"]}
-              bgGradient="bg-gradient-to-br from-cyan-400 to-blue-500"
-              image="story-02.webp"
-            />
-            <StoryCard
-              id={3}
-              location="Melaka"
-              place="Kampung Morten"
-              author="Hafiz Suhaimi"
-              authorBadge="Verified Local"
-              tags={["#Melaka", "#Local", "#Tourist"]}
-              bgGradient="bg-gradient-to-br from-orange-400 to-red-500"
-              image="story-03.webp"
-            />
-          </div>
-        </section>
+
       </main>
     </div>
   );

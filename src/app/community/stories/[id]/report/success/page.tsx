@@ -125,7 +125,14 @@ export default function ReportSuccessPage() {
                   <div className="relative ml-2">
                     <PlaneTakeoff className="w-6 h-6 text-purple-900 drop-shadow-md" />
                   </div>
-                  <Badge variant="outline" className="ml-2 rounded-lg border-purple-900">
+                  <Badge
+                    variant="outline"
+                    className="ml-2 rounded-lg border-0"
+                    style={{
+                      backgroundColor: storyData.author.badge === "Verified Local" ? "#E6F3FF" : "#FE9A01",
+                      color: storyData.author.badge === "Verified Local" ? "#1d4ed8" : "white"
+                    }}
+                  >
                     {storyData.author.badge}
                   </Badge>
                 </div>
@@ -165,7 +172,14 @@ export default function ReportSuccessPage() {
                     <span className="text-base font-semibold text-slate-700">
                       {experience.author.name}
                     </span>
-                    <Badge variant="outline" className="rounded-lg border-purple-900">
+                    <Badge
+                      variant="outline"
+                      className="rounded-lg border-0"
+                      style={{
+                        backgroundColor: experience.author.badge === "Verified Local" ? "#E6F3FF" : "#FE9A01",
+                        color: experience.author.badge === "Verified Local" ? "#1d4ed8" : "white"
+                      }}
+                    >
                       {experience.author.badge}
                     </Badge>
                   </div>
