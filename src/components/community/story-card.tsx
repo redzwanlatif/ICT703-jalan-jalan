@@ -47,7 +47,13 @@ export function StoryCard({
                         {authorBadge && (
                             <Badge
                                 variant="outline"
-                                className="rounded-lg border-orange-500/30 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 text-xs"
+                                className={cn(
+                                    "rounded-lg border-0 text-xs",
+                                    authorBadge === "Verified Local" ? "text-blue-700" : "text-white"
+                                )}
+                                style={{
+                                    backgroundColor: authorBadge === "Verified Local" ? "#E6F3FF" : authorBadge === "Frequent Traveller" ? "#FE9A01" : undefined
+                                }}
                             >
                                 {authorBadge}
                             </Badge>
