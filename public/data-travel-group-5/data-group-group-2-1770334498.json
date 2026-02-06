@@ -1,0 +1,681 @@
+{
+  "group_id": "group-2",
+  "created_at": "2026-02-05 23:34:58",
+  "timestamp": 1770334498,
+  "trip_details": {
+    "destination": "Melaka",
+    "start_date": "2026-02-24",
+    "end_date": "2026-02-26"
+  },
+  "travelers": [
+    {
+      "name": "Traveler 1",
+      "gender": "",
+      "preferences": {
+        "travelStyle": "balanced",
+        "crowdTolerance": "avoid-crowd",
+        "preferredSeasons": [],
+        "safetyOptions": {
+          "avoidLateNight": true,
+          "preferWellLit": true,
+          "verifiedTransport": true
+        },
+        "budgetMin": "",
+        "budgetMax": "",
+        "notifications": {
+          "crowd": true,
+          "weather": true,
+          "price": true,
+          "safety": true
+        }
+      }
+    },
+    {
+      "name": "Traveler 2",
+      "gender": "",
+      "preferences": {
+        "travelStyle": "balanced",
+        "crowdTolerance": "avoid-crowd",
+        "preferredSeasons": [],
+        "safetyOptions": {
+          "avoidLateNight": true,
+          "preferWellLit": true,
+          "verifiedTransport": true
+        },
+        "budgetMin": "",
+        "budgetMax": "",
+        "notifications": {
+          "crowd": true,
+          "weather": true,
+          "price": true,
+          "safety": true
+        }
+      }
+    }
+  ],
+  "generated_plan": {
+    "summary": {
+      "destination": "Melaka",
+      "duration": "3 days",
+      "travelers": 2,
+      "dateRange": "Selected dates",
+      "groupBudget": "Flexible",
+      "highlights": [
+        "Explore Melaka",
+        "Experience local culture",
+        "Create lasting memories"
+      ]
+    },
+    "plans": {
+      "Serenity Escape": {
+        "pricePerPerson": "RM 1,200",
+        "description": "A peaceful approach to exploring Melaka",
+        "crowdLevel": "Low-Medium Crowd",
+        "keyFeatures": [
+          "Curated attractions and activities",
+          "Flexible scheduling options",
+          "Local dining recommendations",
+          "Transportation guidance"
+        ],
+        "benefits": [
+          "Personalized experience",
+          "Time-efficient planning",
+          "Cost-effective choices",
+          "Memorable moments"
+        ],
+        "bestWindow": {
+          "optimalPeriod": "Check dates for optimal timing",
+          "priceAdvantage": "10-15% lower",
+          "priceDirection": "lower",
+          "crowdLevel": "Medium"
+        },
+        "analytics": {
+          "weather": {
+            "temperature": "28-33°C",
+            "condition": "Partly Cloudy",
+            "icon": "cloud-sun",
+            "rainChance": 30,
+            "humidity": 75,
+            "summary": "Typical tropical weather expected"
+          },
+          "priceIndex": {
+            "percentChange": -10,
+            "trend": "down",
+            "hotels": -12,
+            "flights": -8,
+            "activities": -5,
+            "summary": "Moderate pricing for the period"
+          },
+          "hotelOccupancy": {
+            "percentage": 65,
+            "level": "Medium",
+            "summary": "Good availability expected"
+          },
+          "crowdLevel": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 15
+              },
+              {
+                "time": "8am",
+                "level": 35
+              },
+              {
+                "time": "10am",
+                "level": 55
+              },
+              {
+                "time": "12pm",
+                "level": 75
+              },
+              {
+                "time": "2pm",
+                "level": 70
+              },
+              {
+                "time": "4pm",
+                "level": 60
+              },
+              {
+                "time": "6pm",
+                "level": 45
+              },
+              {
+                "time": "9pm",
+                "level": 25
+              }
+            ],
+            "peakTime": "11am-2pm",
+            "summary": "Visit early morning for fewer crowds"
+          },
+          "traffic": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 20
+              },
+              {
+                "time": "8am",
+                "level": 75
+              },
+              {
+                "time": "10am",
+                "level": 45
+              },
+              {
+                "time": "12pm",
+                "level": 50
+              },
+              {
+                "time": "2pm",
+                "level": 40
+              },
+              {
+                "time": "4pm",
+                "level": 55
+              },
+              {
+                "time": "6pm",
+                "level": 80
+              },
+              {
+                "time": "9pm",
+                "level": 30
+              }
+            ],
+            "peakDelay": "15-25 min",
+            "summary": "Avoid rush hours 8-9am and 5-7pm"
+          }
+        },
+        "sustainability": {
+          "waterUsage": {
+            "value": 50,
+            "level": "Medium"
+          },
+          "wasteGeneration": {
+            "value": 40,
+            "level": "Low"
+          },
+          "energyConsumption": {
+            "value": 55,
+            "level": "Medium"
+          },
+          "localBusinessSupport": "Medium",
+          "infrastructurePressure": "Medium",
+          "culturalPreservation": "Positive"
+        },
+        "alerts": {
+          "crowd": [
+            {
+              "title": "Crowd Alert",
+              "location": "Main Square",
+              "time": "Weekends",
+              "level": "MEDIUM",
+              "levelType": "warning",
+              "description": "Moderate crowds expected.",
+              "suggestion": "Visit on weekdays."
+            }
+          ],
+          "weather": [
+            {
+              "title": "Weather Notice",
+              "location": "Waterfront Area",
+              "time": "Afternoon",
+              "level": "INFO",
+              "levelType": "info",
+              "description": "Afternoon showers common.",
+              "suggestion": "Carry an umbrella."
+            }
+          ],
+          "price": [
+            {
+              "title": "Price Alert",
+              "location": "Holiday Inn Express",
+              "time": "Current",
+              "level": "DEAL",
+              "levelType": "success",
+              "description": "Good rates available.",
+              "suggestion": "Book in advance."
+            }
+          ],
+          "safety": [
+            {
+              "title": "Safety Tip",
+              "location": "Night Market Street",
+              "time": "Night",
+              "level": "CAUTION",
+              "levelType": "warning",
+              "description": "Stay in well-lit areas.",
+              "suggestion": "Use verified transport."
+            }
+          ]
+        },
+        "suggestions": [
+          {
+            "title": "Early Bird Visits",
+            "description": "Start your day early to beat the crowds at popular attractions."
+          },
+          {
+            "title": "Local Cuisine",
+            "description": "Try local restaurants for authentic flavors and better value."
+          },
+          {
+            "title": "Book Ahead",
+            "description": "Reserve accommodations and activities in advance."
+          },
+          {
+            "title": "Stay Flexible",
+            "description": "Keep some free time for spontaneous discoveries."
+          }
+        ]
+      },
+      "Adventure Blend": {
+        "pricePerPerson": "RM 1,000",
+        "description": "A balanced approach to exploring Melaka",
+        "crowdLevel": "Medium Crowd",
+        "keyFeatures": [
+          "Curated attractions and activities",
+          "Flexible scheduling options",
+          "Local dining recommendations",
+          "Transportation guidance"
+        ],
+        "benefits": [
+          "Personalized experience",
+          "Time-efficient planning",
+          "Cost-effective choices",
+          "Memorable moments"
+        ],
+        "bestWindow": {
+          "optimalPeriod": "Check dates for optimal timing",
+          "priceAdvantage": "10-15% lower",
+          "priceDirection": "lower",
+          "crowdLevel": "Medium"
+        },
+        "analytics": {
+          "weather": {
+            "temperature": "28-33°C",
+            "condition": "Partly Cloudy",
+            "icon": "cloud-sun",
+            "rainChance": 30,
+            "humidity": 75,
+            "summary": "Typical tropical weather expected"
+          },
+          "priceIndex": {
+            "percentChange": -10,
+            "trend": "down",
+            "hotels": -12,
+            "flights": -8,
+            "activities": -5,
+            "summary": "Moderate pricing for the period"
+          },
+          "hotelOccupancy": {
+            "percentage": 65,
+            "level": "Medium",
+            "summary": "Good availability expected"
+          },
+          "crowdLevel": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 15
+              },
+              {
+                "time": "8am",
+                "level": 35
+              },
+              {
+                "time": "10am",
+                "level": 55
+              },
+              {
+                "time": "12pm",
+                "level": 75
+              },
+              {
+                "time": "2pm",
+                "level": 70
+              },
+              {
+                "time": "4pm",
+                "level": 60
+              },
+              {
+                "time": "6pm",
+                "level": 45
+              },
+              {
+                "time": "9pm",
+                "level": 25
+              }
+            ],
+            "peakTime": "11am-2pm",
+            "summary": "Visit early morning for fewer crowds"
+          },
+          "traffic": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 20
+              },
+              {
+                "time": "8am",
+                "level": 75
+              },
+              {
+                "time": "10am",
+                "level": 45
+              },
+              {
+                "time": "12pm",
+                "level": 50
+              },
+              {
+                "time": "2pm",
+                "level": 40
+              },
+              {
+                "time": "4pm",
+                "level": 55
+              },
+              {
+                "time": "6pm",
+                "level": 80
+              },
+              {
+                "time": "9pm",
+                "level": 30
+              }
+            ],
+            "peakDelay": "15-25 min",
+            "summary": "Avoid rush hours 8-9am and 5-7pm"
+          }
+        },
+        "sustainability": {
+          "waterUsage": {
+            "value": 50,
+            "level": "Medium"
+          },
+          "wasteGeneration": {
+            "value": 40,
+            "level": "Low"
+          },
+          "energyConsumption": {
+            "value": 55,
+            "level": "Medium"
+          },
+          "localBusinessSupport": "Medium",
+          "infrastructurePressure": "Medium",
+          "culturalPreservation": "Positive"
+        },
+        "alerts": {
+          "crowd": [
+            {
+              "title": "Crowd Alert",
+              "location": "Main Square",
+              "time": "Weekends",
+              "level": "MEDIUM",
+              "levelType": "warning",
+              "description": "Moderate crowds expected.",
+              "suggestion": "Visit on weekdays."
+            }
+          ],
+          "weather": [
+            {
+              "title": "Weather Notice",
+              "location": "Waterfront Area",
+              "time": "Afternoon",
+              "level": "INFO",
+              "levelType": "info",
+              "description": "Afternoon showers common.",
+              "suggestion": "Carry an umbrella."
+            }
+          ],
+          "price": [
+            {
+              "title": "Price Alert",
+              "location": "Holiday Inn Express",
+              "time": "Current",
+              "level": "DEAL",
+              "levelType": "success",
+              "description": "Good rates available.",
+              "suggestion": "Book in advance."
+            }
+          ],
+          "safety": [
+            {
+              "title": "Safety Tip",
+              "location": "Night Market Street",
+              "time": "Night",
+              "level": "CAUTION",
+              "levelType": "warning",
+              "description": "Stay in well-lit areas.",
+              "suggestion": "Use verified transport."
+            }
+          ]
+        },
+        "suggestions": [
+          {
+            "title": "Early Bird Visits",
+            "description": "Start your day early to beat the crowds at popular attractions."
+          },
+          {
+            "title": "Local Cuisine",
+            "description": "Try local restaurants for authentic flavors and better value."
+          },
+          {
+            "title": "Book Ahead",
+            "description": "Reserve accommodations and activities in advance."
+          },
+          {
+            "title": "Stay Flexible",
+            "description": "Keep some free time for spontaneous discoveries."
+          }
+        ]
+      },
+      "Smart Saver": {
+        "pricePerPerson": "RM 800",
+        "description": "A budget-friendly approach to exploring Melaka",
+        "crowdLevel": "Medium-High Crowd",
+        "keyFeatures": [
+          "Curated attractions and activities",
+          "Flexible scheduling options",
+          "Local dining recommendations",
+          "Transportation guidance"
+        ],
+        "benefits": [
+          "Personalized experience",
+          "Time-efficient planning",
+          "Cost-effective choices",
+          "Memorable moments"
+        ],
+        "bestWindow": {
+          "optimalPeriod": "Check dates for optimal timing",
+          "priceAdvantage": "10-15% lower",
+          "priceDirection": "lower",
+          "crowdLevel": "Medium"
+        },
+        "analytics": {
+          "weather": {
+            "temperature": "28-33°C",
+            "condition": "Partly Cloudy",
+            "icon": "cloud-sun",
+            "rainChance": 30,
+            "humidity": 75,
+            "summary": "Typical tropical weather expected"
+          },
+          "priceIndex": {
+            "percentChange": -10,
+            "trend": "down",
+            "hotels": -12,
+            "flights": -8,
+            "activities": -5,
+            "summary": "Moderate pricing for the period"
+          },
+          "hotelOccupancy": {
+            "percentage": 65,
+            "level": "Medium",
+            "summary": "Good availability expected"
+          },
+          "crowdLevel": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 15
+              },
+              {
+                "time": "8am",
+                "level": 35
+              },
+              {
+                "time": "10am",
+                "level": 55
+              },
+              {
+                "time": "12pm",
+                "level": 75
+              },
+              {
+                "time": "2pm",
+                "level": 70
+              },
+              {
+                "time": "4pm",
+                "level": 60
+              },
+              {
+                "time": "6pm",
+                "level": 45
+              },
+              {
+                "time": "9pm",
+                "level": 25
+              }
+            ],
+            "peakTime": "11am-2pm",
+            "summary": "Visit early morning for fewer crowds"
+          },
+          "traffic": {
+            "data": [
+              {
+                "time": "6am",
+                "level": 20
+              },
+              {
+                "time": "8am",
+                "level": 75
+              },
+              {
+                "time": "10am",
+                "level": 45
+              },
+              {
+                "time": "12pm",
+                "level": 50
+              },
+              {
+                "time": "2pm",
+                "level": 40
+              },
+              {
+                "time": "4pm",
+                "level": 55
+              },
+              {
+                "time": "6pm",
+                "level": 80
+              },
+              {
+                "time": "9pm",
+                "level": 30
+              }
+            ],
+            "peakDelay": "15-25 min",
+            "summary": "Avoid rush hours 8-9am and 5-7pm"
+          }
+        },
+        "sustainability": {
+          "waterUsage": {
+            "value": 50,
+            "level": "Medium"
+          },
+          "wasteGeneration": {
+            "value": 40,
+            "level": "Low"
+          },
+          "energyConsumption": {
+            "value": 55,
+            "level": "Medium"
+          },
+          "localBusinessSupport": "Medium",
+          "infrastructurePressure": "Medium",
+          "culturalPreservation": "Positive"
+        },
+        "alerts": {
+          "crowd": [
+            {
+              "title": "Crowd Alert",
+              "location": "Main Square",
+              "time": "Weekends",
+              "level": "MEDIUM",
+              "levelType": "warning",
+              "description": "Moderate crowds expected.",
+              "suggestion": "Visit on weekdays."
+            }
+          ],
+          "weather": [
+            {
+              "title": "Weather Notice",
+              "location": "Waterfront Area",
+              "time": "Afternoon",
+              "level": "INFO",
+              "levelType": "info",
+              "description": "Afternoon showers common.",
+              "suggestion": "Carry an umbrella."
+            }
+          ],
+          "price": [
+            {
+              "title": "Price Alert",
+              "location": "Holiday Inn Express",
+              "time": "Current",
+              "level": "DEAL",
+              "levelType": "success",
+              "description": "Good rates available.",
+              "suggestion": "Book in advance."
+            }
+          ],
+          "safety": [
+            {
+              "title": "Safety Tip",
+              "location": "Night Market Street",
+              "time": "Night",
+              "level": "CAUTION",
+              "levelType": "warning",
+              "description": "Stay in well-lit areas.",
+              "suggestion": "Use verified transport."
+            }
+          ]
+        },
+        "suggestions": [
+          {
+            "title": "Early Bird Visits",
+            "description": "Start your day early to beat the crowds at popular attractions."
+          },
+          {
+            "title": "Local Cuisine",
+            "description": "Try local restaurants for authentic flavors and better value."
+          },
+          {
+            "title": "Book Ahead",
+            "description": "Reserve accommodations and activities in advance."
+          },
+          {
+            "title": "Stay Flexible",
+            "description": "Keep some free time for spontaneous discoveries."
+          }
+        ]
+      }
+    }
+  }
+}

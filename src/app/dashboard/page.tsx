@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import { Navigation } from "@/components/shared/navigation"
 import TabBar from "../../components/ui/TabBar"
 import {
@@ -9,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import {
   Select,
@@ -25,6 +27,7 @@ import {
   Users,
   Wallet,
   LayoutDashboard,
+  ArrowRight,
 } from "lucide-react"
 import { ConflictItem, SummaryStat, DashboardDestination } from "@/types"
 
@@ -219,7 +222,7 @@ const DashboardPage = () => {
                   >
                     <div className={`shrink-0 rounded-2xl ${summaryIconGradients[i]} p-4 flex items-center justify-center`}>
                       {React.isValidElement(s.icon)
-                        ? React.cloneElement(s.icon, { className: "size-10 text-white" })
+                        ? React.cloneElement(s.icon as React.ReactElement<{ className?: string }>, { className: "size-10 text-white" })
                         : null}
                     </div>
                     <div className="min-w-0">
@@ -411,6 +414,16 @@ const DashboardPage = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+
+              {/* View Itinerary Button */}
+              <div className="mt-6 flex justify-center">
+                <Link href="/dashboard/itenary">
+                  <Button className="bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white font-semibold px-6 py-2 rounded-lg shadow-lg shadow-violet-500/25">
+                    View Full Itinerary
+                    <ArrowRight className="ml-2 size-4" />
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>

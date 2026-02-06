@@ -170,7 +170,7 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, typingMsg]);
   
     try {
-      const res = await fetch("https://farisdaus.app.n8n.cloud/webhook/chatbot", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -199,7 +199,7 @@ export default function ChatPage() {
           {
             role: "assistant",
             content:
-              "Request failed (likely CORS). If so, use the /api/chat route method instead.",
+              "Sorry, I couldn't connect to the server. Please try again later.",
             timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           },
         ];

@@ -258,10 +258,10 @@ export default function PlanPage() {
   const [selectedPlan, setSelectedPlan] = useState("balanced");
   const [alertFilter, setAlertFilter] = useState("all");
   const [tripDetails, setTripDetails] = useState({
-    destination: "Langkawi, Kedah",
+    destination: "Melaka",
     dates: "Dec 18, 2025 to Dec 20, 2025",
-    travelers: 2,
-    estimatedCost: 1050,
+    travelers: 4,
+    estimatedCost: 800,
   });
 
   useEffect(() => {
@@ -270,10 +270,10 @@ export default function PlanPage() {
     if (stored) {
       const data = JSON.parse(stored);
       setTripDetails({
-        destination: data.destination || "Langkawi, Kedah",
+        destination: data.destination || "Melaka",
         dates: data.travelDates || "Dec 18, 2025 to Dec 20, 2025",
-        travelers: data.travelers || 2,
-        estimatedCost: 1050,
+        travelers: data.travelers || 4,
+        estimatedCost: 800,
       });
     }
   }, []);
@@ -310,37 +310,37 @@ export default function PlanPage() {
     {
       type: "crowd",
       title: "Crowd Forecast",
-      location: "Cenang Beach",
+      location: "Jonker Street Night Market",
       badge: "HIGH",
       badgeColor: "red",
       icon: CrowdIcon,
       iconBgColor: "bg-orange-100 text-orange-600",
       details: [
-        { icon: Calendar, text: "Sat, 13 Apr · 5-8 PM" },
+        { icon: Calendar, text: "Fri-Sun · 6-10 PM" },
         { icon: Clock, text: "Long waiting time expected" },
       ],
       suggestion:
-        "AI Suggestion: Cenang Beach will be quite busy during this time. Your Balanced Plan allows flexibility - you can either visit earlier (9-11 AM) for a quieter experience, or embrace the evening crowd for a more vibrant atmosphere.",
+        "AI Suggestion: Jonker Street Night Market will be very crowded during weekend evenings. Your Balanced Plan allows flexibility - visit during weekday evenings or explore the area during late afternoon for a quieter experience.",
     },
     {
       type: "weather",
       title: "Weather Alert",
-      location: "Island Hopping",
+      location: "Melaka River Cruise",
       badge: "WARNING",
       badgeColor: "orange",
       icon: CloudRain,
       iconBgColor: "bg-blue-100 text-blue-600",
       details: [
-        { icon: Calendar, text: "13 Apr · Afternoon" },
-        { icon: MapPin, text: "Affects: Island hopping activity" },
+        { icon: Calendar, text: "Dec 19 · Afternoon" },
+        { icon: MapPin, text: "Affects: River cruise activity" },
       ],
       suggestion:
-        "AI Suggestion: Thunderstorms may affect your island hopping. With your Balanced Plan's flexible scheduling, I recommend moving this activity to Day 2 morning when weather conditions are more favorable and you can still enjoy the experience.",
+        "AI Suggestion: Afternoon thunderstorms may affect the river cruise. With your Balanced Plan's flexible scheduling, I recommend taking the morning cruise (9-11 AM) for better weather and scenic views.",
     },
     {
       type: "price",
       title: "Price Drop",
-      location: "Hotel ABC",
+      location: "Hatten Hotel Melaka",
       badge: "SAVE RM 80",
       badgeColor: "green",
       icon: Tag,
@@ -349,29 +349,29 @@ export default function PlanPage() {
         { icon: Clock, text: "Valid until: Tonight, 11:59 PM" },
       ],
       suggestion:
-        "AI Suggestion: This price drop on Hotel ABC is a great opportunity for your Balanced Plan! It offers a perfect mix of comfort and value, located near both popular attractions and hidden gems - exactly what your plan emphasizes.",
+        "AI Suggestion: This price drop on Hatten Hotel is a great opportunity! It's located in the heart of Melaka, within walking distance to Jonker Street and A Famosa - perfect for your Balanced Plan.",
     },
     {
       type: "safety",
       title: "Safety Notice",
-      location: "Area X",
+      location: "Chinatown Area",
       badge: "CAUTION",
       badgeColor: "orange",
       icon: Shield,
       iconBgColor: "bg-red-100 text-red-600",
       details: [
-        { icon: MapPin, text: "Night time" },
-        { icon: Shield, text: "Use main road / different area" },
+        { icon: MapPin, text: "Late night (after 11 PM)" },
+        { icon: Shield, text: "Stay on main streets" },
       ],
       suggestion:
-        "AI Suggestion: Area X should be avoided at night. Your Balanced Plan includes well-lit areas, so consider exploring this area during daylight hours (10 AM - 6 PM) when it's safer and you can still discover its hidden gems.",
+        "AI Suggestion: The Chinatown area is generally safe but stick to well-lit main streets after 11 PM. Your Balanced Plan includes activities that wrap up by 10 PM for optimal safety.",
     },
   ];
 
   const tips = [
-    "Mix your itinerary: visit popular spots like Cenang Beach in the morning, then explore hidden gems like Durian Perangin Waterfall in the afternoon.",
-    "Take advantage of flexible timing - many attractions offer discounted rates during off-peak hours while still being enjoyable.",
-    "Consider staying near the main area but in a quieter side street for the best of both worlds.",
+    "Mix your itinerary: visit A Famosa and St. Paul's Hill in the cool morning, then explore Jonker Street's cafes in the afternoon before the night market opens.",
+    "Take advantage of flexible timing - many Melaka attractions like museums offer discounted rates during weekday mornings.",
+    "Consider staying near Jonker Street but on a quieter side street for easy access to attractions while enjoying peaceful nights.",
   ];
 
   const filteredAlerts =
@@ -503,6 +503,7 @@ export default function PlanPage() {
         <div className="text-center mb-12">
           <Button
             size="lg"
+            onClick={() => router.push("/dashboard")}
             className={cn(
               "h-14 px-12 text-lg font-semibold",
               "bg-gradient-to-r from-rose-500 to-pink-500",
