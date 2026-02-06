@@ -530,9 +530,13 @@ const avgPositionPct =
     BUDGET SENSITIVITY OVERVIEW
 ======================= */}
 <div className="rounded-2xl border border-[#AD46FF] bg-white p-6">
-  <h2 className="text-xl font-bold text-slate-900">
-    Budget Sensitivity Overview
-  </h2>
+<h2 className="text-xl font-bold text-slate-900">
+  Budget Sensitivity Overview
+</h2>
+<p className="mt-1 text-sm text-slate-600">
+  Highlights travelers who are more affected by budget changes compared to the group average.
+</p>
+
 
   {/* Numbers */}
   <div className="mt-6 grid grid-cols-3 gap-6 text-center">
@@ -586,7 +590,12 @@ const avgPositionPct =
 
             {/* INDIVIDUAL MEMBER DETAILS */}
 <div className="rounded-2xl border border-[#AD46FF] bg-white p-10 mb-10">
-  <h2 className="text-xl font-bold text-slate-900">Individual Member Details</h2>
+<h2 className="text-xl font-bold text-slate-900">
+  Individual Member Details
+</h2>
+<p className="mt-1 text-sm text-slate-600">
+  View each traveler’s preferences to understand individual needs and preferences.
+</p>
 
   <div className="mt-4 overflow-x-auto">
     <table className="w-full min-w-[1000px] border-collapse">

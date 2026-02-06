@@ -129,7 +129,7 @@ const TabBar = () => {
           <TabLink
             href="/dashboard"
             active={isActive("dashboard")}
-            label="Dashboard"
+            label="Main"
             icon={<LayoutDashboard className="size-5" />}
           />
 

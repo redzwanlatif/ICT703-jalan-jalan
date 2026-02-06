@@ -643,9 +643,13 @@ const DashboardPage = () => {
 
           {/* Group Summary */}
           <Card className="border-[#AD46FF] bg-white mt-0">
-            <CardHeader className="pb-0">
-              <CardTitle className="text-xl font-bold">Group Summary</CardTitle>
-            </CardHeader>
+          <CardHeader className="pb-0">
+  <CardTitle className="text-xl font-bold">Group Summary</CardTitle>
+  <p className="mt-1 text-sm text-slate-600">
+    This summary highlights common preferences across all travelers to help guide itinerary and place matching.
+  </p>
+</CardHeader>
+
             <CardContent className="pt-2">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
                 {summary.map((s, i) => (
@@ -670,9 +674,13 @@ const DashboardPage = () => {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 {/* BUDGET FIT */}
 <Card className="border-[#AD46FF] bg-white">
-  <CardHeader className="pb-2">
-    <CardTitle className="text-xl font-bold">Budget Fit</CardTitle>
-  </CardHeader>
+<CardHeader className="pb-2">
+  <CardTitle className="text-xl font-bold">Budget Fit</CardTitle>
+  <p className="mt-1 text-sm text-slate-600">
+    Helps you see whether the planned budget works for everyone in the group.
+  </p>
+</CardHeader>
+
 
   <CardContent className="pt-2 space-y-4">
     {(() => {
@@ -822,7 +830,11 @@ const DashboardPage = () => {
            {/* POTENTIAL CONFLICTS */}
 <Card className="border-[#AD46FF] gap-1 bg-white">
   <CardHeader className="pb-0">
-    <CardTitle className="text-xl font-bold">Potential Conflicts</CardTitle>
+  <CardTitle className="text-xl font-bold">Potential Conflicts</CardTitle>
+<p className="mt-1 text-sm text-slate-600">
+  Helps you spot preference differences early and avoid misunderstandings during the trip.
+</p>
+
 
     <div className="flex flex-wrap items-center gap-3 mt-2">
       <span className="font-semibold text-slate-800">Conflict Level:</span>
@@ -917,7 +929,10 @@ const DashboardPage = () => {
           {/* Proposed Destinations */}
           <Card className="border-[#AD46FF] bg-white">
             <CardHeader className="pb-2">
-              <CardTitle className="text-xl font-bold">Proposed Destinations</CardTitle>
+            <CardTitle className="text-xl font-bold">Proposed Destinations</CardTitle>
+<p className="mt-1 text-sm text-slate-600">
+  These destinations have the highest compatibility scores for your group.
+</p>
             </CardHeader>
             <CardContent className="pt-2">
               <div className="space-y-3">
@@ -979,7 +994,14 @@ const DashboardPage = () => {
       <div className="flex items-center justify-between gap-4">
         <CardTitle className="text-xl font-bold">
           Melaka Place Guide (Preferences)
+
+          <p className="mt-1 text-sm text-slate-600">
+  Alternative places that don’t rank as high, but could still be a good fit for your trip.
+</p>
+
         </CardTitle>
+
+        
 
         {/* Chevron */}
         <div
