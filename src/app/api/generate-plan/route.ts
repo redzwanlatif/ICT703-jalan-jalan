@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { put } from '@vercel/blob'
 
 // Get OpenAI API key from environment variable
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
@@ -354,37 +353,9 @@ export async function POST(request: NextRequest) {
       generatedPlan = getDefaultPlanData(data.trip_details.destination, days, data.travelers.length)
     }
 
-    // Prepare data
-    const groupId = data.group_id.replace(/[^a-zA-Z0-9_-]/g, '')
-    const timestamp = Math.floor(Date.now() / 1000)
-    const filename = `data-group-${groupId}-${timestamp}.json`
-
-    // Prepare complete trip data
-    const tripData = {
-      group_id: data.group_id,
-      created_at: new Date().toISOString().replace('T', ' ').slice(0, 19),
-      timestamp: timestamp,
-      trip_details: {
-        destination: data.trip_details.destination,
-        start_date: data.trip_details.start_date,
-        end_date: data.trip_details.end_date
-      },
-      travelers: data.travelers,
-      generated_plan: generatedPlan
-    }
-
-    // Save to Vercel Blob Storage
-    const blob = await put(
-      `data-travel-group-5/${filename}`,
-      JSON.stringify(tripData, null, 2),
-      { access: 'public', contentType: 'application/json' }
-    )
-
     return NextResponse.json({
       success: true,
-      file: filename,
-      url: blob.url,
-      message: 'Comprehensive travel plan generated and saved successfully',
+      message: 'Travel plan generated successfully',
       plan: generatedPlan
     })
 

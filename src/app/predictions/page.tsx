@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Globe2, Users, Calendar, Plane,
   CloudRain, CloudSun, Sun, Thermometer, Cloud,
@@ -63,6 +64,7 @@ interface Preferences {
 }
 
 export default function TravelSmartPage() {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState<Step>('details')
   const [quickGenerate, setQuickGenerate] = useState<boolean>(false)
   const [tripData, setTripData] = useState<TripData>({
@@ -101,6 +103,58 @@ export default function TravelSmartPage() {
   const [quickGenerateData, setQuickGenerateData] = useState<any>(null)
   const [showShareSuccess, setShowShareSuccess] = useState<boolean>(false)
   const [sharedPlatform, setSharedPlatform] = useState<string>('')
+  const [showSaveDialog, setShowSaveDialog] = useState<boolean>(false)
+  const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set())
+  const [submitAttempted, setSubmitAttempted] = useState<boolean>(false)
+
+  // Track field blur for on-blur validation
+  const markTouched = useCallback((travelerIndex: number, field: string) => {
+    setTouchedFields(prev => {
+      const next = new Set(prev)
+      next.add(`${travelerIndex}-${field}`)
+      return next
+    })
+  }, [])
+
+  const isTouched = useCallback((travelerIndex: number, field: string) => {
+    return touchedFields.has(`${travelerIndex}-${field}`)
+  }, [touchedFields])
+
+  // Memoized validation
+  const validationErrors = useMemo(() => {
+    const errors: { travelerIndex: number; field: string }[] = []
+    for (let i = 0; i < tripData.travelers; i++) {
+      if (!tripData.travelerNames[i]?.trim()) errors.push({ travelerIndex: i, field: 'name' })
+      if (!tripData.travelerGenders[i]) errors.push({ travelerIndex: i, field: 'gender' })
+      if (!preferences[i]?.budgetMax) errors.push({ travelerIndex: i, field: 'budgetMax' })
+      if (!preferences[i]?.preferredSeasons?.length) errors.push({ travelerIndex: i, field: 'seasons' })
+      const safety = preferences[i]?.safetyOptions
+      if (safety && !safety.avoidLateNight && !safety.preferWellLit && !safety.verifiedTransport) {
+        errors.push({ travelerIndex: i, field: 'safety' })
+      }
+      const notifs = preferences[i]?.notifications
+      if (notifs && !notifs.crowd && !notifs.weather && !notifs.price && !notifs.safety) {
+        errors.push({ travelerIndex: i, field: 'alerts' })
+      }
+    }
+    return errors
+  }, [tripData.travelers, tripData.travelerNames, tripData.travelerGenders, preferences])
+
+  const isPreferencesValid = validationErrors.length === 0
+  const hasErrorsForTraveler = useCallback((index: number) => validationErrors.some(e => e.travelerIndex === index), [validationErrors])
+
+  // Show error if field was touched (on blur) OR if submit was attempted
+  const shouldShowFieldError = useCallback((travelerIndex: number, field: string) => {
+    if (!validationErrors.some(e => e.travelerIndex === travelerIndex && e.field === field)) return false
+    return submitAttempted || isTouched(travelerIndex, field)
+  }, [validationErrors, submitAttempted, isTouched])
+
+  // Ref for auto-focusing first invalid field on submit
+  const nameInputRefs = useRef<Map<number, HTMLInputElement>>(new Map())
+  const genderTriggerRefs = useRef<Map<number, HTMLButtonElement>>(new Map())
+  const budgetMaxInputRefs = useRef<Map<number, HTMLInputElement>>(new Map())
+  const generateAbortRef = useRef<AbortController | null>(null)
 
   // Sync preferences array with travelers count
   useEffect(() => {
@@ -277,6 +331,11 @@ export default function TravelSmartPage() {
   }
 
   const handleGeneratePlan = async (isQuickGenerate: boolean = false) => {
+    // Cancel any previous request
+    generateAbortRef.current?.abort()
+    const abortController = new AbortController()
+    generateAbortRef.current = abortController
+
     // Reset and show dialog
     setGenerationProgress(0)
     setIsGenerating(true)
@@ -307,7 +366,8 @@ export default function TravelSmartPage() {
         const response = await fetch('/api/quick-generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(quickRequestData)
+          body: JSON.stringify(quickRequestData),
+          signal: abortController.signal
         })
 
         if (!response.ok) {
@@ -347,7 +407,8 @@ export default function TravelSmartPage() {
         const response = await fetch('/api/generate-plan', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestData)
+          body: JSON.stringify(requestData),
+          signal: abortController.signal
         })
 
         if (!response.ok) {
@@ -397,14 +458,84 @@ export default function TravelSmartPage() {
 
     } catch (error) {
       clearInterval(progressInterval)
+      // If user cancelled, silently reset
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        setGenerationProgress(0)
+        return
+      }
       setIsGenerating(false)
       setGenerationProgress(0)
-      alert(`Failed to save travel plan: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      alert(`Failed to generate travel plan: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }
 
   const handlePreferencesSubmit = () => {
+    if (!isPreferencesValid) {
+      setSubmitAttempted(true)
+      // Auto-navigate to first traveler with errors and focus first invalid field
+      const firstError = validationErrors[0]
+      if (firstError) {
+        setCurrentTravelerIndex(firstError.travelerIndex)
+        // Focus after React re-renders the tab
+        setTimeout(() => {
+          if (firstError.field === 'name') {
+            nameInputRefs.current.get(firstError.travelerIndex)?.focus()
+          } else if (firstError.field === 'gender') {
+            genderTriggerRefs.current.get(firstError.travelerIndex)?.focus()
+          } else if (firstError.field === 'budgetMax') {
+            budgetMaxInputRefs.current.get(firstError.travelerIndex)?.focus()
+          }
+        }, 50)
+      }
+      return
+    }
     handleGeneratePlan(false)
+  }
+
+  const handleSavePlan = async () => {
+    setIsSaving(true)
+    try {
+      const travelersData = tripData.travelerNames.map((name, index) => ({
+        name: name || `Traveler ${index + 1}`,
+        gender: tripData.travelerGenders[index] || '',
+        preferences: preferences[index] || preferences[0]
+      }))
+
+      // Save only the user's selected plan
+      const selectedPlanData = generatedPlan?.plans?.[selectedPlan] || null
+      const quickData = quickGenerateData || null
+
+      const response = await fetch('/api/save-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          group_id: `group-${tripData.travelers}`,
+          trip_details: {
+            destination: tripData.destination,
+            start_date: tripData.dateRange?.from ? tripData.dateRange.from.toISOString().split('T')[0] : '',
+            end_date: tripData.dateRange?.to ? tripData.dateRange.to.toISOString().split('T')[0] : ''
+          },
+          travelers: travelersData,
+          selected_plan: selectedPlan,
+          generated_plan: selectedPlanData
+            ? { plans: { [selectedPlan]: selectedPlanData } }
+            : quickData
+        })
+      })
+
+      const result = await response.json()
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to save plan')
+      }
+
+      setShowSaveDialog(false)
+      router.push('/dashboard')
+    } catch (error) {
+      alert(`Failed to save plan: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const handleSelectPlan = (plan: string) => {
@@ -659,7 +790,13 @@ export default function TravelSmartPage() {
   return (
     <PageLayout showFlowGuide={false} maxWidth="lg" background="minimal" className="font-sans theme-rose">
       {/* Generating Modal */}
-      <Dialog open={isGenerating} onOpenChange={(open) => !open && setIsGenerating(false)}>
+      <Dialog open={isGenerating} onOpenChange={(open) => {
+        if (!open) {
+          generateAbortRef.current?.abort()
+          setIsGenerating(false)
+          setGenerationProgress(0)
+        }
+      }}>
         <DialogContent showCloseButton={false} className="sm:max-w-md border-0 shadow-2xl bg-white theme-rose overflow-hidden p-0 font-[family-name:var(--font-geist-sans)]">
           {/* Accessibility title - visually hidden */}
           <DialogTitle className="sr-only">Generating your travel plan</DialogTitle>
@@ -1133,9 +1270,12 @@ export default function TravelSmartPage() {
                           <TabsTrigger
                             key={index}
                             value={index.toString()}
-                            className="text-sm"
+                            className="text-sm relative"
                           >
                             {tripData.travelerNames[index] || `Traveler ${index + 1}`}
+                            {submitAttempted && hasErrorsForTraveler(index) && (
+                              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-destructive" />
+                            )}
                           </TabsTrigger>
                         ))}
                       </TabsList>
@@ -1156,7 +1296,12 @@ export default function TravelSmartPage() {
                         <SelectContent className="font-[family-name:var(--font-geist-sans)]">
                           {Array.from({ length: tripData.travelers }).map((_, index) => (
                             <SelectItem key={index} value={index.toString()}>
-                              {tripData.travelerNames[index] || `Traveler ${index + 1}`}
+                              <span className="flex items-center gap-2">
+                                {tripData.travelerNames[index] || `Traveler ${index + 1}`}
+                                {submitAttempted && hasErrorsForTraveler(index) && (
+                                  <span className="w-2 h-2 rounded-full bg-destructive inline-block" />
+                                )}
+                              </span>
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -1195,9 +1340,12 @@ export default function TravelSmartPage() {
                             <Label htmlFor={`name-${currentTravelerIndex}`} className="text-sm text-muted-foreground">Name</Label>
                             <Input
                               id={`name-${currentTravelerIndex}`}
+                              ref={(el) => { if (el) nameInputRefs.current.set(currentTravelerIndex, el) }}
                               placeholder={`Enter traveler name`}
                               value={tripData.travelerNames[currentTravelerIndex] || ''}
                               autoComplete="off"
+                              aria-invalid={shouldShowFieldError(currentTravelerIndex, 'name')}
+                              onBlur={() => markTouched(currentTravelerIndex, 'name')}
                               onChange={(e) => {
                                 const updatedNames = [...tripData.travelerNames]
                                 updatedNames[currentTravelerIndex] = e.target.value
@@ -1205,6 +1353,9 @@ export default function TravelSmartPage() {
                               }}
                               className="h-10"
                             />
+                            {shouldShowFieldError(currentTravelerIndex, 'name') && (
+                              <p className="text-sm text-destructive mt-1">Name is required</p>
+                            )}
                           </div>
                           <div className="space-y-1.5">
                             <Label htmlFor={`gender-${currentTravelerIndex}`} className="text-sm text-muted-foreground">Gender</Label>
@@ -1214,9 +1365,16 @@ export default function TravelSmartPage() {
                                 const updatedGenders = [...tripData.travelerGenders]
                                 updatedGenders[currentTravelerIndex] = value
                                 setTripData({ ...tripData, travelerGenders: updatedGenders })
+                                markTouched(currentTravelerIndex, 'gender')
                               }}
                             >
-                              <SelectTrigger id={`gender-${currentTravelerIndex}`} className="h-10 font-[family-name:var(--font-geist-sans)]">
+                              <SelectTrigger
+                                id={`gender-${currentTravelerIndex}`}
+                                ref={(el) => { if (el) genderTriggerRefs.current.set(currentTravelerIndex, el) }}
+                                className="h-10 font-[family-name:var(--font-geist-sans)]"
+                                aria-invalid={shouldShowFieldError(currentTravelerIndex, 'gender')}
+                                onBlur={() => markTouched(currentTravelerIndex, 'gender')}
+                              >
                                 <SelectValue placeholder="Select gender" />
                               </SelectTrigger>
                               <SelectContent className="font-[family-name:var(--font-geist-sans)]">
@@ -1226,6 +1384,9 @@ export default function TravelSmartPage() {
                                 <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
                               </SelectContent>
                             </Select>
+                            {shouldShowFieldError(currentTravelerIndex, 'gender') && (
+                              <p className="text-sm text-destructive mt-1">Gender is required</p>
+                            )}
                           </div>
                         </div>
                       </CardContent>
@@ -1267,11 +1428,14 @@ export default function TravelSmartPage() {
                               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">RM</span>
                               <Input
                                 id="budget-max"
+                                ref={(el) => { if (el) budgetMaxInputRefs.current.set(currentTravelerIndex, el) }}
                                 placeholder="5000"
                                 value={currentPrefs.budgetMax}
                                 autoComplete="off"
                                 inputMode="numeric"
                                 maxLength={6}
+                                aria-invalid={shouldShowFieldError(currentTravelerIndex, 'budgetMax')}
+                                onBlur={() => markTouched(currentTravelerIndex, 'budgetMax')}
                                 onChange={(e) => {
                                   const value = e.target.value.replace(/\D/g, '').slice(0, 6)
                                   updateCurrentPrefs({ budgetMax: value })
@@ -1279,6 +1443,9 @@ export default function TravelSmartPage() {
                                 className="h-10 pl-10"
                               />
                             </div>
+                            {shouldShowFieldError(currentTravelerIndex, 'budgetMax') && (
+                              <p className="text-sm text-destructive mt-1">Maximum budget is required</p>
+                            )}
                           </div>
                         </div>
                       </CardContent>
@@ -1332,6 +1499,10 @@ export default function TravelSmartPage() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="px-4 pb-3">
+                        {shouldShowFieldError(currentTravelerIndex, 'safety') && (
+                          <p className="text-sm text-destructive mb-2">Select at least one safety option</p>
+                        )}
+                        <div className={shouldShowFieldError(currentTravelerIndex, 'safety') ? 'ring-1 ring-destructive rounded-lg p-2' : ''}>
                         {[
                           { id: 'avoidLateNight', label: 'Avoid late-night activities' },
                           { id: 'preferWellLit', label: 'Prefer well-lit areas' },
@@ -1342,14 +1513,16 @@ export default function TravelSmartPage() {
                             <Switch
                               id={option.id}
                               checked={currentPrefs.safetyOptions[option.id as keyof typeof currentPrefs.safetyOptions]}
-                              onCheckedChange={(checked) =>
+                              onCheckedChange={(checked) => {
                                 updateCurrentPrefs({
                                   safetyOptions: { ...currentPrefs.safetyOptions, [option.id]: checked }
                                 })
-                              }
+                                markTouched(currentTravelerIndex, 'safety')
+                              }}
                             />
                           </div>
                         ))}
+                        </div>
                       </CardContent>
                     </Card>
                   </div>
@@ -1366,7 +1539,10 @@ export default function TravelSmartPage() {
                         <p className="text-sm text-muted-foreground">Select all that apply</p>
                       </CardHeader>
                       <CardContent className="px-4 pb-4">
-                        <div className="grid grid-cols-2 gap-2">
+                        {shouldShowFieldError(currentTravelerIndex, 'seasons') && (
+                          <p className="text-sm text-destructive mb-2">Select at least one season</p>
+                        )}
+                        <div className={`grid grid-cols-2 gap-2 ${shouldShowFieldError(currentTravelerIndex, 'seasons') ? 'ring-1 ring-destructive rounded-lg p-1' : ''}`}>
                           {[
                             { value: 'chinese-new-year', label: 'Chinese New Year' },
                             { value: 'hari-raya-aidilfitri', label: 'Hari Raya Aidilfitri' },
@@ -1396,6 +1572,7 @@ export default function TravelSmartPage() {
                                     ? [...currentPrefs.preferredSeasons, season.value]
                                     : currentPrefs.preferredSeasons.filter(s => s !== season.value)
                                   updateCurrentPrefs({ preferredSeasons: newSeasons })
+                                  markTouched(currentTravelerIndex, 'seasons')
                                 }}
                               />
                               <span className="text-sm">{season.label}</span>
@@ -1453,6 +1630,10 @@ export default function TravelSmartPage() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="px-4 pb-3">
+                        {shouldShowFieldError(currentTravelerIndex, 'alerts') && (
+                          <p className="text-sm text-destructive mb-2">Select at least one alert preference</p>
+                        )}
+                        <div className={shouldShowFieldError(currentTravelerIndex, 'alerts') ? 'ring-1 ring-destructive rounded-lg p-2' : ''}>
                         {[
                           { id: 'crowd', label: 'Crowd alerts' },
                           { id: 'weather', label: 'Weather alerts' },
@@ -1464,14 +1645,16 @@ export default function TravelSmartPage() {
                             <Switch
                               id={`alert-${option.id}`}
                               checked={currentPrefs.notifications[option.id as keyof typeof currentPrefs.notifications]}
-                              onCheckedChange={(checked) =>
+                              onCheckedChange={(checked) => {
                                 updateCurrentPrefs({
                                   notifications: { ...currentPrefs.notifications, [option.id]: checked }
                                 })
-                              }
+                                markTouched(currentTravelerIndex, 'alerts')
+                              }}
                             />
                           </div>
                         ))}
+                        </div>
                       </CardContent>
                     </Card>
                   </div>
@@ -1488,6 +1671,11 @@ export default function TravelSmartPage() {
                 Generate Travel Plan
                 <Sparkles className="ml-2 h-4 w-4" />
               </Button>
+              {submitAttempted && !isPreferencesValid && (
+                <p className="text-sm text-destructive text-center mt-2">
+                  Please fill in all required fields for each traveler
+                </p>
+              )}
             </div>
           </div>
         )}
@@ -1510,45 +1698,6 @@ export default function TravelSmartPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        setCurrentStep('details')
-                        setGeneratedPlan(null)
-                        setQuickGenerateData(null)
-                        setTripData({
-                          destination: '',
-                          dateRange: undefined,
-                          travelers: 1,
-                          travelerNames: [''],
-                          travelerGenders: ['']
-                        })
-                        setPreferences([{
-                          travelStyle: 'balanced',
-                          crowdTolerance: 'avoid-crowd',
-                          preferredSeasons: [],
-                          safetyOptions: {
-                            avoidLateNight: true,
-                            preferWellLit: true,
-                            verifiedTransport: true
-                          },
-                          budgetMin: '',
-                          budgetMax: '',
-                          notifications: {
-                            crowd: true,
-                            weather: true,
-                            price: true,
-                            safety: true
-                          }
-                        }])
-                        setCurrentTravelerIndex(0)
-                        setSelectedPlan('Balanced Plan')
-                      }}
-                      className="h-9 px-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm border-0 text-white text-xs font-medium"
-                    >
-                      <Plus className="h-3.5 w-3.5 mr-1.5" />
-                      Create New Plan
-                    </Button>
                     <Popover>
                     <PopoverTrigger asChild>
                       <Button size="icon" className="h-9 w-9 bg-white/20 hover:bg-white/30 backdrop-blur-sm border-0">
@@ -2851,6 +3000,103 @@ export default function TravelSmartPage() {
                 </div>
               </>
             )}
+
+            {/* Action Buttons */}
+            <div className="pt-4 space-y-3 animate-fade-in-up" style={{ animationDelay: '0.8s', animationFillMode: 'backwards' }}>
+              <Button
+                className="w-full h-11 font-semibold bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 shadow-lg shadow-rose-500/20"
+                onClick={() => setShowSaveDialog(true)}
+              >
+                <CheckCircle2 className="mr-2 h-4 w-4" />
+                Confirm & Save Plan
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full h-11 font-semibold"
+                onClick={() => {
+                  setCurrentStep('details')
+                  setGeneratedPlan(null)
+                  setQuickGenerateData(null)
+                  setTripData({
+                    destination: '',
+                    dateRange: undefined,
+                    travelers: 1,
+                    travelerNames: [''],
+                    travelerGenders: ['']
+                  })
+                  setPreferences([{
+                    travelStyle: 'balanced',
+                    crowdTolerance: 'avoid-crowd',
+                    preferredSeasons: [],
+                    safetyOptions: {
+                      avoidLateNight: true,
+                      preferWellLit: true,
+                      verifiedTransport: true
+                    },
+                    budgetMin: '',
+                    budgetMax: '',
+                    notifications: {
+                      crowd: true,
+                      weather: true,
+                      price: true,
+                      safety: true
+                    }
+                  }])
+                  setCurrentTravelerIndex(0)
+                  setSelectedPlan('Balanced Plan')
+                  setSubmitAttempted(false)
+                  setTouchedFields(new Set())
+                }}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Create New Plan
+              </Button>
+            </div>
+
+            {/* Save Confirmation Dialog */}
+            <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+              <DialogContent className="w-[calc(100%-2rem)] sm:max-w-sm p-0 overflow-hidden font-[family-name:var(--font-geist-sans)]">
+                <DialogHeader className="sr-only">
+                  <DialogTitle>Save Travel Plan</DialogTitle>
+                  <DialogDescription>Confirm saving your travel plan and redirect to dashboard</DialogDescription>
+                </DialogHeader>
+                <div className="p-6 text-center">
+                  <div className="relative mx-auto w-16 h-16 mb-4">
+                    <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-rose-400 to-rose-500 flex items-center justify-center shadow-lg">
+                      <Sparkles className="h-8 w-8 text-white" />
+                    </div>
+                  </div>
+
+                  <h3 className="text-lg font-semibold mb-2">Save this travel plan?</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Your plan for <span className="font-medium text-foreground">{tripData.destination}</span> will be saved and you will be redirected to the dashboard.
+                  </p>
+
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-50 dark:bg-rose-950/30 mb-6">
+                    <MapPinIcon className="h-3.5 w-3.5 text-rose-500" />
+                    <span className="text-sm font-medium">{tripData.destination}</span>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => setShowSaveDialog(false)}
+                      disabled={isSaving}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      className="flex-1 bg-rose-500 hover:bg-rose-600"
+                      onClick={handleSavePlan}
+                      disabled={isSaving}
+                    >
+                      {isSaving ? 'Saving...' : 'Save & Continue'}
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         )}
       </div>
