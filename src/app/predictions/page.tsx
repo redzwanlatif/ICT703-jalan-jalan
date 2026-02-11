@@ -501,10 +501,6 @@ export default function TravelSmartPage() {
         preferences: preferences[index] || preferences[0]
       }))
 
-      // Save only the user's selected plan
-      const selectedPlanData = generatedPlan?.plans?.[selectedPlan] || null
-      const quickData = quickGenerateData || null
-
       const response = await fetch('/api/save-plan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -517,9 +513,7 @@ export default function TravelSmartPage() {
           },
           travelers: travelersData,
           selected_plan: selectedPlan,
-          generated_plan: selectedPlanData
-            ? { plans: { [selectedPlan]: selectedPlanData } }
-            : quickData
+          generated_plan: generatedPlan || quickGenerateData
         })
       })
 
