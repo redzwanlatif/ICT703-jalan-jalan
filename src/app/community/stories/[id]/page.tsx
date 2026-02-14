@@ -189,7 +189,7 @@ export default function StoryDetailPage({
           {/* Right Column: Content */}
           <div className="space-y-6 pt-2">
             <h3 className="text-xl font-bold text-neutral-800 leading-tight">
-              {storyData.title}: All-inclusive Resort in Maldives
+              {storyData.title}: All-inclusive Resort in Malaysia
             </h3>
 
             {/* Author Section */}
