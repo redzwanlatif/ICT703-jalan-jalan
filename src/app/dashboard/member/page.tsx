@@ -650,7 +650,7 @@ const avgPositionPct =
 
     <div>
       <div className="text-xs text-slate-500">Highest Budget</div>
-      <div className="text-xl font-bold text-green-600">
+      <div className="text-xl font-bold text-red-600">
         RM{groupMaxBudget.toFixed(0)}
       </div>
     </div>
@@ -658,7 +658,14 @@ const avgPositionPct =
 
   {/* Gradient Bar */}
   <div className="mt-6 space-y-2">
-    <div className="relative h-3 w-full rounded-full bg-gradient-to-r from-red-500 via-yellow-400 to-green-500">
+  <div
+  className="relative h-3 w-full rounded-full"
+  style={{
+    background:
+      "linear-gradient(to right, #ef4444 0%, #fb923c 25%, #22c55e 50%, #fb923c 75%, #ef4444 100%)",
+  }}
+>
+
       {/* Average Marker */}
       <div
         className="absolute -top-1 h-5 w-1 rounded-full bg-violet-700"
