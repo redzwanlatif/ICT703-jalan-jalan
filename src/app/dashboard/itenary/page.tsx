@@ -9,6 +9,14 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import {
   MapPin,
   Coins,
   Users2,
@@ -527,6 +535,8 @@ export default function ItineraryPage() {
   const [loading, setLoading] = React.useState(true)
   const [selectedDay, setSelectedDay] = React.useState("1")
   const [dayActivities, setDayActivities] = React.useState<Record<string, Activity[]>>({})
+  const [bestMatchPopupOpen, setBestMatchPopupOpen] = React.useState(false)
+  const [pendingReplacement, setPendingReplacement] = React.useState<PlaceProfile | null>(null)
 
   // mount
   React.useEffect(() => setMounted(true), [])
@@ -544,6 +554,23 @@ export default function ItineraryPage() {
       ...prev,
       [dayKey]: activitiesForPlace(newPlace).map((a) => ({ ...a })),
     }))
+  }
+
+  const handleReplaceClick = (place: PlaceProfile, isBestMatch: boolean) => {
+    if (isBestMatch) {
+      setPendingReplacement(place)
+      setBestMatchPopupOpen(true)
+    } else {
+      replaceSelectedDayPlace(place)
+    }
+  }
+
+  const confirmBestMatchReplacement = () => {
+    if (pendingReplacement) {
+      replaceSelectedDayPlace(pendingReplacement)
+    }
+    setBestMatchPopupOpen(false)
+    setPendingReplacement(null)
   }
   
 
@@ -815,12 +842,12 @@ export default function ItineraryPage() {
   const ready = mounted && !loading && !!jsonData
 
   if (!ready) {
-    return (
-      <div className="min-h-screen" style={{ background: "linear-gradient(to bottom, #f5f3ff 0%, #F1F5F9 20%)" }}>
-        <div className="sticky top-0 z-20">
-          <Navigation />
-          <TabBar />
-        </div>
+  return (
+    <div className="min-h-screen" style={{ background: "linear-gradient(to bottom, #f5f3ff 0%, #F1F5F9 20%)" }}>
+      <div className="sticky top-0 z-20">
+        <Navigation />
+        <TabBar />
+      </div>
         <div className="p-6 text-slate-600">Loading itinerary...</div>
       </div>
     )
@@ -835,14 +862,16 @@ export default function ItineraryPage() {
   }
   
 
-  const totalCost = jsonData?.summary?.totalCost ?? 1400
-  const memberCount = travelers.length || 1
+  const topSuggestions = suggestionCandidates.slice(0, 4)
+  const maxSuggestionMatch = topSuggestions.length > 0
+    ? Math.max(...topSuggestions.map((s) => computePlaceMatchPercent(travelers, s.place)))
+    : 0
 
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(to bottom, #f5f3ff 0%, #F1F5F9 20%)" }}>
       <div className="sticky top-0 z-20">
         <Navigation />
-        <TabBar totalCost={totalCost} memberCount={memberCount} />
+        <TabBar />
       </div>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 py-2">
@@ -1217,7 +1246,7 @@ export default function ItineraryPage() {
             <div className="mt-3 text-sm text-slate-500">No available destinations right now.</div>
           ) : (
             <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-              {suggestionCandidates.slice(0, 4).map(({ place }) => {
+              {topSuggestions.map(({ place }) => {
                 const pref = place.preferences
                 const match = computePlaceMatchPercent(travelers, place)
 
@@ -1288,7 +1317,7 @@ export default function ItineraryPage() {
 
                       <button
                         type="button"
-                        onClick={() => replaceSelectedDayPlace(place)}
+                        onClick={() => handleReplaceClick(place, match === maxSuggestionMatch)}
                         className="shrink-0 rounded-xl border border-violet-200 bg-violet-50 px-3 py-2 text-sm font-semibold text-violet-700 hover:bg-violet-100"
                       >
                         Replace
@@ -1313,6 +1342,38 @@ export default function ItineraryPage() {
 
 
       </main>
+
+      <Dialog open={bestMatchPopupOpen} onOpenChange={setBestMatchPopupOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-green-700">
+              <div className="rounded-full bg-green-100 p-1">
+                <Heart className="size-4 fill-green-600 text-green-600" />
+              </div>
+              Best Match Found!
+            </DialogTitle>
+            <DialogDescription className="pt-2">
+              This option has the highest compatibility score with your group's preferences. It's the best choice for a balanced and enjoyable trip!
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-start">
+            <button
+              type="button"
+              onClick={confirmBestMatchReplacement}
+              className="inline-flex h-10 items-center justify-center rounded-md bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-white"
+            >
+              Excellent, choose this!
+            </button>
+            <button
+              type="button"
+              onClick={() => setBestMatchPopupOpen(false)}
+              className="mt-2 sm:mt-0 inline-flex h-10 items-center justify-center rounded-md border border-slate-200 bg-transparent px-4 py-2 text-sm font-medium text-slate-900 transition-colors hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-white"
+            >
+              Cancel
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
