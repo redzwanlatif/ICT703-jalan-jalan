@@ -13,6 +13,7 @@ import {
   ShoppingBag,
   Coffee,
   Ticket,
+  Sparkles,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Navigation } from "@/components/shared/navigation";
@@ -23,6 +24,8 @@ import {
   PageHeader,
 } from "@/components/shared/page-layout";
 import { FlowGuide } from "@/components/shared/flow-guide";
+import { AIComparisonPanel } from "@/components/informatics";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const spendingCategories = [
@@ -98,6 +101,20 @@ export default function InsightsPage() {
             <span className="text-violet-600 dark:text-violet-400 text-xs font-medium">All local trips</span>
           </UnifiedCard>
         </div>
+
+        {/* Past vs Current AI Insights */}
+        <section className="mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <h2 className="font-bold text-lg text-neutral-800 dark:text-neutral-100">
+              Past vs Current Insights
+            </h2>
+            <Badge className="bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800 gap-1">
+              <Sparkles className="size-3" />
+              AI
+            </Badge>
+          </div>
+          <AIComparisonPanel />
+        </section>
 
         {/* Monthly Trend Chart */}
         <div className="mb-6">
